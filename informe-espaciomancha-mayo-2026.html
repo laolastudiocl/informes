@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de Performance — Espacio Mancha · Mayo 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Pathway+Gothic+One&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  /* ─── RESET & BASE ─── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #2E3B74;
+    --forest:  #256A46;
+    --red:     #B9352E;
+    --amber:   #E99F2F;
+    --dark:    #3D3D3D;
+    --cream:   #F3F0EB;
+    --black:   #1A1A1A;
+    --navy-dark: #181E35;
+    --forest-dark: #1E2A1E;
+    --text:    #D4CFC8;
+    --muted:   #8A8680;
+    --gold-chart: #E99F2F;
+    --green-chart: #5BBF8A;
+    --blue-chart:  #7B9FE8;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Pathway Gothic One', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  .title-font {
+    font-family: 'Pathway Gothic One', sans-serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  h1, h2, h3, .kpi-number, .section-title {
+    font-family: 'Pathway Gothic One', sans-serif;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* ─── LAYOUT ─── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--navy);
+    border-bottom: 4px solid var(--amber);
+    padding: 64px 0 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: rgba(233,159,47,0.06);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(233,159,47,0.15);
+    border: 1px solid rgba(233,159,47,0.4);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 24px;
+    animation: pulse-badge 3s ease-in-out infinite;
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  @keyframes pulse-badge { 0%,100%{box-shadow:0 0 0 0 rgba(233,159,47,0.2)} 50%{box-shadow:0 0 0 8px rgba(233,159,47,0)} }
+
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(233,159,47,0.7);
+    margin-bottom: 8px;
+  }
+  .hero-title {
+    font-size: clamp(36px, 5vw, 64px);
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .hero-subtitle {
+    font-size: 15px;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 48px;
+    letter-spacing: 0.03em;
+    text-transform: none;
+  }
+
+  .hero-kpis {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .hero-kpi {
+    background: rgba(255,255,255,0.04);
+    padding: 20px 16px;
+    text-align: center;
+    transition: background 0.2s;
+  }
+  .hero-kpi:hover { background: rgba(255,255,255,0.08); }
+  .hero-kpi-label {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+  }
+  .hero-kpi-value {
+    font-size: 22px;
+    color: #fff;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .hero-kpi-sub {
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 4px;
+    text-transform: none;
+  }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    padding: 64px 0;
+  }
+  .section:nth-child(even) { background: var(--navy-dark); }
+  .section:nth-child(odd)  { background: var(--forest-dark); }
+  /* override for specific sections */
+  .section-dark { background: var(--black) !important; }
+  .section-navy { background: var(--navy-dark) !important; }
+  .section-forest { background: var(--forest-dark) !important; }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 8px;
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 3px;
+    height: 14px;
+    background: var(--amber);
+    border-radius: 2px;
+  }
+  .section-title {
+    font-size: clamp(22px, 3vw, 34px);
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .section-desc {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 40px;
+    text-transform: none;
+    max-width: 640px;
+    line-height: 1.7;
+  }
+
+  /* ─── KPI CARDS ─── */
+  .kpi-grid {
+    display: grid;
+    gap: 16px;
+  }
+  .kpi-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .kpi-grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .kpi-grid-6 { grid-template-columns: repeat(6, 1fr); }
+  .kpi-grid-2 { grid-template-columns: repeat(2, 1fr); }
+
+  .kpi-card {
+    background: var(--dark);
+    border-radius: 8px;
+    padding: 20px 18px;
+    border-top: 3px solid var(--amber);
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card.danger  { border-top-color: var(--red); }
+  .kpi-card.success { border-top-color: var(--green-chart); }
+  .kpi-card.info    { border-top-color: var(--blue-chart); }
+  .kpi-card.warning { border-top-color: var(--amber); }
+
+  .kpi-card-label {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .kpi-card-value {
+    font-size: 28px;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .kpi-card-sub {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: none;
+  }
+  .kpi-card-delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    margin-top: 8px;
+  }
+  .delta-up   { background: rgba(91,191,138,0.15); color: var(--green-chart); }
+  .delta-down { background: rgba(185,53,46,0.15);  color: var(--red); }
+  .delta-neutral { background: rgba(233,159,47,0.15); color: var(--amber); }
+
+  /* ─── INSIGHT BOX ─── */
+  .insight-box {
+    background: rgba(46,59,116,0.25);
+    border-left: 3px solid var(--amber);
+    border-radius: 0 8px 8px 0;
+    padding: 20px 24px;
+    margin-top: 32px;
+  }
+  .insight-box-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .insight-box-text {
+    font-size: 14px;
+    color: var(--text);
+    text-transform: none;
+    line-height: 1.8;
+  }
+
+  /* ─── ALERT BOXES ─── */
+  .alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    text-transform: none;
+  }
+  .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .alert-danger  { background: rgba(185,53,46,0.12);  border: 1px solid rgba(185,53,46,0.3);  color: #e8a09c; }
+  .alert-warning { background: rgba(233,159,47,0.10); border: 1px solid rgba(233,159,47,0.3); color: #e8c47a; }
+  .alert-success { background: rgba(91,191,138,0.10); border: 1px solid rgba(91,191,138,0.3); color: #85d4aa; }
+  .alert-info    { background: rgba(123,159,232,0.10);border: 1px solid rgba(123,159,232,0.3);color: #a3bce8; }
+  .alert-data-missing { background: rgba(61,61,61,0.4); border: 1px dashed rgba(255,255,255,0.15); color: var(--muted); }
+
+  /* ─── TABLE ─── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-transform: none;
+  }
+  .data-table th {
+    background: rgba(0,0,0,0.3);
+    color: var(--amber);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .data-table td {
+    padding: 13px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text);
+    vertical-align: middle;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: rgba(255,255,255,0.03); }
+  .table-wrap {
+    background: var(--dark);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* ROAS badge */
+  .roas-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .roas-green  { background: rgba(91,191,138,0.18);  color: #5BBF8A; }
+  .roas-amber  { background: rgba(233,159,47,0.18);  color: #E99F2F; }
+  .roas-red    { background: rgba(185,53,46,0.18);   color: #e07570; }
+  .roas-gray   { background: rgba(100,100,100,0.18); color: #888; }
+
+  /* ─── CHART CONTAINER ─── */
+  .chart-wrap {
+    background: var(--dark);
+    border-radius: 8px;
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+  }
+  .chart-title {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 20px;
+  }
+
+  /* ─── FUNNEL ─── */
+  .funnel-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .funnel-step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 0 0 0;
+  }
+  .funnel-bar-wrap {
+    flex: 1;
+    position: relative;
+  }
+  .funnel-bar {
+    height: 52px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    color: #fff;
+    font-size: 13px;
+    transition: opacity 0.2s;
+  }
+  .funnel-bar-label { font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; font-size: 11px; }
+  .funnel-bar-value { font-size: 18px; font-weight: 700; }
+  .funnel-arrow {
+    text-align: center;
+    color: var(--amber);
+    font-size: 11px;
+    padding: 4px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .funnel-arrow-pct {
+    display: inline-block;
+    background: rgba(233,159,47,0.15);
+    border: 1px solid rgba(233,159,47,0.3);
+    border-radius: 10px;
+    padding: 2px 10px;
+    font-size: 11px;
+    color: var(--amber);
+  }
+
+  /* ─── ACTION CARDS ─── */
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .action-card {
+    background: var(--dark);
+    border-radius: 8px;
+    padding: 20px;
+    border-left: 4px solid var(--amber);
+  }
+  .action-card.urgent  { border-left-color: var(--red); }
+  .action-card.high    { border-left-color: var(--amber); }
+  .action-card.medium  { border-left-color: var(--blue-chart); }
+  .action-card.opport  { border-left-color: var(--green-chart); }
+  .action-priority {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .action-card.urgent  .action-priority { color: var(--red); }
+  .action-card.high    .action-priority { color: var(--amber); }
+  .action-card.medium  .action-priority { color: var(--blue-chart); }
+  .action-card.opport  .action-priority { color: var(--green-chart); }
+  .action-title {
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 8px;
+    text-transform: none;
+    font-family: 'Pathway Gothic One', sans-serif;
+    font-weight: 600;
+  }
+  .action-desc {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: none;
+    line-height: 1.7;
+  }
+  .action-impact {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+  }
+
+  /* ─── PROJECTION CARDS ─── */
+  .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .proj-card {
+    background: var(--dark);
+    border-radius: 8px;
+    padding: 28px 24px;
+    border-top: 3px solid transparent;
+  }
+  .proj-optimist { border-top-color: var(--green-chart); }
+  .proj-conserv  { border-top-color: var(--amber); }
+  .proj-scenario-label {
+    font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .proj-optimist .proj-scenario-label { color: var(--green-chart); }
+  .proj-conserv  .proj-scenario-label { color: var(--amber); }
+  .proj-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 13px; text-transform: none;
+  }
+  .proj-row:last-of-type { border-bottom: none; }
+  .proj-row-label { color: var(--muted); }
+  .proj-row-value { color: #fff; font-weight: 600; }
+
+  /* ─── DATA MISSING BANNER ─── */
+  .missing-banner {
+    background: rgba(61,61,61,0.3);
+    border: 1px dashed rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 40px 32px;
+    text-align: center;
+    color: var(--muted);
+  }
+  .missing-banner-icon { font-size: 32px; margin-bottom: 12px; }
+  .missing-banner-title { font-size: 14px; color: var(--text); text-transform: none; margin-bottom: 6px; }
+  .missing-banner-desc  { font-size: 12px; text-transform: none; }
+
+  /* ─── PROGRESS BARS ─── */
+  .progress-wrap { margin-bottom: 14px; }
+  .progress-label {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; margin-bottom: 6px; text-transform: none;
+  }
+  .progress-label-name { color: var(--text); }
+  .progress-label-val  { color: var(--amber); font-weight: 600; }
+  .progress-track {
+    height: 8px; background: rgba(255,255,255,0.07);
+    border-radius: 4px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 4px;
+    background: linear-gradient(90deg, var(--amber), rgba(233,159,47,0.5));
+    transition: width 1s ease;
+  }
+  .progress-fill.green  { background: linear-gradient(90deg, var(--green-chart), rgba(91,191,138,0.4)); }
+  .progress-fill.blue   { background: linear-gradient(90deg, var(--blue-chart),  rgba(123,159,232,0.4)); }
+  .progress-fill.red    { background: linear-gradient(90deg, var(--red),         rgba(185,53,46,0.4)); }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    background: var(--navy);
+    border-top: 4px solid var(--amber);
+    padding: 40px 0 32px;
+    text-align: center;
+  }
+  .footer-logo { font-size: 22px; color: #fff; margin-bottom: 6px; }
+  .footer-tagline { font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 20px; }
+  .footer-meta { font-size: 11px; color: rgba(255,255,255,0.25); text-transform: none; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .hero-kpis { grid-template-columns: repeat(3,1fr); }
+    .kpi-grid-6 { grid-template-columns: repeat(3,1fr); }
+    .kpi-grid-4 { grid-template-columns: repeat(2,1fr); }
+    .kpi-grid-3 { grid-template-columns: repeat(2,1fr); }
+    .action-grid { grid-template-columns: 1fr; }
+    .proj-grid   { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .hero-kpis { grid-template-columns: repeat(2,1fr); }
+    .kpi-grid-3, .kpi-grid-4, .kpi-grid-6 { grid-template-columns: 1fr 1fr; }
+    .container { padding: 0 16px; }
+  }
+
+  /* Divider */
+  .divider { height: 1px; background: rgba(255,255,255,0.05); margin: 32px 0; }
+
+  /* Two-col layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     00 · HERO
+══════════════════════════════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      La Ola Studio · Informe de Performance
+    </div>
+    <div class="hero-label">Performance Report · Mayo 2026</div>
+    <h1 class="hero-title">Espacio Mancha<br>Mayo 2026</h1>
+    <p class="hero-subtitle">
+      Análisis completo de Meta Ads · Período 1 al 31 de mayo, 2026 · Basado en datos reales exportados desde Meta Ads Manager
+    </p>
+
+    <div class="hero-kpis">
+      <div class="hero-kpi">
+        <div class="hero-kpi-label">Período</div>
+        <div class="hero-kpi-value" style="font-size:16px">May 1–31</div>
+        <div class="hero-kpi-sub">31 días</div>
+      </div>
+      <div class="hero-kpi">
+        <div class="hero-kpi-label">Inversión Total</div>
+        <div class="hero-kpi-value">$214K</div>
+        <div class="hero-kpi-sub">CLP · Meta Ads</div>
+      </div>
+      <div class="hero-kpi">
+        <div class="hero-kpi-label">Ingresos Atribuidos</div>
+        <div class="hero-kpi-value">$193K</div>
+        <div class="hero-kpi-sub">CLP · compras</div>
+      </div>
+      <div class="hero-kpi">
+        <div class="hero-kpi-label">ROAS Meta</div>
+        <div class="hero-kpi-value" style="color:#e07570">0.90x</div>
+        <div class="hero-kpi-sub">bajo umbral</div>
+      </div>
+      <div class="hero-kpi">
+        <div class="hero-kpi-label">Conversiones</div>
+        <div class="hero-kpi-value">2</div>
+        <div class="hero-kpi-sub">compras atribuidas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     ⚠ NOTA DE COBERTURA
+══════════════════════════════════════ -->
+<div style="background:#1a1506; border-bottom: 1px solid rgba(233,159,47,0.2); padding: 14px 0;">
+  <div class="container">
+    <div style="display:flex; align-items:center; gap:10px; font-size:12px; color:#b89640; text-transform:none;">
+      <span style="font-size:16px;">⚠️</span>
+      <span><strong style="color:var(--amber)">Informe parcial:</strong> Este reporte cubre únicamente Meta Ads. Los datos de Google Ads, SEO (Search Console), redes sociales orgánicas e historial de 13 meses están pendientes de entrega. Las secciones correspondientes están marcadas con aviso de datos faltantes.</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     01 · RESUMEN EJECUTIVO
+══════════════════════════════════════ -->
+<section class="section section-navy">
+  <div class="container">
+    <div class="section-label">01 · Resumen Ejecutivo</div>
+    <h2 class="section-title">Panorama del Mes</h2>
+    <p class="section-desc">
+      Mayo 2026 fue un mes marcado por la campaña estacional de Día de la Madre, con dos campañas activas en Meta Ads. Los datos revelan una inversión de $213.918 CLP con retorno negativo en términos de ROAS consolidado (0.90x), aunque con señales claras de qué formatos y mensajes tienen verdadero potencial de conversión.
+    </p>
+
+    <div class="kpi-grid kpi-grid-3" style="margin-bottom:20px;">
+      <div class="kpi-card danger">
+        <div class="kpi-card-label">ROAS Global Meta</div>
+        <div class="kpi-card-value">0.90x</div>
+        <div class="kpi-card-sub">Por debajo del umbral de rentabilidad</div>
+        <span class="kpi-card-delta delta-down">↓ Bajo umbral</span>
+      </div>
+      <div class="kpi-card danger">
+        <div class="kpi-card-label">Ingresos Atribuidos</div>
+        <div class="kpi-card-value">$193.000</div>
+        <div class="kpi-card-sub">CLP · solo compras Meta</div>
+        <span class="kpi-card-delta delta-neutral">Solo Meta</span>
+      </div>
+      <div class="kpi-card warning">
+        <div class="kpi-card-label">Inversión Total Paid</div>
+        <div class="kpi-card-value">$213.918</div>
+        <div class="kpi-card-sub">CLP · Meta Ads mayo</div>
+        <span class="kpi-card-delta delta-neutral">1 canal activo</span>
+      </div>
+    </div>
+
+    <div class="kpi-grid kpi-grid-3">
+      <div class="kpi-card danger">
+        <div class="kpi-card-label">Conversiones Totales</div>
+        <div class="kpi-card-value">2</div>
+        <div class="kpi-card-sub">Compras atribuidas a Meta</div>
+        <span class="kpi-card-delta delta-down">⚠ Posible subatribución</span>
+      </div>
+      <div class="kpi-card danger">
+        <div class="kpi-card-label">CPA Promedio</div>
+        <div class="kpi-card-value">$106.959</div>
+        <div class="kpi-card-sub">CLP por compra</div>
+        <span class="kpi-card-delta delta-down">↑ Muy alto</span>
+      </div>
+      <div class="kpi-card info">
+        <div class="kpi-card-label">Artículos al Carrito</div>
+        <div class="kpi-card-value">28</div>
+        <div class="kpi-card-sub">vs 2 compras completadas</div>
+        <span class="kpi-card-delta delta-warning" style="background:rgba(233,159,47,0.15);color:var(--amber);">7.1% cierre</span>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <div class="insight-box-label">🔍 Lectura Estratégica del Mes</div>
+      <div class="insight-box-text">
+        Mayo presenta una paradoja que requiere atención inmediata: el CTR global es saludable (4.51%), lo que indica que los anuncios capturan atención. Sin embargo, la brecha entre los 28 artículos añadidos al carrito y las apenas 2 compras completadas apunta a un problema grave en el embudo de conversión post-clic, probablemente en la experiencia de pago o en la configuración del píxel de Meta. El anuncio <strong style="color:var(--amber)">"Storyselling Día de la Mamá"</strong> es la excepción que confirma la regla: con solo $8.392 invertidos generó 1 compra a ROAS 6.32x, demostrando que el formato storytelling/venta directa funciona para este negocio. La acción más urgente no es cambiar la pauta, sino revisar el checkout y la atribución de conversiones.
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     02 · YoY — DATOS NO DISPONIBLES
+══════════════════════════════════════ -->
+<section class="section section-forest">
+  <div class="container">
+    <div class="section-label">02 · Comparativa Año a Año (YoY)</div>
+    <h2 class="section-title">Evolución vs Mayo 2025</h2>
+    <p class="section-desc">Comparativa de métricas clave entre el período actual y el mismo mes del año anterior.</p>
+    <div class="missing-banner">
+      <div class="missing-banner-icon">📂</div>
+      <div class="missing-banner-title">Datos históricos no disponibles</div>
+      <div class="missing-banner-desc">Para construir esta sección se requieren los informes exportados de Meta Ads correspondientes a mayo 2025. Comparte el CSV del mes equivalente del año anterior para activar esta comparativa.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     03 · PAID MEDIA POR CANAL
+══════════════════════════════════════ -->
+<section class="section section-navy">
+  <div class="container">
+    <div class="section-label">03 · Desempeño Paid Media por Canal</div>
+    <h2 class="section-title">Meta Ads · Desglose por Campaña</h2>
+    <p class="section-desc">Análisis de las dos campañas activas en el período. Google Ads no disponible para este informe.</p>
+
+    <!-- Alerta Google Ads faltante -->
+    <div class="alert alert-data-missing" style="margin-bottom:24px;">
+      <span class="alert-icon">📊</span>
+      <div><strong>Google Ads — sin datos.</strong> Para incluir el canal de búsqueda paga en este informe, exporta el CSV desde Google Ads → Informes → Campaña con el período de mayo 2026.</div>
+    </div>
+
+    <div class="two-col" style="margin-bottom:32px;">
+      <!-- Campaña 1 -->
+      <div class="chart-wrap">
+        <div class="chart-title">Tráfico a la Página Web</div>
+        <div style="display:flex; align-items:flex-end; gap:8px; margin-bottom:20px;">
+          <span style="font-size:48px;color:var(--red);line-height:1;">0.89x</span>
+          <span style="font-size:13px;color:var(--muted);margin-bottom:8px;text-transform:none;">ROAS</span>
+        </div>
+        <div class="divider" style="margin:12px 0;"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;">Inversión</div>
+            <div style="font-size:18px;color:#fff;">$156.503</div>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;">Ingresos</div>
+            <div style="font-size:18px;color:#fff;">$140.000</div>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;">Clics</div>
+            <div style="font-size:18px;color:#fff;">9.065</div>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;">Impresiones</div>
+            <div style="font-size:18px;color:#fff;">206.085</div>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;">CTR</div>
+            <div style="font-size:18px;color:#fff;">4.40%</div>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;">Carrito</div>
+            <div style="font-size:18px;color:#fff;">19</div>
+          </div>
+        </div>
+        <div class="insight-box" style="margin-top:20px;">
+          <div class="insight-box-label">Rol de la campaña</div>
+          <div class="insight-box-text" style="font-size:12px;">Campaña de tráfico permanente. Alto volumen de clics pero orientación a visitas, no a conversiones directas. El ROAS negativo es estructural dado el objetivo de campaña.</div>
+        </div>
+      </div>
+
+      <!-- Campaña 2 -->
+      <div class="chart-wrap">
+        <div class="chart-title">Ventas Día de la Madre 2026</div>
+        <div style="display:flex; align-items:flex-end; gap:8px; margin-bottom:20px;">
+          <span style="font-size:48px;color:var(--amber);line-height:1;">0.92x</span>
+          <span style="font-size:13px;color:var(--muted);margin-bottom:8px;text-transform:none;">ROAS global campaña</span>
+        </div>
+        <div class="divider" style="margin:12px 0;"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;">Inversión</div>
+            <div style="font-size:18px;color:#fff;">$57.415</div>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;">Ingresos</div>
+            <div style="font-size:18px;color:#fff;">$53.000</div>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;">Clics</div>
+            <div style="font-size:18px;color:#fff;">794</div>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;">Impresiones</div>
+            <div style="font-size:18px;color:#fff;">12.497</div>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;">CTR</div>
+            <div style="font-size:18px;color:#fff;">6.35%</div>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;">Carrito</div>
+            <div style="font-size:18px;color:#fff;">9</div>
+          </div>
+        </div>
+        <div class="insight-box" style="margin-top:20px;">
+          <div class="insight-box-label">Rol de la campaña</div>
+          <div class="insight-box-text" style="font-size:12px;">Campaña estacional. CTR más alto (6.35%) que la campaña permanente, lo que confirma que el mensaje estacional resonó. El anuncio Storyselling dentro de esta campaña logró 6.32x ROAS, jalando el promedio hacia arriba.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desglose por plataforma -->
+    <div class="chart-wrap">
+      <div class="chart-title">Inversión y Compras por Plataforma</div>
+      <canvas id="chartPlatform" height="100"></canvas>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     04 · SEO — NO DISPONIBLE
+══════════════════════════════════════ -->
+<section class="section section-forest">
+  <div class="container">
+    <div class="section-label">04 · SEO — Tráfico Orgánico de Búsqueda</div>
+    <h2 class="section-title">Google Search Console</h2>
+    <div class="missing-banner">
+      <div class="missing-banner-icon">🔍</div>
+      <div class="missing-banner-title">Datos de Search Console no entregados</div>
+      <div class="missing-banner-desc">Exporta desde Search Console → Rendimiento → Búsqueda web → Filtrar mayo 2026 → Exportar CSV (consultas + páginas). Esta sección incluirá: clics orgánicos, impresiones, CTR, posición media, top 10 keywords y top 5 páginas.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     05 · RRSS ORGÁNICAS — NO DISPONIBLE
+══════════════════════════════════════ -->
+<section class="section section-navy">
+  <div class="container">
+    <div class="section-label">05 · Redes Sociales Orgánicas</div>
+    <h2 class="section-title">Instagram / TikTok / Facebook</h2>
+    <div class="missing-banner">
+      <div class="missing-banner-icon">📱</div>
+      <div class="missing-banner-title">Datos orgánicos no entregados</div>
+      <div class="missing-banner-desc">Exporta desde Meta Business Suite → Insights → Mayo 2026 (alcance, impresiones, interacciones, seguidores nuevos, visitas al perfil, top publicaciones). Si hay TikTok, desde TikTok Studio → Analytics.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     06 · TENDENCIAS HISTÓRICAS — NO DISP.
+══════════════════════════════════════ -->
+<section class="section section-forest">
+  <div class="container">
+    <div class="section-label">06 · Tendencias Históricas (13 Meses)</div>
+    <h2 class="section-title">Evolución Mayo 2025 – Mayo 2026</h2>
+    <div class="missing-banner">
+      <div class="missing-banner-icon">📈</div>
+      <div class="missing-banner-title">Historial de 13 meses no disponible</div>
+      <div class="missing-banner-desc">Para activar los 5 gráficos históricos (ROAS Google vs Meta, Ingresos vs Inversión, distribución de inversión, CPA histórico, clics SEO) se necesitan los CSVs de los 12 meses anteriores o una tabla con los valores clave por mes.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     07 · ANÁLISIS CREATIVO META ADS
+══════════════════════════════════════ -->
+<section class="section section-navy">
+  <div class="container">
+    <div class="section-label">07 · Análisis Creativo Meta Ads</div>
+    <h2 class="section-title">Performance por Anuncio</h2>
+    <p class="section-desc">Desglose completo de los 6 anuncios activos en mayo, con diagnóstico de rentabilidad y eficiencia por formato.</p>
+
+    <div class="alert alert-warning" style="margin-bottom:24px;">
+      <span class="alert-icon">⚠️</span>
+      <div><strong>Alerta de atribución:</strong> Solo 2 compras atribuidas con 28 artículos añadidos al carrito. La ventana de atribución configurada es "7 días post-clic / 1 día post-view". Es altamente probable que existan ventas no capturadas por problemas de píxel o por conversiones que ocurren fuera del canal digital.</div>
+    </div>
+
+    <div class="table-wrap" style="margin-bottom:32px;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Anuncio</th>
+            <th>Inversión (CLP)</th>
+            <th>Impresiones</th>
+            <th>CTR</th>
+            <th>Carrito</th>
+            <th>Compras</th>
+            <th>Ingreso (CLP)</th>
+            <th>CPA (CLP)</th>
+            <th>ROAS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:#fff;font-weight:600;">Video sobre ustedes antiguo</td>
+            <td>$150.595</td>
+            <td>199.046</td>
+            <td>4.40%</td>
+            <td>19</td>
+            <td>1</td>
+            <td>$140.000</td>
+            <td>$150.595</td>
+            <td><span class="roas-badge roas-red">0.93x</span></td>
+          </tr>
+          <tr>
+            <td style="color:#fff;font-weight:600;">Catálogo</td>
+            <td>$44.271</td>
+            <td>10.549</td>
+            <td>5.46%</td>
+            <td>2</td>
+            <td>0</td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="roas-badge roas-gray">Sin conv.</span></td>
+          </tr>
+          <tr style="background:rgba(91,191,138,0.05);">
+            <td style="color:#fff;font-weight:600;">Storyselling día de la mamá ⭐</td>
+            <td>$8.392</td>
+            <td>1.368</td>
+            <td>6.73%</td>
+            <td>7</td>
+            <td>1</td>
+            <td>$53.000</td>
+            <td>$8.392</td>
+            <td><span class="roas-badge roas-green">6.32x</span></td>
+          </tr>
+          <tr>
+            <td style="color:#fff;font-weight:600;">Video Enmarcaciones antiguo</td>
+            <td>$5.908</td>
+            <td>7.039</td>
+            <td>4.35%</td>
+            <td>0</td>
+            <td>0</td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="roas-badge roas-gray">Sin conv.</span></td>
+          </tr>
+          <tr>
+            <td style="color:#fff;font-weight:600;">Video día de la mamá</td>
+            <td>$4.058</td>
+            <td>360</td>
+            <td>32.50%</td>
+            <td>0</td>
+            <td>0</td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="roas-badge roas-gray">Sin conv.</span></td>
+          </tr>
+          <tr>
+            <td style="color:#fff;font-weight:600;">Foto día de la mamá</td>
+            <td>$694</td>
+            <td>220</td>
+            <td>4.09%</td>
+            <td>0</td>
+            <td>0</td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="roas-badge roas-gray">Sin conv.</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ROAS por anuncio - barras -->
+    <div class="two-col">
+      <div class="chart-wrap">
+        <div class="chart-title">ROAS por Anuncio</div>
+        <canvas id="chartRoasAnuncio" height="200"></canvas>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">Inversión vs Ingreso por Anuncio</div>
+        <canvas id="chartInvIngreso" height="200"></canvas>
+      </div>
+    </div>
+
+    <!-- Eficiencia por formato -->
+    <div class="chart-wrap" style="margin-top:20px;">
+      <div class="chart-title">Eficiencia Relativa por Formato (ROAS normalizado)</div>
+      <div style="margin-top:8px;">
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span class="progress-label-name">Storyselling / Video storytelling directo</span>
+            <span class="progress-label-val">6.32x ROAS</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill green" style="width:100%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span class="progress-label-name">Video institucional ("sobre ustedes")</span>
+            <span class="progress-label-val">0.93x ROAS</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill red" style="width:15%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span class="progress-label-name">Catálogo de productos</span>
+            <span class="progress-label-val">Sin conversiones</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span class="progress-label-name">Video producto estacional (Día Mamá)</span>
+            <span class="progress-label-val">Sin conversiones</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span class="progress-label-name">Imagen estática (foto producto)</span>
+            <span class="progress-label-val">Sin conversiones</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <div class="insight-box-label">🏆 Ganadores del Mes y Recomendaciones de Formato</div>
+      <div class="insight-box-text">
+        <strong style="color:var(--green-chart)">Escalar urgente:</strong> "Storyselling Día de la Mamá" es el único anuncio rentable del mes con ROAS 6.32x. El formato storytelling con llamado a la acción directo funciona. Se recomienda crear 2–3 variantes del mismo concepto para el mes siguiente.<br><br>
+        <strong style="color:var(--amber)">Revisar estrategia:</strong> "Video sobre ustedes" consume el 70% del presupuesto ($150K de $213K) con ROAS negativo. Es un video institucional de marca, no de conversión, por lo que este resultado es esperable — pero no es el canal correcto para optimizar ventas. Considerarlo como inversión de awareness, no de performance.<br><br>
+        <strong style="color:var(--red)">Pausar o reinvertir:</strong> El Catálogo con $44.271 invertidos y 0 conversiones (solo 2 artículos al carrito) muestra que el feed de catálogo no está funcionando para este negocio. O hay un problema en el feed, o el producto requiere un enfoque de contenido más narrativo. <strong>Nota especial:</strong> "Video día de la mamá" tiene un CTR de 32.5% — extraordinariamente alto — pero sin conversiones, lo que puede indicar un problema de landing page o tracking.
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     08 · GOOGLE ADS — NO DISPONIBLE
+══════════════════════════════════════ -->
+<section class="section section-forest">
+  <div class="container">
+    <div class="section-label">08 · Análisis Google Ads en Detalle</div>
+    <h2 class="section-title">PMax y Búsqueda</h2>
+    <div class="missing-banner">
+      <div class="missing-banner-icon">🔎</div>
+      <div class="missing-banner-title">Datos de Google Ads no entregados</div>
+      <div class="missing-banner-desc">Exporta desde Google Ads → Informes → Campaña → Mayo 2026 con columnas: Red, Estado, Campaña, Presupuesto, Impr., Interacciones, Costo, ROAS, Clics, Conversiones, Valor de conversión.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     09 · EMBUDO DE CONVERSIÓN
+══════════════════════════════════════ -->
+<section class="section section-navy">
+  <div class="container">
+    <div class="section-label">09 · Embudo de Conversión</div>
+    <h2 class="section-title">Meta Ads — Flujo Completo</h2>
+    <p class="section-desc">Visualización de pérdida de audiencia entre cada etapa del embudo. Los porcentajes muestran la tasa de conversión entre pasos consecutivos.</p>
+
+    <div style="max-width:560px; margin: 0 auto;">
+      <!-- Impresiones -->
+      <div style="background:rgba(46,59,116,0.6);border-radius:8px;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <span style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);">Impresiones</span>
+        <span style="font-size:24px;color:#fff;font-weight:700;">218.582</span>
+      </div>
+      <div class="funnel-arrow">↓ <span class="funnel-arrow-pct">4.51% clic/impresión</span></div>
+      <!-- Clics -->
+      <div style="background:rgba(46,59,116,0.5);border-radius:8px;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;margin:4px 16px;margin-bottom:4px;">
+        <span style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);">Clics en enlace</span>
+        <span style="font-size:24px;color:#fff;font-weight:700;">9.859</span>
+      </div>
+      <div class="funnel-arrow">↓ <span class="funnel-arrow-pct">0.28% clic→carrito</span></div>
+      <!-- Carrito -->
+      <div style="background:rgba(233,159,47,0.15);border:1px solid rgba(233,159,47,0.25);border-radius:8px;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;margin:4px 32px;margin-bottom:4px;">
+        <span style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--amber);">Artículos al carrito</span>
+        <span style="font-size:24px;color:var(--amber);font-weight:700;">28</span>
+      </div>
+      <div class="funnel-arrow">↓ <span class="funnel-arrow-pct" style="border-color:rgba(185,53,46,0.4);background:rgba(185,53,46,0.15);color:var(--red);">7.14% carrito→compra ⚠</span></div>
+      <!-- Compra -->
+      <div style="background:rgba(185,53,46,0.15);border:1px solid rgba(185,53,46,0.3);border-radius:8px;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;margin:4px 48px;">
+        <span style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);">Compras completadas</span>
+        <span style="font-size:24px;color:var(--red);font-weight:700;">2</span>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <div class="insight-box-label">🎯 Dónde se pierde la audiencia</div>
+      <div class="insight-box-text">
+        El quiebre crítico está entre <strong style="color:var(--amber)">carrito (28) y compra (2)</strong>, con solo 7.14% de cierre. En e-commerce saludable este ratio debería estar entre 25–40%. Las causas más probables son: (1) Proceso de pago con fricción o errores técnicos, (2) Costos de envío no anticipados que generan abandono, (3) Falta de retargeting que recupere los 26 carritos abandonados, (4) Problema de configuración del píxel que no está registrando conversiones correctamente. <strong>Acción inmediata:</strong> Verificar el píxel de Meta con el Pixel Helper y crear una campaña de retargeting para carritos abandonados.
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     10 · SINERGIAS PAID + ORGÁNICO
+══════════════════════════════════════ -->
+<section class="section section-forest">
+  <div class="container">
+    <div class="section-label">10 · Sinergias Paid + Orgánico</div>
+    <h2 class="section-title">Estrategia Integrada</h2>
+    <div class="missing-banner">
+      <div class="missing-banner-icon">🔗</div>
+      <div class="missing-banner-title">Requiere datos SEO y orgánico de RRSS</div>
+      <div class="missing-banner-desc">Esta sección se construye cruzando keywords de búsqueda orgánica (Search Console) con keywords de campañas pagas, y midiendo si el contenido orgánico de Instagram/TikTok genera audiencias para retargeting en Meta. Disponible cuando se entreguen los datos faltantes.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     11 · ALERTAS Y DIAGNÓSTICO
+══════════════════════════════════════ -->
+<section class="section section-navy">
+  <div class="container">
+    <div class="section-label">11 · Alertas y Diagnóstico</div>
+    <h2 class="section-title">Estado Crítico del Canal</h2>
+    <p class="section-desc">Diagnóstico consolidado de problemas prioritarios y oportunidades detectadas en los datos disponibles.</p>
+
+    <div class="alert alert-danger">
+      <span class="alert-icon">🔴</span>
+      <div><strong>ROAS global 0.90x — bajo umbral de rentabilidad.</strong> La cuenta Meta está en terreno negativo. Por cada peso invertido, se recuperan $0.90. Si bien parte de esto puede deberse a problemas de atribución, es una señal que requiere acción inmediata en la estructura de campañas.</div>
+    </div>
+
+    <div class="alert alert-danger">
+      <span class="alert-icon">🔴</span>
+      <div><strong>26 de 28 carritos abandonados sin recuperar.</strong> Solo 2 de 28 artículos añadidos al carrito resultaron en compra. No hay campaña activa de retargeting de carritos abandonados. Esto representa ingresos inmediatos sin capturar.</div>
+    </div>
+
+    <div class="alert alert-warning">
+      <span class="alert-icon">🟡</span>
+      <div><strong>"Video sobre ustedes antiguo" consume 70% del presupuesto con ROAS negativo.</strong> $150.595 CLP invertidos con ROAS 0.93x. Si bien genera tráfico (9.065 clics), el objetivo de la campaña es tráfico, no conversión. Revisar si este nivel de inversión en awareness es sostenible dado el presupuesto total.</div>
+    </div>
+
+    <div class="alert alert-warning">
+      <span class="alert-icon">🟡</span>
+      <div><strong>Catálogo sin conversiones con $44.271 invertidos.</strong> El anuncio de catálogo tuvo 576 clics y 0 compras. Posibles causas: feed de productos mal configurado, precios no competitivos mostrados en el anuncio, o el formato catálogo no es adecuado para este tipo de producto (enmarcaciones/arte requieren contexto narrativo).</div>
+    </div>
+
+    <div class="alert alert-warning">
+      <span class="alert-icon">🟡</span>
+      <div><strong>Audience Network: $22.446 invertidos con 0 conversiones.</strong> La red de audiencia de Meta (apps externas) está consumiendo ~10% del presupuesto sin ninguna conversión. Se recomienda excluir este placement.</div>
+    </div>
+
+    <div class="alert alert-success">
+      <span class="alert-icon">🟢</span>
+      <div><strong>Oportunidad: "Storyselling Día de la Mamá" — ROAS 6.32x con inversión mínima ($8.392).</strong> Es el único anuncio rentable del mes. Con menos del 4% del presupuesto generó una conversión con excelente ROAS. El formato storytelling + oferta directa funciona claramente para Espacio Mancha. Escalar este enfoque.</div>
+    </div>
+
+    <div class="alert alert-success">
+      <span class="alert-icon">🟢</span>
+      <div><strong>Oportunidad: "Video día de la mamá" tiene CTR de 32.5%.</strong> Un CTR extraordinariamente alto indica que el creativo captura atención masiva. El problema no está en el anuncio sino en lo que ocurre post-clic. Investigar la landing page a la que apunta este anuncio.</div>
+    </div>
+
+    <div class="alert alert-info">
+      <span class="alert-icon">🔵</span>
+      <div><strong>Instagram es el único placement que genera conversiones.</strong> Las 2 compras del mes ocurrieron en Instagram ($131.919 invertidos, ROAS 1.46x). Facebook ($59.146) y Audience Network ($22.446) no generaron ninguna conversión. Redistribuir presupuesto hacia Instagram.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     12 · INTELIGENCIA DE AUDIENCIAS
+══════════════════════════════════════ -->
+<section class="section section-forest">
+  <div class="container">
+    <div class="section-label">12 · Inteligencia de Audiencias y Contenido</div>
+    <h2 class="section-title">Patrones de Comportamiento</h2>
+    <p class="section-desc">Análisis de qué formatos y mensajes resonaron con la audiencia de Espacio Mancha en mayo.</p>
+
+    <div class="two-col">
+      <div class="chart-wrap">
+        <div class="chart-title">Hallazgos de Formato</div>
+        <div style="text-transform:none;font-size:13px;line-height:1.9;color:var(--text);">
+          <p style="margin-bottom:12px;">📌 <strong style="color:#fff;">El storytelling supera al catálogo.</strong> El anuncio con narrativa personal ("Storyselling") convirtió 6.32x vs 0 del catálogo puro. Para un negocio de arte/enmarcaciones, el contexto emocional es esencial.</p>
+          <p style="margin-bottom:12px;">📌 <strong style="color:#fff;">Instagram > Facebook para conversiones.</strong> 100% de las compras vinieron de Instagram. El público de Espacio Mancha es más afín a la red visual.</p>
+          <p style="margin-bottom:12px;">📌 <strong style="color:#fff;">Alta intención, bajo cierre.</strong> 28 artículos al carrito indica interés real en el producto. El problema es posterior: checkout, precio final, o falta de urgencia para completar.</p>
+          <p>📌 <strong style="color:#fff;">Contenido estacional funciona.</strong> CTR de 6.35% en la campaña Día de la Madre vs 4.40% de la campaña permanente. Los momentos de regalo amplifican la intención de compra.</p>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">Estacionalidad Detectada</div>
+        <div style="text-transform:none;font-size:13px;line-height:1.9;color:var(--text);">
+          <p style="margin-bottom:12px;">🗓️ <strong style="color:#fff;">Mayo = Día de la Madre.</strong> Campaña estacional activada correctamente. El siguiente hito de regalo relevante es Día del Padre (junio) y luego la temporada de fin de año.</p>
+          <p style="margin-bottom:12px;">📊 <strong style="color:#fff;">Distribución de plataformas:</strong><br>
+            • Instagram: 62% del gasto, 100% de conversiones<br>
+            • Facebook: 28% del gasto, 0% de conversiones<br>
+            • Audience Network: 10% del gasto, 0% de conversiones
+          </p>
+          <p>🎯 <strong style="color:#fff;">CPM de $979 CLP</strong> es costo por mil impresiones. Relativamente eficiente para el mercado chileno en este segmento. El problema no es el alcance, es la conversión post-clic.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     13 · PLAN DE ACCIÓN
+══════════════════════════════════════ -->
+<section class="section section-navy">
+  <div class="container">
+    <div class="section-label">13 · Plan de Acción — Junio 2026</div>
+    <h2 class="section-title">8 Recomendaciones Priorizadas</h2>
+    <p class="section-desc">Acciones concretas ordenadas por urgencia e impacto estimado para el mes siguiente.</p>
+
+    <div class="action-grid">
+      <div class="action-card urgent">
+        <div class="action-priority">🔴 Urgente — Ejecutar esta semana</div>
+        <div class="action-title">Verificar y reparar el Píxel de Meta</div>
+        <div class="action-desc">Instalar Meta Pixel Helper en Chrome y verificar que el evento "Purchase" se dispare correctamente en el checkout. Con 28 carritos y solo 2 compras registradas, hay probabilidad alta de que el píxel no esté trackeando conversiones completas. Si hay Conversions API configurada, verificar deduplicación.</div>
+        <span class="action-impact">Impacto: Visibilidad real del ROAS · Activar optimización automática de Meta</span>
+      </div>
+
+      <div class="action-card urgent">
+        <div class="action-priority">🔴 Urgente — Ejecutar esta semana</div>
+        <div class="action-title">Crear campaña de retargeting — Carritos abandonados</div>
+        <div class="action-desc">26 personas agregaron productos al carrito en mayo y no compraron. Crear una campaña de retargeting específica para visitantes que iniciaron checkout (Custom Audience → Evento AddToCart sin Purchase en los últimos 14 días). Presupuesto sugerido: $20.000–$30.000 CLP/mes con creativos de urgencia.</div>
+        <span class="action-impact">Impacto: Potencial de recuperar 5–8 ventas adicionales · ROAS estimado 4–8x</span>
+      </div>
+
+      <div class="action-card high">
+        <div class="action-priority">🟡 Alta Prioridad — Mes de Junio</div>
+        <div class="action-title">Escalar "Storyselling" como formato principal</div>
+        <div class="action-desc">El único anuncio rentable del mes fue el Storyselling (6.32x). Crear 2–3 variantes del mismo concepto: misma estructura narrativa (problema → solución → prueba social → llamado a la acción), distintos productos o casos de uso. Destinar al menos 30% del presupuesto a este formato. Oportunidad: Storyselling para Día del Padre.</div>
+        <span class="action-impact">Impacto: Potencial ROAS 4–8x si el patrón se confirma en más variantes</span>
+      </div>
+
+      <div class="action-card high">
+        <div class="action-priority">🟡 Alta Prioridad — Mes de Junio</div>
+        <div class="action-title">Excluir Audience Network y Threads de la pauta</div>
+        <div class="action-desc">$22.446 CLP (10% del presupuesto) gastados en Audience Network con 0 conversiones y $407 en Threads con 0 conversiones. Exclusión inmediata a nivel de conjunto de anuncios (Placements → Manual → Desactivar Audience Network y Threads). Redirigir ese presupuesto a Instagram Stories y Reels.</div>
+        <span class="action-impact">Impacto: +$22.853 CLP disponibles para placements que convierten</span>
+      </div>
+
+      <div class="action-card high">
+        <div class="action-priority">🟡 Alta Prioridad — Mes de Junio</div>
+        <div class="action-title">Campaña específica para Día del Padre</div>
+        <div class="action-desc">Junio trae el siguiente hito de regalo. El aprendizaje de Día de la Madre confirma que el contenido estacional tiene CTR más alto (6.35% vs 4.40%). Preparar creativo storyselling adaptado a regalos para papá con al menos 2 semanas de anticipación. Incluir testimonios si están disponibles.</div>
+        <span class="action-impact">Impacto: Aprovechar período de alta intención de regalo · Mayor CTR proyectado</span>
+      </div>
+
+      <div class="action-card medium">
+        <div class="action-priority">🔵 Media Prioridad — Optimización gradual</div>
+        <div class="action-title">Revisar landing page del "Video día de la mamá"</div>
+        <div class="action-desc">CTR de 32.5% es extraordinario. Ese anuncio atrae clics masivamente pero no convierte. Analizar la URL de destino: ¿carga rápido en móvil? ¿Tiene un CTA claro? ¿El precio se muestra antes o después del clic? Un buen creativo desperdiciado por mala landing es una oportunidad clara. Instalar Hotjar o Clarity para ver grabaciones.</div>
+        <span class="action-impact">Impacto: Potencial de convertir 1 de cada 10 clics si se mejora la experiencia</span>
+      </div>
+
+      <div class="action-card medium">
+        <div class="action-priority">🔵 Media Prioridad — Optimización gradual</div>
+        <div class="action-title">Reevaluar rol y presupuesto del video institucional</div>
+        <div class="action-desc">El "Video sobre ustedes antiguo" consume $150.595 (70% del presupuesto) y genera tráfico pero no conversiones directas. Si el objetivo es awareness/branding, está bien, pero debe presupuestarse de forma separada del dinero destinado a performance. Propuesta: reducir a 20–30% del presupuesto total y reasignar el resto a formatos de conversión.</div>
+        <span class="action-impact">Impacto: Mejora estructural del ROAS global del canal</span>
+      </div>
+
+      <div class="action-card opport">
+        <div class="action-priority">🟢 Oportunidad — Experimento a considerar</div>
+        <div class="action-title">Test A/B: Storyselling con y sin precio explícito</div>
+        <div class="action-desc">El Storyselling actual convirtió a 6.32x. Para escalar con confianza, crear una variante idéntica pero mostrando el precio del producto directamente en el video/imagen. Hipótesis: si el precio no es barrera, mencionarlo pre-filtra audiencia y mejora el ROAS. Si el precio es barrera, se descubre sin gastar más. Presupuesto sugerido: $15.000–$20.000 CLP en split equitativo.</div>
+        <span class="action-impact">Impacto: Aprendizaje estratégico sobre sensibilidad de precio en la audiencia</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     14 · PROYECCIÓN JUNIO 2026
+══════════════════════════════════════ -->
+<section class="section section-forest">
+  <div class="container">
+    <div class="section-label">14 · Proyección Mes Siguiente</div>
+    <h2 class="section-title">Escenarios para Junio 2026</h2>
+    <p class="section-desc">Proyecciones basadas en los datos reales de mayo y los supuestos de implementación de las recomendaciones. Inversión base proyectada: $213.918 CLP (igual a mayo).</p>
+
+    <div class="proj-grid">
+      <div class="proj-card proj-optimist">
+        <div class="proj-scenario-label">🟢 Escenario Optimista — Acciones implementadas</div>
+        <div class="proj-row">
+          <span class="proj-row-label">Inversión proyectada</span>
+          <span class="proj-row-value">~$210.000 CLP</span>
+        </div>
+        <div class="proj-row">
+          <span class="proj-row-label">ROAS esperado</span>
+          <span class="proj-row-value">2.5x – 3.5x</span>
+        </div>
+        <div class="proj-row">
+          <span class="proj-row-label">Ingresos proyectados</span>
+          <span class="proj-row-value">$525K – $735K CLP</span>
+        </div>
+        <div class="proj-row">
+          <span class="proj-row-label">Conversiones esperadas</span>
+          <span class="proj-row-value">8–15 compras</span>
+        </div>
+        <div class="proj-row">
+          <span class="proj-row-label">Supuesto clave</span>
+          <span class="proj-row-value" style="font-size:11px;text-align:right;max-width:180px;">Píxel reparado + retargeting activo + 3 storyselling nuevos</span>
+        </div>
+      </div>
+
+      <div class="proj-card proj-conserv">
+        <div class="proj-scenario-label">🟡 Escenario Conservador — Sin cambios</div>
+        <div class="proj-row">
+          <span class="proj-row-label">Inversión proyectada</span>
+          <span class="proj-row-value">~$213.000 CLP</span>
+        </div>
+        <div class="proj-row">
+          <span class="proj-row-label">ROAS esperado</span>
+          <span class="proj-row-value">0.80x – 1.0x</span>
+        </div>
+        <div class="proj-row">
+          <span class="proj-row-label">Ingresos proyectados</span>
+          <span class="proj-row-value">$170K – $213K CLP</span>
+        </div>
+        <div class="proj-row">
+          <span class="proj-row-label">Conversiones esperadas</span>
+          <span class="proj-row-value">1–3 compras</span>
+        </div>
+        <div class="proj-row">
+          <span class="proj-row-label">Riesgo principal</span>
+          <span class="proj-row-value" style="font-size:11px;text-align:right;max-width:180px;">Continuar gastando en placements sin conversión + fatiga creativa</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-box" style="margin-top:24px;">
+      <div class="insight-box-label">📅 Contexto Estacional Junio 2026</div>
+      <div class="insight-box-text">
+        Junio tiene dos momentos de alta relevancia para Espacio Mancha: <strong style="color:var(--amber)">Día del Padre (tercer domingo, 21 de junio)</strong> — oportunidad directa de replicar la estrategia estacional que mostró CTR más alto en mayo. El briefing creativo para Día del Padre debe estar listo para el <strong>7 de junio</strong> para tener tiempo de aprobación y aprendizaje de Meta. Además, junio es inicio de temporada fría en Chile, período en que las personas decoran más sus hogares — potencial argumento de contenido orgánico y para creativos de marca.
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-logo">La Ola Studio</div>
+    <div class="footer-tagline">Marketing Digital · Estrategia · Performance</div>
+    <div class="footer-meta">
+      Informe generado para Espacio Mancha · Mayo 2026 · Datos reales exportados desde Meta Ads Manager<br>
+      Secciones marcadas como "datos no disponibles" se completarán al recibir los archivos faltantes.<br><br>
+      La Ola Studio · Versión 1.0 · Informe de Performance Mensual
+    </div>
+  </div>
+</footer>
+
+
+<!-- ══════════════════════════════════════
+     CHARTS
+══════════════════════════════════════ -->
+<script>
+const amber = '#E99F2F';
+const green = '#5BBF8A';
+const blue  = '#7B9FE8';
+const red   = '#B9352E';
+const redL  = '#e07570';
+const muted = '#5a5550';
+
+Chart.defaults.color = '#8A8680';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
+Chart.defaults.font.family = "'Pathway Gothic One', sans-serif";
+
+// ── PLATFORM CHART ──
+new Chart(document.getElementById('chartPlatform'), {
+  type: 'bar',
+  data: {
+    labels: ['Instagram', 'Facebook', 'Audience Network', 'Threads'],
+    datasets: [
+      {
+        label: 'Inversión (CLP)',
+        data: [131919, 59146, 22446, 407],
+        backgroundColor: [amber, 'rgba(233,159,47,0.4)', 'rgba(233,159,47,0.25)', 'rgba(233,159,47,0.12)'],
+        borderRadius: 4,
+        yAxisID: 'y',
+      },
+      {
+        label: 'Ingresos (CLP)',
+        data: [193000, 0, 0, 0],
+        backgroundColor: [green, muted, muted, muted],
+        borderRadius: 4,
+        yAxisID: 'y',
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { color: '#8A8680', font: { size: 11 } } },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString('es-CL')} CLP`
+        }
+      }
+    },
+    scales: {
+      y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } }
+    }
+  }
+});
+
+// ── ROAS POR ANUNCIO ──
+new Chart(document.getElementById('chartRoasAnuncio'), {
+  type: 'bar',
+  indexAxis: 'y',
+  data: {
+    labels: [
+      'Storyselling día mamá',
+      'Video sobre ustedes',
+      'Video Enmarcaciones',
+      'Video día mamá',
+      'Catálogo',
+      'Foto día mamá'
+    ],
+    datasets: [{
+      label: 'ROAS',
+      data: [6.32, 0.93, 0, 0, 0, 0],
+      backgroundColor: [green, redL, muted, muted, muted, muted],
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      annotation: {},
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ROAS: ${ctx.parsed.x.toFixed(2)}x`
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { callback: v => v + 'x' },
+        max: 8
+      }
+    }
+  }
+});
+
+// ── INV vs INGRESO ──
+new Chart(document.getElementById('chartInvIngreso'), {
+  type: 'bar',
+  data: {
+    labels: [
+      'Video ustedes',
+      'Catálogo',
+      'Storyselling mamá',
+      'Video Enmarcac.',
+      'Video mamá',
+      'Foto mamá'
+    ],
+    datasets: [
+      {
+        label: 'Inversión',
+        data: [150595, 44271, 8392, 5908, 4058, 694],
+        backgroundColor: 'rgba(233,159,47,0.7)',
+        borderRadius: 4,
+      },
+      {
+        label: 'Ingresos',
+        data: [140000, 0, 53000, 0, 0, 0],
+        backgroundColor: 'rgba(91,191,138,0.7)',
+        borderRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { color: '#8A8680', font: { size: 11 } } },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString('es-CL')}`
+        }
+      }
+    },
+    scales: {
+      y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
