@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qué Me Decí — Informe de Performance · Mayo 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Pathway+Gothic+One&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --azul: #2E3B74;
+    --verde: #256A46;
+    --rojo: #B9352E;
+    --ambar: #E99F2F;
+    --gris: #3D3D3D;
+    --negro: #1A1A1A;
+    --sec-azul: #181E35;
+    --sec-verde: #1E2A1E;
+    --blanco: #F0F0F0;
+    --texto: #D8D8D8;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--negro);
+    font-family: 'Pathway Gothic One', sans-serif;
+    color: var(--texto);
+    font-size: 16px;
+    letter-spacing: 0.02em;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--azul);
+    border-bottom: 4px solid var(--ambar);
+    padding: 56px 48px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 360px; height: 360px;
+    border-radius: 50%;
+    background: rgba(233,159,47,0.07);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -120px; left: 40%;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: rgba(37,106,70,0.08);
+    pointer-events: none;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(233,159,47,0.18);
+    border: 1px solid var(--ambar);
+    color: var(--ambar);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    animation: pulse 2.8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(233,159,47,0.35); }
+    50%      { box-shadow: 0 0 0 8px rgba(233,159,47,0); }
+  }
+  .hero-period {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(233,159,47,0.8);
+    margin-bottom: 8px;
+  }
+  .hero-title {
+    font-size: clamp(36px, 5vw, 64px);
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .hero-subtitle {
+    font-size: 16px;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 40px;
+    letter-spacing: 0.08em;
+  }
+  .hero-kpis {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+  }
+  .hero-kpi {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 16px 20px;
+    border-radius: 4px;
+  }
+  .hero-kpi-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 6px;
+  }
+  .hero-kpi-value {
+    font-size: clamp(18px, 2.5vw, 28px);
+    color: var(--ambar);
+    line-height: 1;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 56px 48px;
+  }
+  section:nth-of-type(odd)  { background: var(--sec-azul); }
+  section:nth-of-type(even) { background: var(--sec-verde); }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ambar);
+    margin-bottom: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--ambar);
+    opacity: 0.35;
+  }
+  .section-title {
+    font-size: clamp(22px, 3vw, 36px);
+    color: #fff;
+    margin-bottom: 32px;
+    line-height: 1.1;
+  }
+
+  /* KPI CARDS */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .kpi-card {
+    background: rgba(0,0,0,0.3);
+    border-radius: 6px;
+    padding: 20px 22px;
+    border-top: 3px solid var(--ambar);
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card.verde  { border-top-color: var(--verde); }
+  .kpi-card.rojo   { border-top-color: var(--rojo); }
+  .kpi-card.azul   { border-top-color: var(--azul); }
+  .kpi-card-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+  }
+  .kpi-card-value {
+    font-size: clamp(22px, 3vw, 34px);
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .kpi-card-delta {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-top: 6px;
+  }
+  .delta-pos { background: rgba(37,106,70,0.35); color: #5BBF8A; }
+  .delta-neg { background: rgba(185,53,46,0.3);  color: #E07B75; }
+  .delta-neu { background: rgba(233,159,47,0.2); color: var(--ambar); }
+
+  /* INSIGHT BOX */
+  .insight-box {
+    background: rgba(0,0,0,0.3);
+    border-left: 4px solid var(--ambar);
+    padding: 20px 24px;
+    border-radius: 0 6px 6px 0;
+    margin-top: 24px;
+  }
+  .insight-box-title {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ambar);
+    margin-bottom: 10px;
+  }
+  .insight-box p {
+    font-size: 15px;
+    color: var(--texto);
+    line-height: 1.6;
+  }
+
+  /* CAMPAIGN CARDS */
+  .camp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+  .camp-card {
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .camp-card-header {
+    background: var(--azul);
+    padding: 18px 24px;
+    border-bottom: 3px solid var(--ambar);
+  }
+  .camp-card-header.trafico { background: #1a3a28; border-bottom-color: var(--verde); }
+  .camp-card-title {
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .camp-card-tag {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+  }
+  .camp-card-body { padding: 20px 24px; }
+  .camp-metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .camp-metric:last-child { border-bottom: none; }
+  .camp-metric-label { font-size: 12px; color: rgba(255,255,255,0.45); letter-spacing:0.05em; }
+  .camp-metric-value { font-size: 17px; color: #fff; }
+  .camp-insight {
+    background: rgba(46,59,116,0.25);
+    border-left: 3px solid var(--ambar);
+    padding: 12px 16px;
+    margin-top: 16px;
+    font-size: 13px;
+    line-height: 1.5;
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrap { overflow-x: auto; margin-top: 24px; }
+  table { width:100%; border-collapse: collapse; font-size: 14px; }
+  th {
+    background: rgba(46,59,116,0.5);
+    color: var(--ambar);
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(233,159,47,0.3);
+  }
+  td {
+    padding: 11px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: var(--texto);
+    vertical-align: middle;
+  }
+  tr:hover td { background: rgba(255,255,255,0.03); }
+  .badge-verde { background: rgba(37,106,70,0.4); color: #5BBF8A; padding:3px 8px; border-radius:3px; font-size:11px; }
+  .badge-ambar { background: rgba(233,159,47,0.25); color: var(--ambar); padding:3px 8px; border-radius:3px; font-size:11px; }
+  .badge-rojo  { background: rgba(185,53,46,0.35); color: #E07B75; padding:3px 8px; border-radius:3px; font-size:11px; }
+  .badge-info  { background: rgba(46,59,116,0.5);  color: #8DA4F0; padding:3px 8px; border-radius:3px; font-size:11px; }
+
+  /* PROGRESS BARS */
+  .progress-wrap { margin: 8px 0; }
+  .progress-label { display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; }
+  .progress-bar { height: 8px; background: rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; }
+  .progress-fill { height:100%; border-radius:4px; transition: width 1s ease; }
+
+  /* FUNNEL */
+  .funnel { max-width: 560px; margin: 0 auto; }
+  .funnel-step {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 4px;
+  }
+  .funnel-bar-wrap { flex: 1; }
+  .funnel-bar { height: 52px; border-radius: 4px; display:flex; align-items:center; padding: 0 20px; transition: width 1s; position:relative; }
+  .funnel-label { width: 160px; text-align:right; font-size:14px; color:rgba(255,255,255,0.6); }
+  .funnel-value { font-size:22px; color:#fff; }
+  .funnel-arrow { text-align:center; margin: 2px 0; font-size: 13px; color: rgba(233,159,47,0.6); letter-spacing:0.1em; padding-left: 180px; }
+  .funnel-pct { font-size:12px; color:var(--ambar); margin-left:auto; }
+
+  /* ALERTS */
+  .alerts-grid { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .alert-card {
+    padding: 18px 20px;
+    border-radius: 6px;
+    border-left: 4px solid;
+    background: rgba(0,0,0,0.3);
+  }
+  .alert-danger  { border-color: var(--rojo); }
+  .alert-warning { border-color: var(--ambar); }
+  .alert-success { border-color: var(--verde); }
+  .alert-info    { border-color: #5B8FE0; }
+  .alert-icon { font-size:20px; margin-bottom:8px; }
+  .alert-title { font-size:15px; color:#fff; margin-bottom:6px; }
+  .alert-desc { font-size:13px; color:rgba(255,255,255,0.6); line-height:1.5; }
+
+  /* ACTION CARDS */
+  .actions-grid { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .action-card {
+    background: rgba(0,0,0,0.3);
+    border-radius: 6px;
+    padding: 20px 22px;
+    border-top: 3px solid;
+  }
+  .action-card.urgente   { border-color: var(--rojo); }
+  .action-card.alta      { border-color: var(--ambar); }
+  .action-card.media     { border-color: #5B8FE0; }
+  .action-card.experim   { border-color: var(--verde); }
+  .action-priority {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .action-card.urgente .action-priority { color: #E07B75; }
+  .action-card.alta    .action-priority { color: var(--ambar); }
+  .action-card.media   .action-priority { color: #8DA4F0; }
+  .action-card.experim .action-priority { color: #5BBF8A; }
+  .action-title { font-size:17px; color:#fff; margin-bottom:8px; }
+  .action-desc  { font-size:13px; color:rgba(255,255,255,0.6); line-height:1.5; margin-bottom:10px; }
+  .action-impacto { font-size:12px; color:rgba(255,255,255,0.4); }
+  .action-impacto span { color: var(--ambar); }
+
+  /* PROYECCION */
+  .proy-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .proy-card {
+    background: rgba(0,0,0,0.3);
+    border-radius:8px;
+    overflow:hidden;
+  }
+  .proy-header {
+    padding: 16px 22px;
+    font-size: 16px;
+    color: #fff;
+  }
+  .proy-header.optimista  { background: rgba(37,106,70,0.45); }
+  .proy-header.conservador { background: rgba(46,59,116,0.55); }
+  .proy-body { padding:20px 22px; }
+  .proy-row {
+    display:flex; justify-content:space-between;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 14px;
+  }
+  .proy-row:last-child { border:none; }
+  .proy-row span:first-child { color:rgba(255,255,255,0.5); }
+  .proy-row span:last-child { color:#fff; }
+
+  /* CHART CONTAINERS */
+  .chart-container { position:relative; height:280px; }
+  .chart-container.tall { height:340px; }
+  .chart-container.short { height:220px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--azul);
+    border-top: 4px solid var(--ambar);
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-brand { font-size:18px; color:#fff; }
+  .footer-brand span { color: var(--ambar); }
+  .footer-note { font-size:12px; color:rgba(255,255,255,0.4); text-align:right; line-height:1.6; }
+
+  /* DELTA INLINE */
+  .delta { font-size:13px; margin-left:8px; }
+  .delta.pos { color:#5BBF8A; }
+  .delta.neg { color:#E07B75; }
+
+  /* COL 2 CHART */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:start; }
+  .two-col-wide { display:grid; grid-template-columns:1.4fr 1fr; gap:32px; align-items:start; }
+
+  @media (max-width: 900px) {
+    .hero-kpis, .camp-grid, .kpi-grid, .alerts-grid, .actions-grid, .proy-grid, .two-col, .two-col-wide {
+      grid-template-columns: 1fr;
+    }
+    section { padding: 36px 20px; }
+    .hero { padding: 36px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== 00 · HERO ===== -->
+<header class="hero">
+  <div class="badge">La Ola Studio · Informe de Performance</div>
+  <p class="hero-period">Performance Report · Mayo 2026</p>
+  <h1 class="hero-title">Qué Me Decí / Mayo 2026</h1>
+  <p class="hero-subtitle">01 de mayo — 31 de mayo de 2026 &nbsp;·&nbsp; Meta Ads</p>
+  <div class="hero-kpis">
+    <div class="hero-kpi">
+      <div class="hero-kpi-label">Período</div>
+      <div class="hero-kpi-value">01–31 May</div>
+    </div>
+    <div class="hero-kpi">
+      <div class="hero-kpi-label">Inversión Total</div>
+      <div class="hero-kpi-value">$306.158</div>
+    </div>
+    <div class="hero-kpi">
+      <div class="hero-kpi-label">Mensajes Generados</div>
+      <div class="hero-kpi-value">514</div>
+    </div>
+    <div class="hero-kpi">
+      <div class="hero-kpi-label">Costo por Mensaje</div>
+      <div class="hero-kpi-value">$596</div>
+    </div>
+    <div class="hero-kpi">
+      <div class="hero-kpi-label">Clics Totales</div>
+      <div class="hero-kpi-value">5.623</div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== 01 · RESUMEN EJECUTIVO ===== -->
+<section id="resumen">
+  <div class="section-label">01</div>
+  <h2 class="section-title">Resumen Ejecutivo</h2>
+
+  <p style="font-size:15px; line-height:1.8; color:var(--texto); max-width:860px; margin-bottom:32px;">
+    Mayo 2026 es el <strong style="color:#fff">mejor mes registrado</strong> desde el inicio de las campañas en términos de eficiencia: 514 mensajes nuevos al costo por mensaje más bajo del historial ($596 CLP), con una inversión 2,4% inferior a abril. La incorporación del anuncio <em>Vlog mayo</em> a la Campaña de Mensajes fue determinante — su costo por mensaje de $218 CLP es un récord absoluto. La frecuencia promedio se mantiene sana en ambas campañas (1,28 mensajes y 1,09 tráfico), lo que indica que la audiencia aún no está saturada. La Campaña de Tráfico al perfil sigue sin generar mensajes de forma eficiente: concentra $93.010 CLP con solo 7 mensajes atribuidos, un patrón que requiere revisión estratégica para junio.
+  </p>
+
+  <div class="kpi-grid">
+    <div class="kpi-card verde">
+      <div class="kpi-card-label">Mensajes Nuevos</div>
+      <div class="kpi-card-value">514</div>
+      <span class="kpi-card-delta delta-pos">▲ +48,1% vs abril</span>
+    </div>
+    <div class="kpi-card verde">
+      <div class="kpi-card-label">Costo por Mensaje</div>
+      <div class="kpi-card-value">$596</div>
+      <span class="kpi-card-delta delta-pos">▼ -34,1% vs abril</span>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-label">Inversión Total</div>
+      <div class="kpi-card-value">$306.158</div>
+      <span class="kpi-card-delta delta-neg">▼ -2,4% vs abril</span>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-label">Clics Totales</div>
+      <div class="kpi-card-value">5.623</div>
+      <span class="kpi-card-delta delta-pos">▲ +9,1% vs abril</span>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-label">CTR Promedio</div>
+      <div class="kpi-card-value">3,24%</div>
+      <span class="kpi-card-delta delta-neg">▼ -0,01pp vs abril</span>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-label">Frecuencia Promedio</div>
+      <div class="kpi-card-value">1,19x</div>
+      <span class="kpi-card-delta delta-pos">✓ Sin fatiga creativa</span>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-box-title">📊 Lectura estratégica</div>
+    <p>La caída del 34,1% en el costo por mensaje con prácticamente el mismo presupuesto confirma que el cambio de creatividades fue el factor clave. <em>Vlog mayo</em> redefinió el umbral de eficiencia del cliente. El siguiente paso crítico es entender qué elemento de ese anuncio (formato, gancho, mensaje) impulsa esa conversión, para replicarlo en junio. En paralelo, la Campaña de Tráfico tiene un rol de top-funnel válido para awareness, pero no debe medirse ni optimizarse por mensajes.</p>
+  </div>
+</section>
+
+<!-- ===== 01b · TENDENCIA HISTÓRICA ===== -->
+<section id="tendencia" style="padding-top:0; background: var(--sec-azul);">
+  <div class="section-label">01 · TENDENCIA</div>
+  <h2 class="section-title">Evolución Histórica · Sep 2025 → May 2026</h2>
+  <div class="two-col">
+    <div>
+      <p style="font-size:12px; color:rgba(255,255,255,0.4); margin-bottom:12px; letter-spacing:0.1em; text-transform:uppercase;">Costo por mensaje (CLP)</p>
+      <div class="chart-container"><canvas id="chartCPM"></canvas></div>
+    </div>
+    <div>
+      <p style="font-size:12px; color:rgba(255,255,255,0.4); margin-bottom:12px; letter-spacing:0.1em; text-transform:uppercase;">Mensajes nuevos generados</p>
+      <div class="chart-container"><canvas id="chartMsgs"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 02 · CAMPAÑAS ===== -->
+<section id="campanas">
+  <div class="section-label">02</div>
+  <h2 class="section-title">Desempeño por Campaña</h2>
+
+  <div class="camp-grid">
+    <!-- Mensajes -->
+    <div class="camp-card">
+      <div class="camp-card-header">
+        <div class="camp-card-title">Campaña de Mensajes</div>
+        <div class="camp-card-tag">Objetivo · Conversaciones · Activa</div>
+      </div>
+      <div class="camp-card-body">
+        <div class="camp-metric"><span class="camp-metric-label">Mensajes nuevos</span><span class="camp-metric-value">507</span></div>
+        <div class="camp-metric"><span class="camp-metric-label">Costo por mensaje</span><span class="camp-metric-value">$421 CLP</span></div>
+        <div class="camp-metric"><span class="camp-metric-label">Inversión</span><span class="camp-metric-value">$213.148 CLP</span></div>
+        <div class="camp-metric"><span class="camp-metric-label">Impresiones</span><span class="camp-metric-value">104.761</span></div>
+        <div class="camp-metric"><span class="camp-metric-label">Clics en enlace</span><span class="camp-metric-value">2.182</span></div>
+        <div class="camp-metric"><span class="camp-metric-label">CTR</span><span class="camp-metric-value">2,08%</span></div>
+        <div class="camp-metric"><span class="camp-metric-label">Frecuencia</span><span class="camp-metric-value">1,28x ✓</span></div>
+        <div class="camp-metric"><span class="camp-metric-label">Conjunto</span><span class="camp-metric-value" style="font-size:12px;">Peñalolén, Puente Alto, La Florida</span></div>
+        <div class="camp-insight">Campaña principal de performance. Genera el 98,6% de todos los mensajes del mes con solo el 69,6% del presupuesto. ROI de mensajes óptimo.</div>
+      </div>
+    </div>
+
+    <!-- Tráfico -->
+    <div class="camp-card">
+      <div class="camp-card-header trafico">
+        <div class="camp-card-title">Campaña de Tráfico al Perfil</div>
+        <div class="camp-card-tag">Objetivo · Visitas al perfil · Activa</div>
+      </div>
+      <div class="camp-card-body">
+        <div class="camp-metric"><span class="camp-metric-label">Mensajes atribuidos</span><span class="camp-metric-value" style="color:#E07B75;">7</span></div>
+        <div class="camp-metric"><span class="camp-metric-label">Costo por mensaje</span><span class="camp-metric-value" style="color:#E07B75;">$13.287 CLP</span></div>
+        <div class="camp-metric"><span class="camp-metric-label">Inversión</span><span class="camp-metric-value">$93.010 CLP</span></div>
+        <div class="camp-metric"><span class="camp-metric-label">Impresiones</span><span class="camp-metric-value">68.933</span></div>
+        <div class="camp-metric"><span class="camp-metric-label">Clics en enlace</span><span class="camp-metric-value">3.441</span></div>
+        <div class="camp-metric"><span class="camp-metric-label">CTR</span><span class="camp-metric-value">4,99%</span></div>
+        <div class="camp-metric"><span class="camp-metric-label">Frecuencia</span><span class="camp-metric-value">1,09x ✓</span></div>
+        <div class="camp-metric"><span class="camp-metric-label">Conjunto</span><span class="camp-metric-value" style="font-size:12px;">Peña, Puente, La Flower.</span></div>
+        <div class="camp-insight" style="border-left-color: var(--verde);">Rol de top-funnel: genera visitas al perfil (2.927 resultados, $25 CLP c/u), no mensajes directos. No evaluar por CPMsg. Revisar si el volumen de seguidores captados justifica la inversión.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparativa -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Campaña</th>
+          <th>Inversión</th>
+          <th>% del presup.</th>
+          <th>Mensajes</th>
+          <th>Costo/Mensaje</th>
+          <th>Clics</th>
+          <th>CTR</th>
+          <th>Frecuencia</th>
+          <th>Eficiencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:#fff">Mensajes</strong></td>
+          <td>$213.148</td>
+          <td>69,6%</td>
+          <td><strong style="color:#5BBF8A">507</strong></td>
+          <td><strong style="color:#5BBF8A">$421</strong></td>
+          <td>2.182</td>
+          <td>2,08%</td>
+          <td>1,28x</td>
+          <td><span class="badge-verde">ÓPTIMA</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:#fff">Tráfico</strong></td>
+          <td>$93.010</td>
+          <td>30,4%</td>
+          <td><span style="color:#E07B75">7</span></td>
+          <td><span style="color:#E07B75">$13.287</span></td>
+          <td>3.441</td>
+          <td>4,99%</td>
+          <td>1,09x</td>
+          <td><span class="badge-info">TOP-FUNNEL</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== 03 · CREATIVOS ===== -->
+<section id="creativos">
+  <div class="section-label">03</div>
+  <h2 class="section-title">Análisis Creativo — Performance por Anuncio</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Anuncio</th>
+          <th>Campaña</th>
+          <th>Inversión</th>
+          <th>Impresiones</th>
+          <th>CTR</th>
+          <th>Mensajes</th>
+          <th>Costo/Mensaje</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:#fff">Vlog mayo</strong></td>
+          <td>Mensajes</td>
+          <td>$27.661</td>
+          <td>14.274</td>
+          <td>2,68%</td>
+          <td><strong style="color:#5BBF8A">127</strong></td>
+          <td><strong style="color:#5BBF8A">$218</strong></td>
+          <td><span class="badge-verde">ESCALAR 🔝</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:#fff">Vlog 3.0</strong></td>
+          <td>Mensajes</td>
+          <td>$120.289</td>
+          <td>59.154</td>
+          <td>3,72%</td>
+          <td><strong style="color:#5BBF8A">264</strong></td>
+          <td>$527</td>
+          <td><span class="badge-verde">MANTENER ✓</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:#fff">Vlog</strong></td>
+          <td>Mensajes</td>
+          <td>$56.725</td>
+          <td>28.194</td>
+          <td>3,83%</td>
+          <td>110</td>
+          <td>$655</td>
+          <td><span class="badge-ambar">REVISAR</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:#fff">Bofu 1 levantandome</strong></td>
+          <td>Mensajes</td>
+          <td>$6.730</td>
+          <td>2.356</td>
+          <td>2,27%</td>
+          <td>5</td>
+          <td>$1.346</td>
+          <td><span class="badge-rojo">PAUSAR ⚠</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:#fff">Promo feed</strong></td>
+          <td>Mensajes</td>
+          <td>$1.743</td>
+          <td>783</td>
+          <td>26,6%</td>
+          <td>1</td>
+          <td>$1.743</td>
+          <td><span class="badge-ambar">TEST</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:#fff">Video Victor</strong></td>
+          <td>Tráfico</td>
+          <td>$78.576</td>
+          <td>57.094</td>
+          <td>3,91%</td>
+          <td>3</td>
+          <td><span style="color:#E07B75">$26.192</span></td>
+          <td><span class="badge-info">TOP-FUNNEL</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:#fff">Te bloqueó tu ex?</strong></td>
+          <td>Tráfico</td>
+          <td>$13.165</td>
+          <td>10.816</td>
+          <td>3,93%</td>
+          <td>4</td>
+          <td><span style="color:#E07B75">$3.291</span></td>
+          <td><span class="badge-info">TOP-FUNNEL</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:#fff">Secuencia</strong></td>
+          <td>Tráfico</td>
+          <td>$708</td>
+          <td>628</td>
+          <td>4,22%</td>
+          <td style="color:#E07B75"><strong>0</strong></td>
+          <td style="color:#E07B75">—</td>
+          <td><span class="badge-rojo">0 MENSAJES ✕</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:#fff">Nuevo servicio de rulos</strong></td>
+          <td>Tráfico</td>
+          <td>$393</td>
+          <td>290</td>
+          <td>7,97%</td>
+          <td style="color:#E07B75"><strong>0</strong></td>
+          <td style="color:#E07B75">—</td>
+          <td><span class="badge-rojo">0 MENSAJES ✕</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:#fff">Video fondo morado</strong></td>
+          <td>Tráfico</td>
+          <td>$168</td>
+          <td>105</td>
+          <td>9,33%</td>
+          <td style="color:#E07B75"><strong>0</strong></td>
+          <td style="color:#E07B75">—</td>
+          <td><span class="badge-rojo">0 MENSAJES ✕</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:36px;">
+    <p style="font-size:12px; color:rgba(255,255,255,0.4); margin-bottom:16px; letter-spacing:0.1em; text-transform:uppercase;">Mensajes por anuncio (Campaña de Mensajes)</p>
+    <div class="chart-container short"><canvas id="chartAds"></canvas></div>
+  </div>
+
+  <div style="margin-top:36px;">
+    <p style="font-size:12px; color:rgba(255,255,255,0.4); margin-bottom:16px; letter-spacing:0.1em; text-transform:uppercase;">Eficiencia relativa por anuncio (% de mensajes / % de inversión)</p>
+    <!-- Efficiency bars -->
+    <div style="max-width:700px;">
+      <div style="margin-bottom:14px;">
+        <div class="progress-label"><span style="color:#fff">Vlog mayo</span><span style="color:#5BBF8A">2.31x — Supereficiente</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%; background: var(--verde);"></div></div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div class="progress-label"><span style="color:#fff">Vlog 3.0</span><span style="color:var(--ambar)">1.10x — Equilibrado</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:80%; background: var(--ambar);"></div></div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div class="progress-label"><span style="color:#fff">Vlog</span><span style="color:var(--ambar)">0.97x — Casi par</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:65%; background: var(--ambar);"></div></div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div class="progress-label"><span style="color:#fff">Bofu 1 levantandome</span><span style="color:#E07B75">0.37x — Ineficiente</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:28%; background: var(--rojo);"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box" style="margin-top:24px;">
+    <div class="insight-box-title">🎨 Ganadores del mes & recomendaciones</div>
+    <p><strong style="color:#fff">Escalar:</strong> <em>Vlog mayo</em> — costo por mensaje $218 CLP (63% más eficiente que el promedio del mes). Duplicar su presupuesto en junio es la acción de mayor ROI disponible.<br><br>
+    <strong style="color:#fff">Mantener:</strong> <em>Vlog 3.0</em> — genera el 51% de todos los mensajes del mes con buen CTR (3,72%). Núcleo de volumen.<br><br>
+    <strong style="color:#fff">Pausar:</strong> <em>Bofu 1 levantandome</em> — $1.346 CLP por mensaje con bajo alcance. Redirigir esa inversión hacia Vlog mayo.<br><br>
+    <strong style="color:#fff">Nota sobre tráfico:</strong> Los 3 anuncios con 0 mensajes (Secuencia, Nuevo servicio de rulos, Video fondo morado) no son problemáticos si su rol es generar visitas al perfil — lo cual logran. Evaluar por costo por visita al perfil, no por mensajes.</p>
+  </div>
+</section>
+
+<!-- ===== 04 · PLATAFORMAS ===== -->
+<section id="plataformas">
+  <div class="section-label">04</div>
+  <h2 class="section-title">Desglose por Plataforma y Placement</h2>
+
+  <div class="two-col">
+    <div>
+      <div class="kpi-grid" style="grid-template-columns:1fr 1fr; margin-bottom:24px;">
+        <div class="kpi-card azul">
+          <div class="kpi-card-label">Facebook · Inversión</div>
+          <div class="kpi-card-value">$202.867</div>
+          <span class="kpi-card-delta delta-neu">66,3% del total</span>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card-label">Instagram · Inversión</div>
+          <div class="kpi-card-value">$103.291</div>
+          <span class="kpi-card-delta delta-neu">33,7% del total</span>
+        </div>
+        <div class="kpi-card verde">
+          <div class="kpi-card-label">Facebook · Mensajes</div>
+          <div class="kpi-card-value">346</div>
+          <span class="kpi-card-delta delta-pos">67,3% de mensajes</span>
+        </div>
+        <div class="kpi-card verde">
+          <div class="kpi-card-label">Instagram · Mensajes</div>
+          <div class="kpi-card-value">168</div>
+          <span class="kpi-card-delta delta-neu">$615 CLP/msg</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Plataforma</th><th>Inversión</th><th>Impresiones</th><th>Clics</th><th>Mensajes</th><th>$/Mensaje</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:#fff">Facebook</strong></td>
+              <td>$202.867</td>
+              <td>103.353</td>
+              <td>3.041</td>
+              <td><strong style="color:#5BBF8A">346</strong></td>
+              <td>$586</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#fff">Instagram</strong></td>
+              <td>$103.291</td>
+              <td>70.341</td>
+              <td>2.582</td>
+              <td>168</td>
+              <td>$615</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <p style="font-size:12px; color:rgba(255,255,255,0.4); margin-bottom:12px; letter-spacing:0.1em; text-transform:uppercase;">Distribución inversión por plataforma</p>
+      <div class="chart-container short"><canvas id="chartPlatforms"></canvas></div>
+    </div>
+  </div>
+
+  <div style="margin-top:32px;">
+    <p style="font-size:12px; color:rgba(255,255,255,0.4); margin-bottom:16px; letter-spacing:0.1em; text-transform:uppercase;">Top placements — Inversión vs Mensajes</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Placement</th><th>Inversión</th><th>Impresiones</th><th>Clics</th><th>Mensajes</th><th>$/Mensaje</th><th>Eficiencia</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:#fff">Feed</strong></td>
+            <td>$134.193</td>
+            <td>68.953</td>
+            <td>1.599</td>
+            <td><strong style="color:#5BBF8A">295</strong></td>
+            <td style="color:#5BBF8A"><strong>$455</strong></td>
+            <td><span class="badge-verde">PRIORIDAD</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#fff">Instagram Reels</strong></td>
+            <td>$28.923</td>
+            <td>19.880</td>
+            <td>448</td>
+            <td>106</td>
+            <td style="color:#5BBF8A">$273</td>
+            <td><span class="badge-verde">PRIORIDAD</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#fff">Reels in-stream</strong></td>
+            <td>$23.415</td>
+            <td>11.721</td>
+            <td>399</td>
+            <td>43</td>
+            <td>$545</td>
+            <td><span class="badge-ambar">MANTENER</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#fff">Facebook Reels</strong></td>
+            <td>$25.377</td>
+            <td>10.318</td>
+            <td>245</td>
+            <td>29</td>
+            <td>$875</td>
+            <td><span class="badge-ambar">REVISAR</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#fff">FB Stories</strong></td>
+            <td>$35.102</td>
+            <td>14.622</td>
+            <td>1.112</td>
+            <td>4</td>
+            <td style="color:#E07B75">$8.776</td>
+            <td><span class="badge-rojo">INEFICIENTE</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#fff">IG Stories</strong></td>
+            <td>$47.804</td>
+            <td>34.293</td>
+            <td>1.618</td>
+            <td>14</td>
+            <td style="color:#E07B75">$3.415</td>
+            <td><span class="badge-rojo">REVISAR</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#fff">Anuncios FB Reels</strong></td>
+            <td>$7.350</td>
+            <td>11.501</td>
+            <td>135</td>
+            <td>14</td>
+            <td>$525</td>
+            <td><span class="badge-ambar">MANTENER</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#fff">Marketplace</strong></td>
+            <td>$2.585</td>
+            <td>1.870</td>
+            <td>40</td>
+            <td>2</td>
+            <td>$1.293</td>
+            <td><span class="badge-ambar">MENOR</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#fff">Notif. Facebook</strong></td>
+            <td>$479</td>
+            <td>73</td>
+            <td>7</td>
+            <td style="color:#E07B75">0</td>
+            <td style="color:#E07B75">—</td>
+            <td><span class="badge-rojo">0 MENSAJES</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="insight-box" style="margin-top:24px;">
+    <div class="insight-box-title">📍 Dónde concentrar presupuesto</div>
+    <p><strong style="color:#fff">Feed</strong> e <strong style="color:#fff">Instagram Reels</strong> son los placements más eficientes: juntos generan 401 mensajes al menor costo por mensaje. <strong style="color:#E07B75">Facebook Stories</strong> e <strong style="color:#E07B75">Instagram Stories</strong> consumen $82.906 CLP combinados y aportan solo 18 mensajes — representa el 27% del gasto con un retorno de mensajes de apenas 3,5%. Excluirlos o reducirlos en la campaña de mensajes y redirigir hacia Feed e IG Reels es la optimización de mayor impacto disponible sin cambiar creatividades.</p>
+  </div>
+</section>
+
+<!-- ===== 05 · EMBUDO ===== -->
+<section id="embudo">
+  <div class="section-label">05</div>
+  <h2 class="section-title">Embudo de Conversión</h2>
+
+  <div class="funnel">
+    <div class="funnel-step">
+      <div class="funnel-label">Impresiones</div>
+      <div class="funnel-bar-wrap">
+        <div class="funnel-bar" style="width:100%; background: rgba(46,59,116,0.7);">
+          <span class="funnel-value">173.694</span>
+          <span class="funnel-pct">100%</span>
+        </div>
+      </div>
+    </div>
+    <div class="funnel-arrow">▼ CTR 3,24% — 96,76% no hace clic</div>
+    <div class="funnel-step">
+      <div class="funnel-label">Clics en enlace</div>
+      <div class="funnel-bar-wrap">
+        <div class="funnel-bar" style="width:72%; background: rgba(46,59,116,0.85);">
+          <span class="funnel-value">5.623</span>
+          <span class="funnel-pct">3,24%</span>
+        </div>
+      </div>
+    </div>
+    <div class="funnel-arrow">▼ 10,53% inicia conversación</div>
+    <div class="funnel-step">
+      <div class="funnel-label">Conversaciones iniciadas</div>
+      <div class="funnel-bar-wrap">
+        <div class="funnel-bar" style="width:52%; background: rgba(37,106,70,0.6);">
+          <span class="funnel-value">592</span>
+          <span class="funnel-pct">10,53%</span>
+        </div>
+      </div>
+    </div>
+    <div class="funnel-arrow">▼ 86,82% se convierte en mensaje nuevo</div>
+    <div class="funnel-step">
+      <div class="funnel-label">Mensajes nuevos</div>
+      <div class="funnel-bar-wrap">
+        <div class="funnel-bar" style="width:38%; background: rgba(37,106,70,0.85);">
+          <span class="funnel-value">514</span>
+          <span class="funnel-pct">0,30%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box" style="margin-top:36px;">
+    <div class="insight-box-title">🔍 Dónde se pierde más audiencia</div>
+    <p>La mayor pérdida ocurre en el paso <strong style="color:#fff">Impresiones → Clics</strong>: el 96,76% de la audiencia impactada no hace clic. Esto es normal en Meta, pero indica que mejorar el gancho del primer segundo del video o el copy del anuncio puede tener alto impacto. La conversión de <strong style="color:#5BBF8A">conversación iniciada → mensaje nuevo es excelente (86,82%)</strong>, lo que confirma que la landing (perfil o chat) convierte bien. El eslabón débil es la atracción inicial, no el cierre.</p>
+  </div>
+</section>
+
+<!-- ===== 06 · ALERTAS ===== -->
+<section id="alertas">
+  <div class="section-label">06</div>
+  <h2 class="section-title">Alertas y Diagnóstico</h2>
+
+  <div class="alerts-grid">
+    <div class="alert-card alert-danger">
+      <div class="alert-icon">🔴</div>
+      <div class="alert-title">Anuncios con 0 mensajes en Campaña de Tráfico</div>
+      <div class="alert-desc">Secuencia ($708), Nuevo servicio de rulos ($393) y Video fondo morado ($168) no generaron ningún mensaje. Total: $1.269 CLP sin conversión de mensajes. Acción: evaluar si su objetivo es visitas al perfil (en ese caso pueden ser válidos) o pausarlos si no aportan resultados en ninguna métrica.</div>
+    </div>
+
+    <div class="alert-card alert-danger">
+      <div class="alert-icon">🔴</div>
+      <div class="alert-title">Stories (FB + IG) con CPMsg crítico</div>
+      <div class="alert-desc">Facebook Stories: $8.776 CLP/mensaje (18,7x el promedio del mes). Instagram Stories: $3.415 CLP/mensaje (7,3x). Entre ambas consumen $82.906 CLP y aportan solo 18 mensajes. Excluir ambos placements de la Campaña de Mensajes liberaría ~$83K mensuales para reasignar a Feed e IG Reels.</div>
+    </div>
+
+    <div class="alert-card alert-warning">
+      <div class="alert-icon">🟡</div>
+      <div class="alert-title">Bofu 1 levantandome — ineficiente</div>
+      <div class="alert-desc">Costo por mensaje de $1.346 CLP (2,26x el promedio). Solo 5 mensajes con $6.730 de inversión. El formato BOFU puede tener utilidad para audiencias de remarketing, pero actualmente se está distribuyendo en frío. Revisar segmentación o pausar.</div>
+    </div>
+
+    <div class="alert-card alert-warning">
+      <div class="alert-icon">🟡</div>
+      <div class="alert-title">Campaña de Tráfico — $93K sin ROI en mensajes</div>
+      <div class="alert-desc">La campaña de tráfico representa el 30,4% del presupuesto total con solo 7 mensajes atribuidos. Si el objetivo es awareness y visitas al perfil, el costo por visita ($25 CLP) es razonable. Pero si se espera que contribuya a mensajes, hay que redefinir o separar métricas de éxito.</div>
+    </div>
+
+    <div class="alert-card alert-success">
+      <div class="alert-icon">🟢</div>
+      <div class="alert-title">Vlog mayo — oportunidad de escala inmediata</div>
+      <div class="alert-desc">$218 CLP por mensaje, 127 mensajes con solo $27.661 de inversión. Si escalamos este anuncio a $80.000 CLP en junio (manteniendo eficiencia), se proyectan ~367 mensajes adicionales solo desde ese creativo. Es el activo más valioso del mes.</div>
+    </div>
+
+    <div class="alert-card alert-success">
+      <div class="alert-icon">🟢</div>
+      <div class="alert-title">Frecuencias saludables — sin fatiga creativa</div>
+      <div class="alert-desc">Campaña de Mensajes: 1,28x. Campaña de Tráfico: 1,09x. Ambas muy por debajo del umbral de fatiga (3,5x). Las audiencias no están saturadas, lo que da margen para escalar inversión antes de necesitar nuevas creatividades.</div>
+    </div>
+
+    <div class="alert-card alert-info">
+      <div class="alert-icon">🔵</div>
+      <div class="alert-title">Instagram Reels — placement infrautilizado</div>
+      <div class="alert-desc">Con $273 CLP por mensaje es el segundo placement más eficiente del mes, pero solo recibió $28.923 (9,4% del presupuesto). Aumentar la ponderación de IG Reels dentro de la Campaña de Mensajes puede mejorar el CPM general sin cambiar creatividades.</div>
+    </div>
+
+    <div class="alert-card alert-info">
+      <div class="alert-icon">🔵</div>
+      <div class="alert-title">Retención de video — oportunidad creativa</div>
+      <div class="alert-desc">Vlog mayo retiene el 21% hasta el 95% vs el 18% de Vlog 3.0. Analizar qué sucede en los primeros 3 segundos de Vlog mayo para replicar esa estructura en la próxima creatividad. Un gancho más fuerte en Vlog 3.0 podría bajar aún más su CPMsg.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 07 · PLAN DE ACCIÓN ===== -->
+<section id="acciones">
+  <div class="section-label">07</div>
+  <h2 class="section-title">Plan de Acción — Junio 2026</h2>
+
+  <div class="actions-grid">
+    <div class="action-card urgente">
+      <div class="action-priority">🔴 Urgente</div>
+      <div class="action-title">Excluir Stories de Campaña de Mensajes</div>
+      <div class="action-desc">Ir al Ad Set de la Campaña de Mensajes → Editar placements → Excluir Facebook Stories e Instagram Stories. Ambos tienen CPMsg entre 3.415 y 8.776 CLP. Acción inmediata al inicio de junio.</div>
+      <div class="action-impacto">Impacto estimado: <span>liberación de ~$83K para reasignar, reducción del CPMsg global en 15-20%</span></div>
+    </div>
+
+    <div class="action-card urgente">
+      <div class="action-priority">🔴 Urgente</div>
+      <div class="action-title">Escalar Vlog mayo a presupuesto principal</div>
+      <div class="action-desc">Duplicar o triplicar el presupuesto de Vlog mayo dentro del Ad Set de mensajes. Actualmente recibe $27.661; llevar a $70.000–80.000 CLP para capitalizar su eficiencia de $218 CLP/mensaje antes de que se sature la audiencia.</div>
+      <div class="action-impacto">Impacto estimado: <span>+250 mensajes adicionales en junio si la eficiencia se mantiene al 70%</span></div>
+    </div>
+
+    <div class="action-card alta">
+      <div class="action-priority">🟡 Alta prioridad</div>
+      <div class="action-title">Pausar Bofu 1 levantandome</div>
+      <div class="action-desc">Con $1.346 CLP/mensaje y solo 5 resultados, el anuncio no justifica su inversión actual en audiencias frías. Redirigir su presupuesto ($6.730) hacia Vlog 3.0 o Vlog mayo. Si existe audiencia de remarketing, reactivarlo solo para ese segmento.</div>
+      <div class="action-impacto">Impacto estimado: <span>+12-15 mensajes al reasignar esa inversión</span></div>
+    </div>
+
+    <div class="action-card alta">
+      <div class="action-priority">🟡 Alta prioridad</div>
+      <div class="action-title">Aumentar ponderación de Instagram Reels</div>
+      <div class="action-desc">IG Reels generó mensajes a $273 CLP — el segundo más eficiente. Forzar mayor distribución hacia este placement creando un Ad Set específico para IG Reels o aumentando manualmente su ponderación. Probar con $40.000 CLP en junio.</div>
+      <div class="action-impacto">Impacto estimado: <span>~147 mensajes adicionales desde IG Reels si escala con esa eficiencia</span></div>
+    </div>
+
+    <div class="action-card alta">
+      <div class="action-priority">🟡 Alta prioridad</div>
+      <div class="action-title">Definir métricas de éxito para Campaña de Tráfico</div>
+      <div class="action-desc">Alinear con el cliente si el objetivo de esta campaña es awareness/visitas al perfil o mensajes. Si es visitas: el costo de $25 CLP/visita es eficiente — reportarlo así. Si se espera mensajes: reestructurar o migrar presupuesto a Mensajes.</div>
+      <div class="action-impacto">Impacto estimado: <span>Decisión estratégica que define la asignación del 30% del presupuesto</span></div>
+    </div>
+
+    <div class="action-card media">
+      <div class="action-priority">🔵 Media prioridad</div>
+      <div class="action-title">Producir nueva creatividad basada en Vlog mayo</div>
+      <div class="action-desc">Analizar el gancho del primer segundo de Vlog mayo (el que logra $218 CLP/mensaje). Producir 1-2 variaciones con estructura similar: mismo formato vertical, mismo tono de inicio, distinto CTA o contexto. Tener listas para semana 2 de junio.</div>
+      <div class="action-impacto">Impacto estimado: <span>Seguro de desempeño cuando Vlog mayo alcance saturación de frecuencia</span></div>
+    </div>
+
+    <div class="action-card media">
+      <div class="action-priority">🔵 Media prioridad</div>
+      <div class="action-title">Revisar segmentación de audience en ambas campañas</div>
+      <div class="action-desc">Con frecuencias de 1,09–1,28 y alcances de 59K–68K, hay margen para ampliar la audiencia o probar targeting por intereses específicos (servicios de belleza, rulos, afro). Evaluar audience expansion en Meta para aumentar volumen sin subir CPMsg.</div>
+      <div class="action-impacto">Impacto estimado: <span>Mayor volumen de mensajes manteniendo eficiencia actual</span></div>
+    </div>
+
+    <div class="action-card experim">
+      <div class="action-priority">🟢 Experimento</div>
+      <div class="action-title">Test: Ad Set dedicado a Feed solamente</div>
+      <div class="action-desc">Feed generó mensajes a $455 CLP con el mayor volumen (295). Crear un Ad Set separado con placement exclusivo en Feed y $50.000 CLP de presupuesto, midiendo si el CPMsg baja al aislar el placement de los menos eficientes. Duración: 2 semanas.</div>
+      <div class="action-impacto">Impacto estimado: <span>Aprendizaje sobre si la mezcla de placements está diluyendo eficiencia del Feed</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 08 · PROYECCIÓN ===== -->
+<section id="proyeccion">
+  <div class="section-label">08</div>
+  <h2 class="section-title">Proyección Junio 2026</h2>
+
+  <p style="font-size:14px; color:rgba(255,255,255,0.5); margin-bottom:24px; letter-spacing:0.05em;">
+    Contexto estacional: Junio es inicio de temporada baja en servicios de belleza en Chile (vacaciones de invierno). Menor demanda espontánea, pero audiencias más receptivas a promociones puntuales. Recomendado: mantener inversión y activar ofertas de temporada.
+  </p>
+
+  <div class="proy-grid">
+    <div class="proy-card">
+      <div class="proy-header optimista">🟢 Escenario Optimista — Acciones implementadas</div>
+      <div class="proy-body">
+        <div class="proy-row"><span>Inversión estimada</span><span>$310.000 CLP</span></div>
+        <div class="proy-row"><span>Costo/mensaje proyectado</span><span style="color:#5BBF8A">$460–480 CLP</span></div>
+        <div class="proy-row"><span>Mensajes esperados</span><span style="color:#5BBF8A">640–670</span></div>
+        <div class="proy-row"><span>Supuesto clave</span><span>Exclusión de Stories + escala de Vlog mayo + IG Reels ampliado</span></div>
+        <div class="proy-row"><span>Riesgo</span><span>Que la eficiencia de Vlog mayo caiga al aumentar inversión (curva de aprendizaje)</span></div>
+      </div>
+    </div>
+
+    <div class="proy-card">
+      <div class="proy-header conservador">🔵 Escenario Conservador — Sin cambios</div>
+      <div class="proy-body">
+        <div class="proy-row"><span>Inversión estimada</span><span>$306.000 CLP</span></div>
+        <div class="proy-row"><span>Costo/mensaje proyectado</span><span style="color:var(--ambar)">$580–620 CLP</span></div>
+        <div class="proy-row"><span>Mensajes esperados</span><span style="color:var(--ambar)">490–530</span></div>
+        <div class="proy-row"><span>Supuesto clave</span><span>Mismas creatividades y placements que mayo</span></div>
+        <div class="proy-row"><span>Riesgo principal</span><span style="color:#E07B75">Vlog mayo pierde eficiencia sin presupuesto adicional; se pierde la ventana de oportunidad</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box" style="margin-top:24px;">
+    <div class="insight-box-title">📅 Contexto junio</div>
+    <p>Las vacaciones de invierno en Chile (julio) generan anticipación en junio. Los servicios de belleza para eventos escolares o salidas pueden ser un gancho efectivo. Considera adaptar el copy de Vlog mayo o crear una variación con mensaje estacional ("listo para el invierno" o "prepárate para el receso") para captar demanda estacional sin cambiar el formato que ya probó ser eficiente.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">La Ola Studio <span>· Informe de Performance</span></div>
+    <div style="font-size:12px; color:rgba(255,255,255,0.35); margin-top:4px;">Elaborado con datos exportados de Meta Ads Manager</div>
+  </div>
+  <div class="footer-note">
+    Cliente: Qué Me Decí · Salón de Belleza<br>
+    Período: 01 mayo — 31 mayo 2026<br>
+    Versión 1.0 · Junio 2026
+  </div>
+</footer>
+
+<script>
+// ---- CHART: CPM HISTÓRICO ----
+const meses = ['Sep 25','Oct 25','Nov 25','Dic 25','Ene 26','Feb 26','Mar 26','Abr 26','May 26'];
+const cpmData = [787, 676, 733, 946, 1105, 897, 726, 904, 596];
+const msgsData = [8, 361, 309, 260, 315, 333, 411, 347, 514];
+
+new Chart(document.getElementById('chartCPM'), {
+  type: 'bar',
+  data: {
+    labels: meses,
+    datasets: [{
+      label: 'Costo por mensaje (CLP)',
+      data: cpmData,
+      backgroundColor: meses.map((m,i) => i === 8 ? '#5BBF8A' : 'rgba(233,159,47,0.65)'),
+      borderColor: meses.map((m,i) => i === 8 ? '#5BBF8A' : '#E99F2F'),
+      borderWidth: 1,
+      borderRadius: 3,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `$${ctx.parsed.y.toLocaleString('es-CL')} CLP` } } },
+    scales: {
+      x: { ticks: { color: 'rgba(255,255,255,0.5)', font: { family: 'Pathway Gothic One' } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: 'rgba(255,255,255,0.5)', font: { family: 'Pathway Gothic One' }, callback: v => '$'+v.toLocaleString('es-CL') }, grid: { color: 'rgba(255,255,255,0.05)' } }
+    }
+  }
+});
+
+// ---- CHART: MENSAJES HISTÓRICO ----
+new Chart(document.getElementById('chartMsgs'), {
+  type: 'bar',
+  data: {
+    labels: meses,
+    datasets: [{
+      label: 'Mensajes nuevos',
+      data: msgsData,
+      backgroundColor: meses.map((m,i) => i === 8 ? '#5BBF8A' : 'rgba(46,59,116,0.8)'),
+      borderColor: meses.map((m,i) => i === 8 ? '#5BBF8A' : '#2E3B74'),
+      borderWidth: 1,
+      borderRadius: 3,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: 'rgba(255,255,255,0.5)', font: { family: 'Pathway Gothic One' } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: 'rgba(255,255,255,0.5)', font: { family: 'Pathway Gothic One' } }, grid: { color: 'rgba(255,255,255,0.05)' } }
+    }
+  }
+});
+
+// ---- CHART: ADS MENSAJES ----
+new Chart(document.getElementById('chartAds'), {
+  type: 'bar',
+  data: {
+    labels: ['Vlog 3.0','Vlog mayo','Vlog','Bofu 1','Promo feed'],
+    datasets: [{
+      label: 'Mensajes',
+      data: [264, 127, 110, 5, 1],
+      backgroundColor: ['rgba(233,159,47,0.75)','rgba(91,191,138,0.85)','rgba(233,159,47,0.55)','rgba(185,53,46,0.65)','rgba(185,53,46,0.5)'],
+      borderColor: ['#E99F2F','#5BBF8A','#E99F2F','#B9352E','#B9352E'],
+      borderWidth: 1,
+      borderRadius: 3,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: 'rgba(255,255,255,0.5)', font: { family: 'Pathway Gothic One' } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: 'rgba(255,255,255,0.7)', font: { family: 'Pathway Gothic One', size: 13 } }, grid: { display: false } }
+    }
+  }
+});
+
+// ---- CHART: PLATAFORMAS (donut) ----
+new Chart(document.getElementById('chartPlatforms'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Facebook','Instagram'],
+    datasets: [{
+      data: [202867, 103291],
+      backgroundColor: ['rgba(46,59,116,0.85)','rgba(233,159,47,0.75)'],
+      borderColor: ['#2E3B74','#E99F2F'],
+      borderWidth: 2,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { color: 'rgba(255,255,255,0.6)', font: { family: 'Pathway Gothic One' }, padding: 16 } },
+      tooltip: { callbacks: { label: ctx => ` $${ctx.parsed.toLocaleString('es-CL')} CLP` } }
+    },
+    cutout: '60%',
+  }
+});
+</script>
+</body>
+</html>
