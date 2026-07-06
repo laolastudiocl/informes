@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de Performance Junio 2026 | La Marqueza Joyas</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Pathway+Gothic+One&display=swap" rel="stylesheet">
+<style>
+:root {
+  --azul:    #2E3B74;
+  --verde:   #256A46;
+  --rojo:    #B9352E;
+  --amarillo:#E99F2F;
+  --gris-d:  #3D3D3D;
+  --negro:   #1A1A1A;
+  --card:    #222222;
+  --panel:   #2A2A2A;
+  --blanco:  #FFFFFF;
+  --muted:   rgba(255,255,255,0.45);
+  --muted2:  rgba(255,255,255,0.65);
+  --verde-ok:#5BBF8A;
+  --rojo-ok: #E07070;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--blanco);font-family:'Pathway Gothic One',sans-serif;font-size:15px;line-height:1.5;}
+h1,h2,h3,h4{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.03em;}
+
+/* ── HERO ── */
+.hero{background:var(--azul);border-bottom:4px solid var(--amarillo);padding:52px 48px 44px;position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:50px;background:var(--negro);clip-path:ellipse(55% 100% at 50% 100%);opacity:.15;}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:3px;padding:5px 14px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.85);margin-bottom:20px;}
+.badge .dot{width:6px;height:6px;background:var(--amarillo);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-size:clamp(2.4rem,4.5vw,3.8rem);font-weight:700;line-height:1.0;margin-bottom:10px;}
+.hero h1 span{color:var(--amarillo);}
+.hero-sub{font-size:13px;color:var(--muted);max-width:520px;margin-bottom:32px;letter-spacing:.5px;text-transform:uppercase;}
+.hero-kpis{display:flex;gap:36px;flex-wrap:wrap;}
+.hero-kpi{font-size:11px;color:var(--muted);letter-spacing:.5px;}
+.hero-kpi strong{display:block;font-family:'Oswald',sans-serif;font-size:15px;color:var(--blanco);letter-spacing:.5px;}
+
+/* ── LAYOUT ── */
+.section{padding:52px 48px;border-bottom:1px solid rgba(255,255,255,.05);}
+.section.alt{background:#1E2A1E;}
+.section.alt2{background:#181E35;}
+.wrap{max-width:1200px;margin:0 auto;}
+.s-label{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--amarillo);margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.s-label::before{content:'';display:inline-block;width:20px;height:2px;background:var(--amarillo);flex-shrink:0;}
+.s-title{font-size:clamp(1.5rem,2.8vw,2.2rem);font-weight:700;color:var(--blanco);margin-bottom:6px;line-height:1.05;}
+.s-title em{color:var(--amarillo);font-style:normal;}
+.s-desc{font-size:14px;color:var(--muted);max-width:640px;margin-bottom:36px;letter-spacing:.3px;}
+
+/* ── KPIS ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06);border-radius:4px;overflow:hidden;}
+.kpi{background:var(--card);padding:24px 20px;position:relative;}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.kpi.c-amarillo::after{background:var(--amarillo);}
+.kpi.c-verde::after{background:var(--verde-ok);}
+.kpi.c-azul::after{background:var(--azul);}
+.kpi.c-rojo::after{background:var(--rojo);}
+.kpi.c-gris::after{background:var(--gris-d);}
+.kpi-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.kpi-val{font-family:'Oswald',sans-serif;font-size:1.9rem;font-weight:700;line-height:1;margin-bottom:5px;}
+.kpi-val.amarillo{color:var(--amarillo);}
+.kpi-val.verde{color:var(--verde-ok);}
+.kpi-sub{font-size:11px;color:var(--muted);}
+.badge-delta{display:inline-block;font-size:10px;letter-spacing:1px;padding:3px 9px;border-radius:2px;margin-top:7px;text-transform:uppercase;}
+.up{background:rgba(37,106,70,.22);color:var(--verde-ok);border:1px solid rgba(37,106,70,.4);}
+.down{background:rgba(185,53,46,.18);color:var(--rojo-ok);border:1px solid rgba(185,53,46,.35);}
+.neu{background:rgba(233,159,47,.18);color:var(--amarillo);border:1px solid rgba(233,159,47,.35);}
+
+/* ── CANAL CARDS ── */
+.canal-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.canal{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:24px;position:relative;overflow:hidden;}
+.canal::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.canal.meta::before{background:linear-gradient(90deg,#1877F2,#42B72A);}
+.canal.google::before{background:linear-gradient(90deg,#EA4335,#FBBC04,#34A853,#4285F4);}
+.canal-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;}
+.canal-label.meta{color:#1877F2;}
+.canal-label.google{color:#EA4335;}
+.canal-roas{font-family:'Oswald',sans-serif;font-size:3rem;font-weight:700;line-height:1;margin:6px 0;}
+.canal-roas em{font-style:normal;font-size:1.1rem;color:var(--muted);font-family:'Pathway Gothic One',sans-serif;font-weight:400;}
+.canal-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
+.c-stat{border-top:1px solid rgba(255,255,255,.05);padding-top:10px;}
+.c-stat-l{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.c-stat-v{font-size:13px;font-weight:600;color:var(--blanco);}
+
+/* ── COMPARATIVAS ── */
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.cmp-row{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.04);border-radius:5px;overflow:hidden;margin-bottom:6px;}
+.cmp-cell{background:var(--card);padding:13px 16px;}
+.cmp-cell .cl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.cmp-cell .cv{font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700;}
+.cmp-cell .cd{font-size:10px;font-weight:600;margin-top:3px;}
+.cd.up{color:var(--verde-ok);}
+.cd.down{color:var(--rojo-ok);}
+.cd.neu{color:var(--amarillo);}
+
+/* ── TABLA ── */
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.07);}
+td{padding:13px 12px;border-bottom:1px solid rgba(255,255,255,.04);color:rgba(255,255,255,.82);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(233,159,47,.03);}
+.roas-badge{display:inline-block;padding:3px 9px;border-radius:3px;font-size:11px;font-weight:700;font-family:'Oswald',sans-serif;}
+.roas-badge.h{background:rgba(37,106,70,.2);color:var(--verde-ok);}
+.roas-badge.m{background:rgba(233,159,47,.18);color:var(--amarillo);}
+.roas-badge.l{background:rgba(185,53,46,.18);color:var(--rojo-ok);}
+.roas-badge.t{background:rgba(46,59,116,.3);color:#7B9FE8;}
+
+/* ── CHARTS ── */
+.chart-card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:24px;}
+.chart-title{font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;color:var(--blanco);margin-bottom:3px;}
+.chart-sub{font-size:11px;color:var(--muted);margin-bottom:18px;}
+.chart-wrap{position:relative;width:100%;height:260px;}
+
+/* ── FUNNEL ── */
+.funnel{display:flex;flex-direction:column;}
+.f-step{display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--panel);}
+.f-step:first-child{border-radius:6px 6px 0 0;}
+.f-step:last-child{border-radius:0 0 6px 6px;}
+.f-step+.f-step{border-top:1px solid rgba(255,255,255,.04);}
+.f-bar{height:3px;background:var(--amarillo);border-radius:2px;flex-shrink:0;}
+.f-label{flex:1;}
+.f-label strong{display:block;font-size:13px;color:var(--blanco);font-weight:600;}
+.f-label span{font-size:11px;color:var(--muted);}
+.f-num{font-family:'Oswald',sans-serif;font-size:1.2rem;font-weight:700;text-align:right;min-width:90px;}
+.f-pct{font-size:11px;color:var(--muted);text-align:right;min-width:55px;}
+
+/* ── ALERTAS ── */
+.alert{border-radius:5px;padding:18px 22px;display:flex;gap:14px;align-items:flex-start;margin-bottom:14px;}
+.alert.warn{background:rgba(233,159,47,.07);border:1px solid rgba(233,159,47,.22);}
+.alert.danger{background:rgba(185,53,46,.07);border:1px solid rgba(185,53,46,.22);}
+.alert.ok{background:rgba(37,106,70,.07);border:1px solid rgba(37,106,70,.22);}
+.alert.info{background:rgba(46,59,116,.15);border:1px solid rgba(46,59,116,.3);}
+.alert-icon{font-size:17px;flex-shrink:0;margin-top:1px;}
+.alert-title{font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;color:var(--blanco);margin-bottom:4px;}
+.alert-text{font-size:12px;color:var(--muted2);line-height:1.6;}
+
+/* ── INSIGHT ── */
+.insight{background:rgba(46,59,116,.25);border:1px solid rgba(233,159,47,.25);border-left:4px solid var(--amarillo);border-radius:0 5px 5px 0;padding:15px 18px;margin:18px 0;font-size:13px;color:var(--muted2);line-height:1.7;}
+.insight strong{color:var(--amarillo);}
+
+/* ── RECOMENDACIONES ── */
+.rec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;}
+.rec{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:22px;position:relative;overflow:hidden;}
+.rec::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;}
+.rec.p1::before{background:var(--rojo);}
+.rec.p2::before{background:var(--amarillo);}
+.rec.p3::before{background:#4285F4;}
+.rec.p4::before{background:var(--verde-ok);}
+.rec-prio{font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;}
+.rec-prio.p1{color:var(--rojo-ok);}
+.rec-prio.p2{color:var(--amarillo);}
+.rec-prio.p3{color:#7B9FE8;}
+.rec-prio.p4{color:var(--verde-ok);}
+.rec-title{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--blanco);margin-bottom:7px;}
+.rec-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+.rec-impact{margin-top:10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--amarillo);}
+
+/* ── DIVIDER ── */
+.divider{display:flex;align-items:center;gap:14px;margin:32px 0;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.06);}
+.divider span{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--amarillo);white-space:nowrap;}
+
+/* ── PROGRESS ── */
+.prog-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.prog-label{font-size:12px;color:var(--blanco);min-width:170px;}
+.prog-track{flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:2px;}
+.prog-val{font-size:12px;font-weight:700;color:var(--amarillo);min-width:55px;text-align:right;font-family:'Oswald',sans-serif;}
+
+/* ── FOOTER ── */
+.footer{background:var(--azul);border-top:4px solid var(--amarillo);padding:48px;text-align:center;}
+.footer-logo{font-family:'Oswald',sans-serif;font-size:1.9rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.footer-logo span{color:var(--amarillo);}
+.footer-sub{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:20px;}
+.footer-line{width:60px;height:3px;background:var(--amarillo);margin:16px auto;border-radius:1px;}
+.footer-credit{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1px;text-transform:uppercase;}
+
+@media(max-width:768px){
+  .section{padding:36px 20px;}
+  .hero{padding:36px 20px;}
+  .canal-grid,.cmp-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="badge"><span class="dot"></span>La Ola Studio · Informe de Performance</div>
+    <div style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:14px;display:flex;align-items:center;gap:10px;"><span style="display:inline-block;width:20px;height:2px;background:var(--amarillo);"></span>Performance Report · Junio 2026</div>
+    <h1>La Marqueza Joyas<br><span>Junio 2026</span></h1>
+    <p class="hero-sub">Análisis estratégico consolidado de Google Ads y Meta Ads · 01–30 junio 2026</p>
+    <div class="hero-kpis">
+      <div class="hero-kpi"><strong>01–30 Jun 2026</strong>Período</div>
+      <div class="hero-kpi"><strong>$1.871.582 CLP</strong>Inversión total</div>
+      <div class="hero-kpi"><strong>$6.750.977 CLP</strong>Ingresos atribuidos</div>
+      <div class="hero-kpi"><strong>3.61x</strong>ROAS global</div>
+      <div class="hero-kpi"><strong>209 ventas</strong>Conversiones totales</div>
+    </div>
+  </div>
+</header>
+
+<!-- 01 RESUMEN EJECUTIVO -->
+<section class="section">
+  <div class="wrap">
+    <div class="s-label">01 · Resumen Ejecutivo</div>
+    <h2 class="s-title">Junio: caída post-estacional<br>con señales <em>mixtas</em></h2>
+    <p class="s-desc">Junio cierra con un ROAS de 3.61x — el más bajo desde enero 2026 y 40% por debajo de mayo. La caída era esperable al salir del peak del Día de la Madre, pero su magnitud responde también a decisiones de estructura de campaña que se pueden corregir.</p>
+
+    <div class="kpi-grid" style="margin-bottom:28px;">
+      <div class="kpi c-amarillo">
+        <div class="kpi-label">ROAS Global Consolidado</div>
+        <div class="kpi-val amarillo">3.61x</div>
+        <div class="kpi-sub">vs. 6.03x en mayo 2026</div>
+        <span class="badge-delta down">↓ -40.2% MoM</span>
+      </div>
+      <div class="kpi c-rojo">
+        <div class="kpi-label">Ingresos Totales</div>
+        <div class="kpi-val">$6.75M</div>
+        <div class="kpi-sub">CLP · Google + Meta</div>
+        <span class="badge-delta down">↓ -39.9% MoM</span>
+      </div>
+      <div class="kpi c-gris">
+        <div class="kpi-label">Inversión Total</div>
+        <div class="kpi-val">$1.87M</div>
+        <div class="kpi-sub">CLP · prácticamente igual a mayo</div>
+        <span class="badge-delta neu">+0.5% MoM</span>
+      </div>
+      <div class="kpi c-rojo">
+        <div class="kpi-label">Conversiones Totales</div>
+        <div class="kpi-val">209</div>
+        <div class="kpi-sub">89 Google + 120 Meta</div>
+        <span class="badge-delta down">↓ -33.7% MoM</span>
+      </div>
+      <div class="kpi c-rojo">
+        <div class="kpi-label">CPA Promedio Global</div>
+        <div class="kpi-val">$8.955</div>
+        <div class="kpi-sub">CLP por conversión</div>
+        <span class="badge-delta down">↑ +51.5% MoM (peor)</span>
+      </div>
+      <div class="kpi c-azul">
+        <div class="kpi-label">Impresiones Totales</div>
+        <div class="kpi-val">1.10M</div>
+        <div class="kpi-sub">215K Google + 890K Meta</div>
+        <span class="badge-delta down">↓ -15.9% MoM</span>
+      </div>
+    </div>
+
+    <div class="insight">
+      <strong>Lectura ejecutiva:</strong> Junio muestra la caída natural post-Día de la Madre, pero amplificada por $300.568 CLP invertidos en campaña de tráfico que generó 1 sola compra. Si aislas ese gasto, la campaña de ventas de Meta tuvo ROAS de 3.76x — todavía bajo, pero más representativo de lo que el canal puede hacer fuera de períodos peak. Google mantuvo el ROAS más alto (5.28x) con inversión casi idéntica. La estructura del mes no está rota, pero sí tiene un problema de asignación de presupuesto que debe corregirse antes de julio.
+    </div>
+  </div>
+</section>
+
+<!-- 02 YoY -->
+<section class="section alt2">
+  <div class="wrap">
+    <div class="s-label">02 · Comparativa Año a Año</div>
+    <h2 class="s-title">Junio 2026 vs <em>Junio 2025</em></h2>
+    <p class="s-desc">Con 37.4% más de inversión que junio 2025, los ingresos cayeron 14.1%. Es la comparativa más incómoda del período: se gastó más y se generó menos.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px;">
+      <div class="kpi c-rojo" style="border-radius:5px;">
+        <div class="kpi-label">Ingresos Totales</div>
+        <div style="display:flex;align-items:flex-end;gap:12px;margin:10px 0;">
+          <div><div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;">2025</div><div style="font-family:'Oswald',sans-serif;font-size:1.3rem;color:var(--muted);">$7.86M</div></div>
+          <div style="color:rgba(255,255,255,.2);font-size:18px;">→</div>
+          <div><div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;">2026</div><div style="font-family:'Oswald',sans-serif;font-size:1.5rem;">$6.75M</div></div>
+        </div>
+        <span class="badge-delta down">↓ -14.1% YoY</span>
+      </div>
+      <div class="kpi c-rojo" style="border-radius:5px;">
+        <div class="kpi-label">Inversión Total</div>
+        <div style="display:flex;align-items:flex-end;gap:12px;margin:10px 0;">
+          <div><div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;">2025</div><div style="font-family:'Oswald',sans-serif;font-size:1.3rem;color:var(--muted);">$1.36M</div></div>
+          <div style="color:rgba(255,255,255,.2);font-size:18px;">→</div>
+          <div><div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;">2026</div><div style="font-family:'Oswald',sans-serif;font-size:1.5rem;">$1.87M</div></div>
+        </div>
+        <span class="badge-delta down">↑ +37.4% YoY</span>
+      </div>
+      <div class="kpi c-rojo" style="border-radius:5px;">
+        <div class="kpi-label">Conversiones Totales</div>
+        <div style="display:flex;align-items:flex-end;gap:12px;margin:10px 0;">
+          <div><div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;">2025</div><div style="font-family:'Oswald',sans-serif;font-size:1.3rem;color:var(--muted);">256</div></div>
+          <div style="color:rgba(255,255,255,.2);font-size:18px;">→</div>
+          <div><div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;">2026</div><div style="font-family:'Oswald',sans-serif;font-size:1.5rem;">209</div></div>
+        </div>
+        <span class="badge-delta down">↓ -18.4% YoY</span>
+      </div>
+    </div>
+
+    <div class="cmp-grid">
+      <!-- Google YoY -->
+      <div style="background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:6px;overflow:hidden;">
+        <div style="background:linear-gradient(90deg,#EA4335,#FBBC04,#34A853,#4285F4);height:3px;"></div>
+        <div style="padding:18px 22px;">
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#EA4335;margin-bottom:14px;">Google Ads — YoY</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <tr style="border-bottom:1px solid rgba(255,255,255,.06);">
+              <th style="text-align:left;padding:7px 0;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">Métrica</th>
+              <th style="text-align:right;padding:7px 0;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">Jun 25</th>
+              <th style="text-align:right;padding:7px 0;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">Jun 26</th>
+              <th style="text-align:right;padding:7px 0;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">Δ</th>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04);"><td style="padding:9px 0;color:var(--muted2);">Inversión</td><td style="text-align:right;color:var(--muted);">$510.320</td><td style="text-align:right;font-weight:600;">$538.453</td><td style="text-align:right;color:var(--amarillo);">+5.5%</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04);"><td style="padding:9px 0;color:var(--muted2);">Ingresos</td><td style="text-align:right;color:var(--muted);">$4.512.598</td><td style="text-align:right;font-weight:600;">$2.842.531</td><td style="text-align:right;color:var(--rojo-ok);">-37.0%</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04);"><td style="padding:9px 0;color:var(--muted2);">ROAS</td><td style="text-align:right;color:var(--muted);">8.84x</td><td style="text-align:right;font-weight:600;">5.28x</td><td style="text-align:right;color:var(--rojo-ok);">-40.3%</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04);"><td style="padding:9px 0;color:var(--muted2);">CPA</td><td style="text-align:right;color:var(--muted);">$3.251</td><td style="text-align:right;font-weight:600;">$6.050</td><td style="text-align:right;color:var(--rojo-ok);">+86.1%</td></tr>
+            <tr><td style="padding:9px 0;color:var(--muted2);">Conversiones</td><td style="text-align:right;color:var(--muted);">157</td><td style="text-align:right;font-weight:600;">89</td><td style="text-align:right;color:var(--rojo-ok);">-43.3%</td></tr>
+          </table>
+          <div class="insight" style="margin-top:14px;font-size:12px;">
+            <strong>Contexto:</strong> Google en junio 2025 tenía ROAS de 8.84x — uno de sus mejores meses del año. La caída a 5.28x en 2026 no es atípica si consideramos que el primer semestre 2026 fue estructuralmente más bajo que 2025 en Google (el histórico lo confirma). La anomalía real de Google en 2026 fueron marzo y abril.
+          </div>
+        </div>
+      </div>
+      <!-- Meta YoY -->
+      <div style="background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:6px;overflow:hidden;">
+        <div style="background:linear-gradient(90deg,#1877F2,#42B72A);height:3px;"></div>
+        <div style="padding:18px 22px;">
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#1877F2;margin-bottom:14px;">Meta Ads — YoY</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <tr style="border-bottom:1px solid rgba(255,255,255,.06);">
+              <th style="text-align:left;padding:7px 0;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">Métrica</th>
+              <th style="text-align:right;padding:7px 0;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">Jun 25</th>
+              <th style="text-align:right;padding:7px 0;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">Jun 26</th>
+              <th style="text-align:right;padding:7px 0;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">Δ</th>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04);"><td style="padding:9px 0;color:var(--muted2);">Inversión</td><td style="text-align:right;color:var(--muted);">$852.008</td><td style="text-align:right;font-weight:600;">$1.333.129</td><td style="text-align:right;color:var(--rojo-ok);">+56.5%</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04);"><td style="padding:9px 0;color:var(--muted2);">Ingresos</td><td style="text-align:right;color:var(--muted);">$3.348.547</td><td style="text-align:right;font-weight:600;">$3.908.446</td><td style="text-align:right;color:var(--verde-ok);">+16.7%</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04);"><td style="padding:9px 0;color:var(--muted2);">ROAS</td><td style="text-align:right;color:var(--muted);">3.93x</td><td style="text-align:right;font-weight:600;">2.93x</td><td style="text-align:right;color:var(--rojo-ok);">-25.4%</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04);"><td style="padding:9px 0;color:var(--muted2);">CPA</td><td style="text-align:right;color:var(--muted);">$8.606</td><td style="text-align:right;font-weight:600;">$11.109</td><td style="text-align:right;color:var(--rojo-ok);">+29.1%</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04);"><td style="padding:9px 0;color:var(--muted2);">Compras</td><td style="text-align:right;color:var(--muted);">99</td><td style="text-align:right;font-weight:600;">120</td><td style="text-align:right;color:var(--verde-ok);">+21.2%</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04);"><td style="padding:9px 0;color:var(--muted2);">Alcance</td><td style="text-align:right;color:var(--muted);">154.343</td><td style="text-align:right;font-weight:600;">301.716</td><td style="text-align:right;color:var(--verde-ok);">+95.5%</td></tr>
+            <tr><td style="padding:9px 0;color:var(--muted2);">Clics enlace</td><td style="text-align:right;color:var(--muted);">15.435</td><td style="text-align:right;font-weight:600;">36.663</td><td style="text-align:right;color:var(--verde-ok);">+137.5%</td></tr>
+          </table>
+          <div class="insight" style="margin-top:14px;font-size:12px;">
+            <strong>Contexto:</strong> Meta gastó 56.5% más que junio 2025 y generó solo 16.7% más en ingresos. El volumen de compras subió 21.2% y el alcance casi se duplicó — eso es positivo. El problema es que el ROAS bajó porque el presupuesto extra fue a campaña de tráfico, no a conversiones.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 CANALES -->
+<section class="section alt">
+  <div class="wrap">
+    <div class="s-label">03 · Desempeño por Canal</div>
+    <h2 class="s-title">Google <em>sostiene</em>, Meta <em>tropieza</em></h2>
+    <p class="s-desc">Los dos canales cuentan historias distintas en junio. Google mantuvo eficiencia razonable. Meta tuvo su peor ROAS en 14 meses, arrastrado principalmente por la campaña de tráfico.</p>
+
+    <div class="canal-grid" style="margin-bottom:28px;">
+      <!-- META -->
+      <div class="canal meta">
+        <div class="canal-label meta">Meta Ads · Facebook & Instagram</div>
+        <div class="canal-roas">2.93x <em>ROAS</em></div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Inversión: $1.333.129 CLP · Mínimo histórico 14 meses</div>
+        <div class="canal-stats">
+          <div class="c-stat"><div class="c-stat-l">Ingresos atribuidos</div><div class="c-stat-v">$3.908.446</div></div>
+          <div class="c-stat"><div class="c-stat-l">Compras (ventas)</div><div class="c-stat-v">120</div></div>
+          <div class="c-stat"><div class="c-stat-l">CPA (ventas)</div><div class="c-stat-v">$11.109 CLP</div></div>
+          <div class="c-stat"><div class="c-stat-l">Alcance total</div><div class="c-stat-v">301.716</div></div>
+          <div class="c-stat"><div class="c-stat-l">Clics en enlace</div><div class="c-stat-v">36.663</div></div>
+          <div class="c-stat"><div class="c-stat-l">Frecuencia</div><div class="c-stat-v">2.95x</div></div>
+          <div class="c-stat"><div class="c-stat-l">Carrito añadido</div><div class="c-stat-v">670</div></div>
+          <div class="c-stat"><div class="c-stat-l">Impresiones</div><div class="c-stat-v">890.025</div></div>
+        </div>
+        <div class="insight" style="margin-top:16px;font-size:12px;">
+          <strong>Campaña Ventas aislada:</strong> ROAS 3.76x con $1.032.561 invertidos y 119 compras. Mejorable, pero dentro de rango. El ROAS global de 2.93x se debe a que la campaña de tráfico ($300.568 CLP) redujo el denominador sin aportar ingresos de conversión.
+        </div>
+      </div>
+      <!-- GOOGLE -->
+      <div class="canal google">
+        <div class="canal-label google">Google Ads · PMax + Búsqueda</div>
+        <div class="canal-roas">5.28x <em>ROAS</em></div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Inversión: $538.453 CLP · Canal más eficiente del mes</div>
+        <div class="canal-stats">
+          <div class="c-stat"><div class="c-stat-l">Ingresos atribuidos</div><div class="c-stat-v">$2.842.531</div></div>
+          <div class="c-stat"><div class="c-stat-l">Conversiones</div><div class="c-stat-v">89</div></div>
+          <div class="c-stat"><div class="c-stat-l">CPA</div><div class="c-stat-v">$6.050 CLP</div></div>
+          <div class="c-stat"><div class="c-stat-l">Clics totales</div><div class="c-stat-v">6.078</div></div>
+          <div class="c-stat"><div class="c-stat-l">Impresiones</div><div class="c-stat-v">215.588</div></div>
+          <div class="c-stat"><div class="c-stat-l">CTR búsqueda</div><div class="c-stat-v">9.79%</div></div>
+          <div class="c-stat"><div class="c-stat-l">PMax ROAS</div><div class="c-stat-v">5.82x</div></div>
+          <div class="c-stat"><div class="c-stat-l">Búsqueda ROAS</div><div class="c-stat-v">2.63x</div></div>
+        </div>
+        <div class="insight" style="margin-top:16px;font-size:12px;">
+          <strong>PMax sigue siendo el motor:</strong> 5.82x ROAS con $447.038 invertidos. La campaña PMax sigue limitada por política (igual que en mayo), lo que restringe su alcance real. Resolverlo sigue siendo la mayor palanca disponible en Google.
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparativa MoM -->
+    <div class="divider"><span>Comparativa vs Mayo 2026</span></div>
+    <div class="cmp-grid">
+      <div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Google Ads</div>
+        <div class="cmp-row"><div class="cmp-cell"><div class="cl">ROAS · Mayo</div><div class="cv" style="color:var(--muted);">8.34x</div></div><div class="cmp-cell"><div class="cl">ROAS · Junio</div><div class="cv">5.28x</div><div class="cd down">↓ -36.7%</div></div></div>
+        <div class="cmp-row"><div class="cmp-cell"><div class="cl">CPA · Mayo</div><div class="cv" style="color:var(--muted);">$3.778</div></div><div class="cmp-cell"><div class="cl">CPA · Junio</div><div class="cv">$6.050</div><div class="cd down">↑ +60.2%</div></div></div>
+        <div class="cmp-row"><div class="cmp-cell"><div class="cl">Conversiones · Mayo</div><div class="cv" style="color:var(--muted);">104</div></div><div class="cmp-cell"><div class="cl">Conversiones · Junio</div><div class="cv">89</div><div class="cd down">↓ -14.4%</div></div></div>
+      </div>
+      <div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Meta Ads</div>
+        <div class="cmp-row"><div class="cmp-cell"><div class="cl">ROAS · Mayo</div><div class="cv" style="color:var(--muted);">5.21x</div></div><div class="cmp-cell"><div class="cl">ROAS · Junio</div><div class="cv">2.93x</div><div class="cd down">↓ -43.8%</div></div></div>
+        <div class="cmp-row"><div class="cmp-cell"><div class="cl">CPA · Mayo</div><div class="cv" style="color:var(--muted);">$6.515</div></div><div class="cmp-cell"><div class="cl">CPA · Junio</div><div class="cv">$11.109</div><div class="cd down">↑ +70.5%</div></div></div>
+        <div class="cmp-row"><div class="cmp-cell"><div class="cl">Compras · Mayo</div><div class="cv" style="color:var(--muted);">211</div></div><div class="cmp-cell"><div class="cl">Compras · Junio</div><div class="cv">120</div><div class="cd down">↓ -43.1%</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 HISTÓRICO -->
+<section class="section">
+  <div class="wrap">
+    <div class="s-label">04 · Tendencias Históricas</div>
+    <h2 class="s-title">14 meses de <em>perspectiva</em></h2>
+    <p class="s-desc">Junio 2026 en contexto: es el punto más bajo del año en ROAS Meta, pero está dentro del patrón estacional del primer semestre. Los peaks reales ocurren en agosto–octubre y diciembre.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+      <div class="chart-card">
+        <div class="chart-title">ROAS por Canal — 14 meses reales</div>
+        <div class="chart-sub">Google Ads vs Meta Ads vs Consolidado · May 25 → Jun 26</div>
+        <div class="chart-wrap"><canvas id="roasChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Ingresos vs Inversión Total</div>
+        <div class="chart-sub">Millones CLP consolidados · ambos canales</div>
+        <div class="chart-wrap"><canvas id="revChart"></canvas></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <div class="chart-card">
+        <div class="chart-title">Distribución de Inversión</div>
+        <div class="chart-sub">Google vs Meta en millones CLP · apilado</div>
+        <div class="chart-wrap"><canvas id="distChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">CPA Histórico</div>
+        <div class="chart-sub">Costo por adquisición real · Google vs Meta</div>
+        <div class="chart-wrap"><canvas id="cpaChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="insight" style="margin-top:24px;">
+      <strong>Patrón confirmado en 14 meses:</strong> El ROAS de Google oscila entre 5x y 20x según la temporada, con peaks claros en agosto–octubre y diciembre. Meta es más estable (3x–7x) pero también tiene sus peaks en noviembre–diciembre. Junio es históricamente el mes más bajo de ambos canales después del Día de la Madre. La pregunta relevante para julio es si la curva empieza a recuperarse o si sigue baja hasta agosto — el histórico de 2025 sugiere que julio fue ligeramente mejor que junio.
+    </div>
+  </div>
+</section>
+
+<!-- 05 ANÁLISIS CREATIVO META -->
+<section class="section alt">
+  <div class="wrap">
+    <div class="s-label">05 · Análisis Creativo Meta Ads</div>
+    <h2 class="s-title">Dos campañas, <em>dos objetivos</em>, un problema</h2>
+    <p class="s-desc">El mes operó con una campaña de tráfico y una de ventas. Se analizan por separado porque tienen objetivos distintos y mezclarlos distorsiona la lectura.</p>
+
+    <!-- Campaña tráfico -->
+    <div style="margin-bottom:10px;">
+      <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">CAMPAÑA DE TRÁFICO — Trafico 2 03_2025 · $300.568 CLP</div>
+    </div>
+    <div class="tbl-wrap" style="margin-bottom:12px;">
+      <table>
+        <thead><tr>
+          <th>Anuncio</th><th>Inversión</th><th>Alcance</th><th>Impresiones</th><th>Clics</th><th>CTR</th><th>CPC</th><th>Carrito</th><th>Objetivo</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><strong>9 años de LM</strong></td><td>$113.152</td><td>109.741</td><td>191.254</td><td>10.335</td><td>5.40%</td><td>$11</td><td>14</td><td><span class="roas-badge t">Tráfico</span></td></tr>
+          <tr><td><strong>NUEVA COLECCIÓN MAGNA</strong></td><td>$181.206</td><td>161.317</td><td>365.486</td><td>18.019</td><td>4.93%</td><td>$10</td><td>6</td><td><span class="roas-badge t">Tráfico</span></td></tr>
+          <tr><td><strong>carrusel IG</strong></td><td>$6.077</td><td>8.433</td><td>9.108</td><td>220</td><td>2.42%</td><td>$28</td><td>—</td><td><span class="roas-badge t">Tráfico</span></td></tr>
+          <tr><td><strong>video febrero</strong></td><td>$133</td><td>149</td><td>164</td><td>10</td><td>6.10%</td><td>$13</td><td>—</td><td><span class="roas-badge t">Tráfico</span></td></tr>
+          <tr style="background:rgba(233,159,47,.04);">
+            <td><strong>TOTAL TRÁFICO</strong></td><td><strong>$300.568</strong></td><td><strong>233.875</strong></td><td><strong>566.012</strong></td><td><strong>28.584</strong></td><td><strong>5.05%</strong></td><td><strong>$11</strong></td><td><strong>20</strong></td><td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="insight" style="margin-bottom:28px;">
+      <strong>Lectura de tráfico:</strong> CTR de 5.05% es sólido para tráfico frío — el contenido engancha. El CPC de $11 es muy eficiente. El anuncio "NUEVA COLECCIÓN MAGNA" generó el mayor volumen de clics (18.019) con buen CTR (4.93%). El problema no es el rendimiento de la campaña de tráfico en sí misma, sino que representa el 22.5% de toda la inversión Meta del mes sin contribuir a ingresos reportados.
+    </div>
+
+    <!-- Campaña ventas -->
+    <div style="margin-bottom:10px;">
+      <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">CAMPAÑA DE VENTAS — Retargeting / Compras · $1.032.561 CLP · ROAS 3.76x</div>
+    </div>
+    <div class="tbl-wrap" style="margin-bottom:12px;">
+      <table>
+        <thead><tr>
+          <th>Anuncio</th><th>Inversión</th><th>Compras</th><th>Ingresos</th><th>CPA</th><th>ROAS</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><strong>Catálogo MAGNA</strong></td><td>$616.586</td><td>75</td><td>$2.452.368</td><td>$8.221</td><td><span class="roas-badge m">3.98x</span></td></tr>
+          <tr><td><strong>Calma</strong></td><td>$316.535</td><td>34</td><td>$1.078.652</td><td>$9.310</td><td><span class="roas-badge m">3.41x</span></td></tr>
+          <tr><td><strong>Cyber junio 2026</strong></td><td>$88.825</td><td>10</td><td>$351.010</td><td>$8.883</td><td><span class="roas-badge m">3.95x</span></td></tr>
+          <tr><td style="color:var(--muted);">Pulseras 3.0</td><td style="color:var(--muted);">$6.262</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td><td><span class="roas-badge l">Sin datos</span></td></tr>
+          <tr><td style="color:var(--muted);">Video joyas de fiesta</td><td style="color:var(--muted);">$2.380</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td><td><span class="roas-badge l">Sin datos</span></td></tr>
+          <tr><td style="color:var(--muted);">Día de las madres 2026</td><td style="color:var(--muted);">$1.965</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td><td><span class="roas-badge l">Sin datos</span></td></tr>
+          <tr style="background:rgba(233,159,47,.04);">
+            <td><strong>TOTAL VENTAS</strong></td><td><strong>$1.032.561</strong></td><td><strong>119</strong></td><td><strong>$3.882.030</strong></td><td><strong>$8.677</strong></td><td><span class="roas-badge m">3.76x</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px;">
+      <div class="chart-card">
+        <div class="chart-title">ROAS por anuncio — Campaña Ventas</div>
+        <div class="chart-sub">Solo anuncios con datos de conversión</div>
+        <div class="chart-wrap"><canvas id="roasCreat"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Inversión vs Ingresos — Campaña Ventas</div>
+        <div class="chart-sub">CLP por anuncio con conversiones reportadas</div>
+        <div class="chart-wrap"><canvas id="invIngCreat"></canvas></div>
+      </div>
+    </div>
+
+    <div class="insight" style="margin-top:20px;">
+      <strong>Anuncio dominante — Catálogo MAGNA:</strong> Concentra el 59.7% de la inversión de ventas y genera el 63.2% de los ingresos. ROAS de 3.98x — el mejor del mes dentro de ventas. "Calma" es el segundo creativo relevante pero con ROAS de 3.41x y CPA más alto ($9.310). El anuncio Cyber junio llegó tarde al mes y no logró escalar.
+    </div>
+  </div>
+</section>
+
+<!-- 06 GOOGLE DETALLE -->
+<section class="section alt2">
+  <div class="wrap">
+    <div class="s-label">06 · Google Ads en Detalle</div>
+    <h2 class="s-title">PMax lidera, Búsqueda <em>apoya</em></h2>
+    <p class="s-desc">PMax concentra el 83% de la inversión Google y el 92% de los ingresos. Junio es además el primer mes con desglose por grupo de recursos dentro de PMax: joyas generales vs. línea religiosa.</p>
+
+    <div class="canal-grid" style="margin-bottom:32px;">
+      <div class="canal" style="border-color:rgba(251,188,4,.2);">
+        <div style="background:linear-gradient(90deg,#FBBC04,#E99F2F);height:3px;position:absolute;top:0;left:0;right:0;"></div>
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#FBBC04;margin-bottom:8px;">PMax · Máximo Rendimiento "Gregorio"</div>
+        <div class="canal-roas">5.82x <em>ROAS</em></div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Presupuesto diario: $15.400 CLP · Inversión mes: $447.038</div>
+        <div class="canal-stats">
+          <div class="c-stat"><div class="c-stat-l">Conversiones</div><div class="c-stat-v">94.44</div></div>
+          <div class="c-stat"><div class="c-stat-l">Ingresos</div><div class="c-stat-v">$2.602.389</div></div>
+          <div class="c-stat"><div class="c-stat-l">CPA</div><div class="c-stat-v">$4.734 CLP</div></div>
+          <div class="c-stat"><div class="c-stat-l">Clics</div><div class="c-stat-v">6.727</div></div>
+          <div class="c-stat"><div class="c-stat-l">Impresiones</div><div class="c-stat-v">211.819</div></div>
+          <div class="c-stat"><div class="c-stat-l">CTR</div><div class="c-stat-v">3.18%</div></div>
+        </div>
+        <div class="alert warn" style="margin-top:16px;">
+          <div class="alert-icon">⚠️</div>
+          <div><div class="alert-title">Apta (limitada) — segundo mes consecutivo</div><div class="alert-text">La restricción por política afecta al menos un grupo de recursos. Identificado a continuación en el análisis por grupo.</div></div>
+        </div>
+      </div>
+      <div class="canal" style="border-color:rgba(66,133,244,.2);">
+        <div style="background:linear-gradient(90deg,#4285F4,#1a73e8);height:3px;position:absolute;top:0;left:0;right:0;"></div>
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#4285F4;margin-bottom:8px;">Búsqueda #2 · Campaña Search</div>
+        <div class="canal-roas">2.63x <em>ROAS</em></div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Presupuesto diario: $3.000 CLP · Inversión mes: $91.369</div>
+        <div class="canal-stats">
+          <div class="c-stat"><div class="c-stat-l">Conversiones</div><div class="c-stat-v">9</div></div>
+          <div class="c-stat"><div class="c-stat-l">Ingresos</div><div class="c-stat-v">$240.142</div></div>
+          <div class="c-stat"><div class="c-stat-l">CPA</div><div class="c-stat-v">$10.152 CLP</div></div>
+          <div class="c-stat"><div class="c-stat-l">Clics</div><div class="c-stat-v">353</div></div>
+          <div class="c-stat"><div class="c-stat-l">Impresiones</div><div class="c-stat-v">3.605</div></div>
+          <div class="c-stat"><div class="c-stat-l">CTR</div><div class="c-stat-v">9.79%</div></div>
+        </div>
+        <div class="alert info" style="margin-top:16px;">
+          <div class="alert-icon">ℹ️</div>
+          <div><div class="alert-title">CTR 9.79% — anuncios altamente relevantes</div><div class="alert-text">El ROAS de 2.63x refleja el bajo volumen de conversiones con presupuesto de $3.000/día, no un problema de calidad del tráfico.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRUPOS DE RECURSOS PMAX -->
+    <div class="divider"><span>Grupos de Recursos PMax · Primera lectura junio 2026</span></div>
+
+    <p class="s-desc" style="margin-bottom:24px;">Junio es el primer mes con dos grupos de recursos separados dentro de PMax: uno para joyas generales y otro exclusivo para línea religiosa. Sin histórico previo, estos datos son una línea de base, no una conclusión definitiva.</p>
+
+    <!-- Tabla comparativa grupos -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;">
+
+      <!-- Religiosos -->
+      <div style="background:var(--card);border:1px solid rgba(233,159,47,.25);border-radius:6px;overflow:hidden;">
+        <div style="background:linear-gradient(90deg,rgba(233,159,47,.8),rgba(233,159,47,.4));height:3px;"></div>
+        <div style="padding:20px 24px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+            <div>
+              <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--amarillo);margin-bottom:4px;">Grupo · Religiosos</div>
+              <div style="font-family:'Oswald',sans-serif;font-size:2rem;font-weight:700;">5.94x <span style="font-size:1rem;color:var(--muted);font-family:'Pathway Gothic One',sans-serif;font-weight:400;">ROAS</span></div>
+            </div>
+            <div style="text-align:right;">
+              <div style="background:rgba(91,191,138,.15);border:1px solid rgba(91,191,138,.3);border-radius:3px;padding:3px 10px;font-size:10px;color:var(--verde-ok);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Calidad: Excelente</div>
+              <div style="background:rgba(185,53,46,.15);border:1px solid rgba(185,53,46,.3);border-radius:3px;padding:3px 10px;font-size:10px;color:var(--rojo-ok);letter-spacing:1px;text-transform:uppercase;">Apta (limitada)</div>
+            </div>
+          </div>
+          <div class="canal-stats">
+            <div class="c-stat"><div class="c-stat-l">Inversión</div><div class="c-stat-v">$169.497 <span style="font-size:10px;color:var(--muted);">(37.9%)</span></div></div>
+            <div class="c-stat"><div class="c-stat-l">Ingresos</div><div class="c-stat-v">$1.007.620 <span style="font-size:10px;color:var(--muted);">(38.7%)</span></div></div>
+            <div class="c-stat"><div class="c-stat-l">Conversiones</div><div class="c-stat-v">38.32</div></div>
+            <div class="c-stat"><div class="c-stat-l">CPA</div><div class="c-stat-v">$4.423</div></div>
+            <div class="c-stat"><div class="c-stat-l">Impresiones</div><div class="c-stat-v">95.336</div></div>
+            <div class="c-stat"><div class="c-stat-l">CTR</div><div class="c-stat-v">1.99%</div></div>
+            <div class="c-stat"><div class="c-stat-l">CPC promedio</div><div class="c-stat-v">$89</div></div>
+            <div class="c-stat"><div class="c-stat-l">Tasa conv.</div><div class="c-stat-v">2.02%</div></div>
+          </div>
+          <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,.06);padding-top:14px;">
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Temas de búsqueda activos</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <span style="background:rgba(233,159,47,.1);border:1px solid rgba(233,159,47,.2);border-radius:3px;padding:2px 8px;font-size:10px;color:var(--amarillo);">regalos bautizo</span>
+              <span style="background:rgba(233,159,47,.1);border:1px solid rgba(233,159,47,.2);border-radius:3px;padding:2px 8px;font-size:10px;color:var(--amarillo);">medalla religiosa</span>
+              <span style="background:rgba(233,159,47,.1);border:1px solid rgba(233,159,47,.2);border-radius:3px;padding:2px 8px;font-size:10px;color:var(--amarillo);">joyas para bautizo</span>
+              <span style="background:rgba(233,159,47,.1);border:1px solid rgba(233,159,47,.2);border-radius:3px;padding:2px 8px;font-size:10px;color:var(--amarillo);">regalo confirmación</span>
+              <span style="background:rgba(233,159,47,.1);border:1px solid rgba(233,159,47,.2);border-radius:3px;padding:2px 8px;font-size:10px;color:var(--amarillo);">denario</span>
+              <span style="background:rgba(233,159,47,.1);border:1px solid rgba(233,159,47,.2);border-radius:3px;padding:2px 8px;font-size:10px;color:var(--amarillo);">joya espíritu santo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Todo tipo de joyas -->
+      <div style="background:var(--card);border:1px solid rgba(91,191,138,.2);border-radius:6px;overflow:hidden;">
+        <div style="background:linear-gradient(90deg,rgba(91,191,138,.8),rgba(91,191,138,.4));height:3px;"></div>
+        <div style="padding:20px 24px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+            <div>
+              <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--verde-ok);margin-bottom:4px;">Grupo · Todo Tipo de Joyas</div>
+              <div style="font-family:'Oswald',sans-serif;font-size:2rem;font-weight:700;">5.75x <span style="font-size:1rem;color:var(--muted);font-family:'Pathway Gothic One',sans-serif;font-weight:400;">ROAS</span></div>
+            </div>
+            <div style="text-align:right;">
+              <div style="background:rgba(233,159,47,.15);border:1px solid rgba(233,159,47,.3);border-radius:3px;padding:3px 10px;font-size:10px;color:var(--amarillo);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Calidad: Excelente*</div>
+              <div style="background:rgba(233,159,47,.15);border:1px solid rgba(233,159,47,.3);border-radius:3px;padding:3px 10px;font-size:10px;color:var(--amarillo);letter-spacing:1px;text-transform:uppercase;">Pendiente (renombre)</div>
+            </div>
+          </div>
+          <div class="canal-stats">
+            <div class="c-stat"><div class="c-stat-l">Inversión</div><div class="c-stat-v">$277.542 <span style="font-size:10px;color:var(--muted);">(62.1%)</span></div></div>
+            <div class="c-stat"><div class="c-stat-l">Ingresos</div><div class="c-stat-v">$1.594.769 <span style="font-size:10px;color:var(--muted);">(61.3%)</span></div></div>
+            <div class="c-stat"><div class="c-stat-l">Conversiones</div><div class="c-stat-v">56.12</div></div>
+            <div class="c-stat"><div class="c-stat-l">CPA</div><div class="c-stat-v">$4.946</div></div>
+            <div class="c-stat"><div class="c-stat-l">Impresiones</div><div class="c-stat-v">116.483</div></div>
+            <div class="c-stat"><div class="c-stat-l">CTR</div><div class="c-stat-v">4.14%</div></div>
+            <div class="c-stat"><div class="c-stat-l">CPC promedio</div><div class="c-stat-v">$58</div></div>
+            <div class="c-stat"><div class="c-stat-l">Tasa conv.</div><div class="c-stat-v">1.16%</div></div>
+          </div>
+          <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,.06);padding-top:14px;">
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Temas de búsqueda activos</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <span style="background:rgba(91,191,138,.1);border:1px solid rgba(91,191,138,.2);border-radius:3px;padding:2px 8px;font-size:10px;color:var(--verde-ok);">accesorios mujer</span>
+              <span style="background:rgba(91,191,138,.1);border:1px solid rgba(91,191,138,.2);border-radius:3px;padding:2px 8px;font-size:10px;color:var(--verde-ok);">collares mujer</span>
+              <span style="background:rgba(91,191,138,.1);border:1px solid rgba(91,191,138,.2);border-radius:3px;padding:2px 8px;font-size:10px;color:var(--verde-ok);">pulseras mujer</span>
+              <span style="background:rgba(91,191,138,.1);border:1px solid rgba(91,191,138,.2);border-radius:3px;padding:2px 8px;font-size:10px;color:var(--verde-ok);">aros para mujer</span>
+              <span style="background:rgba(91,191,138,.1);border:1px solid rgba(91,191,138,.2);border-radius:3px;padding:2px 8px;font-size:10px;color:var(--verde-ok);">tobilleras mujer</span>
+              <span style="background:rgba(91,191,138,.1);border:1px solid rgba(91,191,138,.2);border-radius:3px;padding:2px 8px;font-size:10px;color:var(--verde-ok);">bisutería mujer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfico comparativo -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;">
+      <div class="chart-card">
+        <div class="chart-title">Inversión vs Ingresos por grupo</div>
+        <div class="chart-sub">CLP · Religiosos vs Todo tipo de joyas</div>
+        <div class="chart-wrap"><canvas id="gruposInvIng"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">ROAS · CPA · CTR por grupo</div>
+        <div class="chart-sub">Comparativa de eficiencia · primera lectura</div>
+        <div class="chart-wrap"><canvas id="gruposEfic"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Tabla resumen comparativa -->
+    <div class="tbl-wrap" style="margin-bottom:20px;">
+      <table>
+        <thead><tr>
+          <th>Métrica</th>
+          <th>Religiosos</th>
+          <th>Todo tipo de joyas</th>
+          <th>Diferencia</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Inversión</td><td>$169.497 (37.9%)</td><td>$277.542 (62.1%)</td><td style="color:var(--muted);">—</td></tr>
+          <tr><td>Ingresos</td><td>$1.007.620</td><td>$1.594.769</td><td style="color:var(--muted);">—</td></tr>
+          <tr><td><strong>ROAS</strong></td><td><strong>5.94x</strong></td><td><strong>5.75x</strong></td><td><span style="color:var(--verde-ok);">+0.19x religiosos</span></td></tr>
+          <tr><td><strong>CPA</strong></td><td><strong>$4.423</strong></td><td><strong>$4.946</strong></td><td><span style="color:var(--verde-ok);">$523 más barato religiosos</span></td></tr>
+          <tr><td>CTR</td><td>1.99%</td><td>4.14%</td><td><span style="color:var(--verde-ok);">+2.15% joyas generales</span></td></tr>
+          <tr><td>CPC promedio</td><td>$89</td><td>$58</td><td><span style="color:var(--rojo-ok);">$31 más caro religiosos</span></td></tr>
+          <tr><td>Tasa de conversión</td><td>2.02%</td><td>1.16%</td><td><span style="color:var(--verde-ok);">+0.86% religiosos</span></td></tr>
+          <tr><td>Estado</td><td>Apta (limitada)</td><td>Pendiente*</td><td style="color:var(--muted);">Ver nota</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert info" style="margin-bottom:14px;">
+      <div class="alert-icon">ℹ️</div>
+      <div><div class="alert-title">* Estado "Pendiente" en Todo tipo de joyas</div><div class="alert-text">El estado Pendiente en este grupo se debe al cambio de nombre realizado durante el mes, no a un problema de calidad. La calidad histórica del grupo es Excelente. Los datos de rendimiento son reales y válidos para el período analizado.</div></div>
+    </div>
+
+    <div class="alert danger">
+      <div class="alert-icon">🔴</div>
+      <div><div class="alert-title">Religiosos: limitado por política — aquí está el problema concreto</div><div class="alert-text">El grupo Religiosos es el que tiene estado "Apta (limitada)". Es probable que los activos creativos con temática religiosa (imágenes de cruces, medallas, vírgenes) estén siendo rechazados por las políticas de Google sobre contenido sensible. Esto reduce el alcance de ese grupo y explica el CTR más bajo (1.99% vs 4.14%). A pesar de la limitación, logra ROAS de 5.94x y CPA de $4.423 — su potencial sin la restricción es probablemente mayor.</div></div>
+    </div>
+
+    <div class="insight">
+      <strong>Lectura de la primera separación por grupo:</strong> Con un mes de datos, la línea religiosa se comporta de forma sorprendentemente eficiente: ROAS más alto (5.94x vs 5.75x), CPA más bajo ($4.423 vs $4.946) y tasa de conversión casi el doble (2.02% vs 1.16%). Esto sugiere que quien busca joyas religiosas tiene una intención de compra más clara y convierte mejor — tiene sentido, porque son productos para eventos específicos (bautizos, comuniones, confirmaciones) donde la decisión de compra ya está tomada. El CTR más bajo del grupo religioso (1.99% vs 4.14%) indica que Google muestra los anuncios a menos personas, posiblemente por la limitación de política. Una vez resuelta esa restricción, el grupo religioso podría escalar con ventaja sobre el general. <strong>Importante:</strong> con un solo mes de datos, estos números son una línea de base, no una conclusión definitiva. Habrá que confirmar la tendencia en julio y agosto antes de tomar decisiones de presupuesto basadas en esta comparativa.
+    </div>
+  </div>
+</section>
+
+<!-- 07 EMBUDO -->
+<section class="section alt">
+  <div class="wrap">
+    <div class="s-label">07 · Embudo de Conversión</div>
+    <h2 class="s-title">Dónde se pierde <em>la audiencia</em></h2>
+    <p class="s-desc">Con menos impresiones que mayo pero similar inversión, el volumen de tráfico cayó. La tasa carrito→compra se mantiene, lo que indica que el problema es de volumen de entrada, no de experiencia en tienda.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+      <div>
+        <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#1877F2;margin-bottom:14px;">Meta Ads</div>
+        <div class="funnel">
+          <div class="f-step"><div class="f-bar" style="width:100%;"></div><div class="f-label"><strong>Alcance</strong><span>Personas únicas</span></div><div class="f-num">301.716</div><div class="f-pct">100%</div></div>
+          <div class="f-step"><div class="f-bar" style="width:70%;"></div><div class="f-label"><strong>Clics en enlace</strong><span>Visitas al sitio</span></div><div class="f-num">36.663</div><div class="f-pct">12.1%</div></div>
+          <div class="f-step"><div class="f-bar" style="width:18%;"></div><div class="f-label"><strong>Carrito añadido</strong><span>Intención de compra</span></div><div class="f-num">670</div><div class="f-pct">1.83%</div></div>
+          <div class="f-step"><div class="f-bar" style="width:11%;"></div><div class="f-label"><strong>Compras realizadas</strong><span>Conversiones</span></div><div class="f-num">120</div><div class="f-pct">17.9% del carrito</div></div>
+        </div>
+        <div class="insight" style="font-size:12px;">La tasa carrito→compra es 17.9% (120/670). En mayo fue 20.2% — similar. La caída de ventas es de volumen (menos clics), no de conversión post-carrito. El sitio está funcionando bien.
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#EA4335;margin-bottom:14px;">Google Ads</div>
+        <div class="funnel">
+          <div class="f-step"><div class="f-bar" style="width:100%;"></div><div class="f-label"><strong>Impresiones</strong><span>Búsqueda + PMax</span></div><div class="f-num">215.588</div><div class="f-pct">100%</div></div>
+          <div class="f-step"><div class="f-bar" style="width:80%;"></div><div class="f-label"><strong>Clics reales</strong><span>Tráfico al sitio</span></div><div class="f-num">6.078</div><div class="f-pct">2.82%</div></div>
+          <div class="f-step"><div class="f-bar" style="width:5%;"></div><div class="f-label"><strong>Conversiones</strong><span>Compras atribuidas</span></div><div class="f-num">89</div><div class="f-pct">1.46%</div></div>
+          <div class="f-step"><div class="f-bar" style="width:3%;"></div><div class="f-label"><strong>Valor por clic</strong><span>CLP promedio</span></div><div class="f-num">$468</div><div class="f-pct">vs $870 en mayo</div></div>
+        </div>
+        <div class="insight" style="font-size:12px;">El valor por clic bajó de $870 (mayo) a $468 (junio). Menos conversiones por el mismo tráfico — consistente con la caída estacional post-Día de la Madre.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 ALERTAS -->
+<section class="section">
+  <div class="wrap">
+    <div class="s-label">08 · Alertas y Diagnóstico</div>
+    <h2 class="s-title">Lo que <em>requiere atención</em> en julio</h2>
+
+    <div class="alert danger">
+      <div class="alert-icon">🔴</div>
+      <div><div class="alert-title">Campaña de tráfico consume 22.5% del presupuesto Meta sin ingresos medibles</div><div class="alert-text">$300.568 CLP en campaña de tráfico generó 1 compra atribuida ($26.416). Para que esta inversión se justifique, el tráfico generado debería traducirse en audiencias de retargeting activas o en recordación de marca medible. Si no hay evidencia de ese efecto, se recomienda reducirla o redirigir presupuesto a ventas.</div></div>
+    </div>
+    <div class="alert warn">
+      <div class="alert-icon">⚠️</div>
+      <div><div class="alert-title">Grupo "Religiosos" (PMax) limitado por política — segundo mes sin resolver</div><div class="alert-text">Ya identificamos el grupo afectado: el grupo Religiosos dentro de PMax tiene estado Apta (limitada), probablemente por activos creativos con contenido religioso que Google clasifica como sensible. A pesar de la restricción, es el grupo más eficiente de toda la campaña — CPA $4.423 y tasa de conversión 2.02%. Su potencial sin la limitación es mayor que el actual.</div></div>
+    </div>
+    <div class="alert warn">
+      <div class="alert-icon">⚠️</div>
+      <div><div class="alert-title">ROAS Meta en mínimo histórico de 14 meses — 2.93x</div><div class="alert-text">El ROAS de 2.93x es el más bajo del período analizado. Aunque la campaña de ventas aislada tiene 3.76x, el consolidado Meta está por debajo de su piso histórico. Para julio es importante que la campaña de ventas supere 4x para volver al rango normal del canal.</div></div>
+    </div>
+    <div class="alert ok">
+      <div class="alert-icon">🟢</div>
+      <div><div class="alert-title">Catálogo MAGNA mantiene tracción — 3.98x con el mayor volumen</div><div class="alert-text">Con $616.586 invertidos y 75 compras, es el anuncio más estable del mes. Lleva activo varios meses con ROAS consistente. Merece seguir activo en julio y considerar variaciones creativas para evitar fatiga (la frecuencia general ya está en 2.95x).</div></div>
+    </div>
+    <div class="alert info">
+      <div class="alert-icon">🔵</div>
+      <div><div class="alert-title">Frecuencia de 2.95x — monitorear en julio</div><div class="alert-text">La frecuencia se mantiene bajo 3x, que es el umbral de alerta estándar. Pero si en julio no se refrescan creativos de campaña de ventas, puede superarse y afectar el CTR y el ROAS.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 PLAN JULIO -->
+<section class="section alt2">
+  <div class="wrap">
+    <div class="s-label">09 · Plan de Acción — Julio 2026</div>
+    <h2 class="s-title">Foco en <em>recuperar eficiencia</em></h2>
+    <p class="s-desc">Julio históricamente es mejor que junio en este sector. El objetivo es recuperar el ROAS Meta sobre 4x y mantener Google sobre 5x, con los mismos niveles de inversión.</p>
+
+    <div class="rec-grid">
+      <div class="rec p1">
+        <div class="rec-prio p1">🔴 Urgente</div>
+        <div class="rec-title">Resolver limitación PMax</div>
+        <div class="rec-desc">Auditar activos rechazados en la campaña "Gregorio" y corregirlos esta semana. Es el segundo mes consecutivo con esta restricción. Con ROAS de 5.82x, desbloquearlo es la acción de mayor retorno disponible en toda la cuenta.</div>
+        <div class="rec-impact">Impacto: +20–35% en volumen de conversiones Google</div>
+      </div>
+      <div class="rec p1">
+        <div class="rec-prio p1">🔴 Urgente</div>
+        <div class="rec-title">Revisar asignación campaña de tráfico</div>
+        <div class="rec-desc">Evaluar si el tráfico generado en junio efectivamente alimentó audiencias de retargeting activas. Si no hay evidencia de ese efecto, reducir el presupuesto de tráfico en un 50% y redirigirlo a campaña de ventas en julio.</div>
+        <div class="rec-impact">Impacto: recuperar ~$150K CLP/mes de capital potencialmente mejor usado</div>
+      </div>
+      <div class="rec p2">
+        <div class="rec-prio p2">🟡 Alta prioridad</div>
+        <div class="rec-title">Refrescar creativos de campaña ventas</div>
+        <div class="rec-desc">Catálogo MAGNA y Calma llevan semanas activos con frecuencia acercándose a 3x. Producir al menos 2 variaciones nuevas antes del 10 de julio para sostener el CTR sin cambiar la estructura de campaña que ya funciona.</div>
+        <div class="rec-impact">Impacto: prevenir caída de ROAS por fatiga creativa</div>
+      </div>
+      <div class="rec p2">
+        <div class="rec-prio p2">🟡 Alta prioridad</div>
+        <div class="rec-title">Preparar campaña para temporada invierno</div>
+        <div class="rec-desc">El histórico muestra que agosto–octubre son los mejores meses del año en Google (14x–20x ROAS). Julio es el momento de preparar creativos y audiencias para escalar en agosto. El peak no espera.</div>
+        <div class="rec-impact">Impacto: capturar el período más rentable del año</div>
+      </div>
+      <div class="rec p3">
+        <div class="rec-prio p3">🔵 Media prioridad</div>
+        <div class="rec-title">Aumentar presupuesto PMax tras desbloqueo</div>
+        <div class="rec-desc">Una vez resueltas las restricciones de política, subir el presupuesto diario de PMax de $15.400 a $20.000–$22.000 CLP. El algoritmo ya tiene historial suficiente para escalar sin perder eficiencia.</div>
+        <div class="rec-impact">Impacto: +30–40% en ingresos Google manteniendo ROAS sobre 5x</div>
+      </div>
+      <div class="rec p4">
+        <div class="rec-prio p4">🟢 Oportunidad</div>
+        <div class="rec-title">Activar audiencias lookalike de compradores mayo</div>
+        <div class="rec-desc">Los 211 compradores de mayo son una señal de calidad para construir lookalike 1% en Meta. Esta audiencia fría debería activarse en julio para alimentar el pipeline de agosto, que históricamente es fuerte.</div>
+        <div class="rec-impact">Impacto: ampliar base de compradores con perfil probado</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 PROYECCIÓN -->
+<section class="section alt">
+  <div class="wrap">
+    <div class="s-label">10 · Proyección — Julio 2026</div>
+    <h2 class="s-title">¿Qué esperar en <em>julio</em>?</h2>
+    <p class="s-desc">Julio 2025 tuvo ROAS Google de 9.12x y Meta de 3.92x — ambos mejores que junio 2025. Si se repite el patrón estacional, julio 2026 debería mejorar respecto a junio.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <div class="canal" style="border-color:rgba(91,191,138,.3);">
+        <div style="background:var(--verde-ok);height:3px;position:absolute;top:0;left:0;right:0;border-radius:0;"></div>
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--verde-ok);margin-bottom:12px;">Escenario con acciones implementadas</div>
+        <div class="canal-stats" style="grid-template-columns:1fr 1fr;">
+          <div class="c-stat"><div class="c-stat-l">Inversión proyectada</div><div class="c-stat-v">~$1.870.000</div></div>
+          <div class="c-stat"><div class="c-stat-l">ROAS esperado</div><div class="c-stat-v">4.2x — 5.0x</div></div>
+          <div class="c-stat"><div class="c-stat-l">Ingresos proyectados</div><div class="c-stat-v">$7.8M — $9.4M</div></div>
+          <div class="c-stat"><div class="c-stat-l">Supuesto clave</div><div class="c-stat-v">PMax desbloqueada + tráfico reducido</div></div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:12px;">Estimación basada en el patrón estacional julio 2025 y la corrección de los problemas identificados. No es una garantía.</div>
+      </div>
+      <div class="canal" style="border-color:rgba(233,159,47,.3);">
+        <div style="background:var(--amarillo);height:3px;position:absolute;top:0;left:0;right:0;border-radius:0;"></div>
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--amarillo);margin-bottom:12px;">Escenario sin cambios estructurales</div>
+        <div class="canal-stats" style="grid-template-columns:1fr 1fr;">
+          <div class="c-stat"><div class="c-stat-l">Inversión proyectada</div><div class="c-stat-v">~$1.870.000</div></div>
+          <div class="c-stat"><div class="c-stat-l">ROAS esperado</div><div class="c-stat-v">3.5x — 4.0x</div></div>
+          <div class="c-stat"><div class="c-stat-l">Ingresos proyectados</div><div class="c-stat-v">$6.5M — $7.5M</div></div>
+          <div class="c-stat"><div class="c-stat-l">Riesgo principal</div><div class="c-stat-v">Fatiga creativa + PMax limitada</div></div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:12px;">Si no se resuelve PMax ni se ajusta el presupuesto de tráfico, julio puede quedar en rango similar a junio.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">LA <span>OLA</span> STUDIO</div>
+  <div class="footer-sub">Diseño web y marketing digital · laolastudio.cl</div>
+  <div class="footer-line"></div>
+  <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:8px;">Informe de Performance · <strong style="color:rgba(255,255,255,.8);">La Marqueza Joyas</strong> · Junio 2026</div>
+  <div class="footer-credit">Estrategia, análisis y diseño — LA OLA STUDIO · Informe confidencial © 2026</div>
+</footer>
+
+<script>
+const months = ['May 25','Jun 25','Jul 25','Ago 25','Sep 25','Oct 25','Nov 25','Dic 25','Ene 26','Feb 26','Mar 26','Abr 26','May 26','Jun 26'];
+const roasG = [13.34,8.84,9.12,14.85,14.18,20.63,13.05,15.61,5.57,6.07,7.67,6.60,8.34,5.28];
+const roasM = [4.37,3.93,3.92,5.13,5.35,6.29,7.00,7.62,4.64,4.43,4.52,4.45,5.21,2.93];
+const invG  = [0.485,0.510,0.513,0.573,0.583,0.579,0.523,0.494,0.491,0.485,0.492,0.489,0.487,0.538];
+const invM  = [1.012,0.852,0.893,0.836,0.816,1.109,1.040,1.285,1.226,1.119,1.377,1.234,1.375,1.333];
+const valG  = [6.478,4.513,4.672,8.518,8.269,11.946,6.828,7.715,2.735,2.942,3.771,3.225,4.063,2.843];
+const valM  = [4.423,3.349,3.499,4.288,4.370,6.972,7.277,9.793,5.683,4.960,6.226,5.490,7.161,3.908];
+const cpaG  = [3215,3251,3535,4446,4859,6434,5452,7972,5917,5387,11174,9978,3778,6050];
+const cpaM  = [7781,8606,8190,6687,6233,5657,4884,4904,7959,8354,8198,8816,6515,11109];
+const totalRoas = months.map((_,i) => +((valG[i]+valM[i])/(invG[i]+invM[i])).toFixed(2));
+const totalInv  = months.map((_,i) => +(invG[i]+invM[i]).toFixed(3));
+const totalRev  = months.map((_,i) => +(valG[i]+valM[i]).toFixed(3));
+const N = months.length - 1; // índice junio 26
+
+const cd = {
+  responsive:true, maintainAspectRatio:false,
+  plugins:{
+    legend:{position:'top',labels:{color:'#666',font:{family:'Pathway Gothic One',size:11},padding:14}},
+    tooltip:{backgroundColor:'#111',titleColor:'#fff',bodyColor:'#888',borderColor:'rgba(233,159,47,.3)',borderWidth:1,titleFont:{family:'Oswald',weight:'700'},bodyFont:{family:'Pathway Gothic One'}}
+  },
+  scales:{
+    x:{grid:{color:'rgba(255,255,255,.03)'},ticks:{color:'#444',font:{size:10,family:'Pathway Gothic One'}}},
+    y:{grid:{color:'rgba(255,255,255,.03)'},ticks:{color:'#444',font:{size:10,family:'Pathway Gothic One'}}}
+  }
+};
+
+// colores
+const CG='#E99F2F', CM='#5BBF8A', CC='#7B9FE8', CR='#E07070';
+const hl = i => i===N ? 1 : 0.5;
+
+// ROAS
+const ctx1 = document.getElementById('roasChart').getContext('2d');
+const gG=ctx1.createLinearGradient(0,0,0,260); gG.addColorStop(0,'rgba(233,159,47,.3)'); gG.addColorStop(1,'rgba(233,159,47,0)');
+const gM=ctx1.createLinearGradient(0,0,0,260); gM.addColorStop(0,'rgba(91,191,138,.2)'); gM.addColorStop(1,'rgba(91,191,138,0)');
+new Chart(ctx1,{type:'line',data:{labels:months,datasets:[
+  {label:'Google ROAS',data:roasG,borderColor:CG,backgroundColor:gG,fill:true,tension:.4,borderWidth:2.5,pointBackgroundColor:months.map((_,i)=>i===N?CG:'#1A1A1A'),pointBorderColor:CG,pointRadius:months.map((_,i)=>i===N?7:3)},
+  {label:'Meta ROAS',data:roasM,borderColor:CM,backgroundColor:gM,fill:true,tension:.4,borderWidth:2.5,pointBackgroundColor:months.map((_,i)=>i===N?CM:'#1A1A1A'),pointBorderColor:CM,pointRadius:months.map((_,i)=>i===N?7:3)},
+  {label:'Consolidado',data:totalRoas,borderColor:CC,fill:false,tension:.4,borderWidth:1.5,borderDash:[4,3],pointRadius:2,pointBorderColor:CC}
+]},options:{...cd,scales:{...cd.scales,y:{...cd.scales.y,ticks:{...cd.scales.y.ticks,callback:v=>v+'x'}}}}});
+
+// REV
+new Chart(document.getElementById('revChart'),{type:'bar',data:{labels:months,datasets:[
+  {label:'Ingresos totales ($M)',data:totalRev,backgroundColor:months.map((_,i)=>i===N?'rgba(233,159,47,.95)':'rgba(233,159,47,.45)'),borderRadius:3},
+  {label:'Inversión total ($M)',type:'line',data:totalInv,borderColor:CR,fill:false,tension:.3,borderWidth:2,pointRadius:2,pointBorderColor:CR}
+]},options:{...cd,scales:{...cd.scales,y:{...cd.scales.y,ticks:{...cd.scales.y.ticks,callback:v=>'$'+v.toFixed(1)+'M'}}}}});
+
+// DIST
+new Chart(document.getElementById('distChart'),{type:'bar',data:{labels:months,datasets:[
+  {label:'Google ($M)',data:invG,backgroundColor:months.map((_,i)=>i===N?'rgba(233,159,47,.95)':'rgba(233,159,47,.6)'),borderRadius:3},
+  {label:'Meta ($M)',data:invM,backgroundColor:months.map((_,i)=>i===N?'rgba(91,191,138,.95)':'rgba(91,191,138,.6)'),borderRadius:3}
+]},options:{...cd,scales:{x:{stacked:true,...cd.scales.x},y:{stacked:true,...cd.scales.y,ticks:{...cd.scales.y.ticks,callback:v=>'$'+v.toFixed(1)+'M'}}}}});
+
+// CPA
+new Chart(document.getElementById('cpaChart'),{type:'line',data:{labels:months,datasets:[
+  {label:'CPA Google',data:cpaG,borderColor:CG,fill:false,tension:.4,borderWidth:2.5,pointBackgroundColor:months.map((_,i)=>i===N?CG:'#1A1A1A'),pointBorderColor:CG,pointRadius:months.map((_,i)=>i===N?6:3)},
+  {label:'CPA Meta',data:cpaM,borderColor:CM,fill:false,tension:.4,borderWidth:2.5,pointBackgroundColor:months.map((_,i)=>i===N?CM:'#1A1A1A'),pointBorderColor:CM,pointRadius:months.map((_,i)=>i===N?6:3)}
+]},options:{...cd,scales:{...cd.scales,y:{...cd.scales.y,ticks:{...cd.scales.y.ticks,callback:v=>'$'+v.toLocaleString('es-CL')}}}}});
+
+// GRUPOS PMAX — Inversión vs Ingresos
+new Chart(document.getElementById('gruposInvIng'),{type:'bar',data:{
+  labels:['Religiosos','Todo tipo de joyas'],
+  datasets:[
+    {label:'Inversión (CLP)',data:[169497,277542],backgroundColor:['rgba(233,159,47,.7)','rgba(91,191,138,.7)'],borderRadius:4},
+    {label:'Ingresos (CLP)',data:[1007620,1594769],backgroundColor:['rgba(233,159,47,.35)','rgba(91,191,138,.35)'],borderRadius:4}
+  ]
+},options:{...cd,scales:{...cd.scales,y:{...cd.scales.y,ticks:{...cd.scales.y.ticks,callback:v=>'$'+(v/1000).toFixed(0)+'K'}}}}});
+
+// GRUPOS PMAX — Eficiencia comparativa (ROAS y CPA normalizados)
+new Chart(document.getElementById('gruposEfic'),{type:'bar',data:{
+  labels:['ROAS (x)','CPA ($K)','CTR (%)','Conv. rate (%)'],
+  datasets:[
+    {label:'Religiosos',data:[5.94,4.423,1.99,2.02],backgroundColor:'rgba(233,159,47,.75)',borderRadius:4},
+    {label:'Todo tipo de joyas',data:[5.75,4.946,4.14,1.16],backgroundColor:'rgba(91,191,138,.75)',borderRadius:4}
+  ]
+},options:{...cd,scales:{...cd.scales,y:{...cd.scales.y,ticks:{...cd.scales.y.ticks,callback:v=>v}}}}});
+
+// CREATIVOS ROAS
+new Chart(document.getElementById('roasCreat'),{type:'bar',data:{labels:['Catálogo MAGNA','Cyber junio','Calma'],datasets:[{label:'ROAS',data:[3.98,3.95,3.41],backgroundColor:['rgba(233,159,47,.85)','rgba(233,159,47,.65)','rgba(233,159,47,.5)'],borderRadius:4}]},options:{...cd,indexAxis:'y',scales:{x:{...cd.scales.x,ticks:{...cd.scales.x.ticks,callback:v=>v+'x'}},y:{...cd.scales.y}}}});
+
+// CREATIVOS INV vs ING
+new Chart(document.getElementById('invIngCreat'),{type:'bar',data:{labels:['Catálogo MAGNA','Calma','Cyber junio'],datasets:[
+  {label:'Inversión (CLP)',data:[616586,316535,88825],backgroundColor:'rgba(233,159,47,.7)',borderRadius:3},
+  {label:'Ingresos (CLP)',data:[2452368,1078652,351010],backgroundColor:'rgba(91,191,138,.7)',borderRadius:3}
+]},options:{...cd,scales:{...cd.scales,y:{...cd.scales.y,ticks:{...cd.scales.y.ticks,callback:v=>'$'+(v/1000).toFixed(0)+'K'}}}}});
+</script>
+</body>
+</html>
