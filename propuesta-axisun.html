@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propuesta Axisun - La Ola Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Oswald', sans-serif;
+      background: #EDE6D6;
+      padding: 40px 20px;
+      color: #1f2937;
+    }
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      background: #fff;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    /* HEADER */
+    .header {
+      background: #3D5BA9;
+      padding: 40px 48px 70px 48px;
+      position: relative;
+      color: #fff;
+    }
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 50px;
+    }
+    .logo-block {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+    .logo-block .l1, .logo-block .l2 {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    .logo-wave { margin-top: 6px; width: 46px; height: 12px; }
+    .header-tag {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: #E0A23B;
+      color: #1f2937;
+      padding: 6px 14px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+    .header-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 38px;
+      line-height: 1.15;
+      max-width: 560px;
+    }
+    .wave-bottom {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 50px;
+      line-height: 0;
+    }
+    .wave-bottom svg { display: block; width: 100%; height: 100%; }
+
+    /* CLIENTE / FECHAS */
+    .meta-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      padding: 36px 48px;
+      background: #fff;
+      border-bottom: 3px solid #1f2937;
+    }
+    .meta-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+    .meta-value {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 26px;
+      color: #3D5BA9;
+    }
+    .meta-dates {
+      text-align: right;
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.8;
+    }
+    .meta-dates b { color: #1f2937; }
+
+    /* DETALLE SERVICIOS */
+    .detail-block {
+      background: #fff;
+      padding: 44px 48px;
+      border-bottom: 3px solid #1f2937;
+    }
+    .detail-eyebrow {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #3D5BA9;
+      margin-bottom: 8px;
+    }
+    .detail-main-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 28px;
+      color: #1f2937;
+      margin-bottom: 32px;
+    }
+    .detail-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .detail-card {
+      display: grid;
+      grid-template-columns: 56px 1fr auto;
+      gap: 20px;
+      align-items: start;
+      padding: 24px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 6px;
+      background: #fafafa;
+    }
+    .detail-card-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .detail-card-icon svg { width: 26px; height: 26px; }
+    .detail-card-icon.red { background: #fde8e4; }
+    .detail-card-icon.blue { background: #e0e8f9; }
+    .detail-card-icon.gold { background: #fdf3dc; }
+    .detail-card-body {}
+    .detail-card-tag {
+      font-family: 'Oswald', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+    .detail-card-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 19px;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+    .detail-card-desc {
+      font-size: 13.5px;
+      color: #4b5563;
+      line-height: 1.75;
+    }
+    .detail-card-includes {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .detail-chip {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #e5e7eb;
+    }
+    .detail-card-price-col {
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .detail-price-amount {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: #3D5BA9;
+      white-space: nowrap;
+    }
+    .detail-price-period {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+
+    /* SERVICIO */
+    .service-block {
+      background: #B5432F;
+      color: #fff;
+      padding: 44px 48px;
+    }
+    .service-eyebrow {
+      font-family: 'Oswald', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 10px;
+    }
+    .service-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 32px;
+      margin-bottom: 6px;
+    }
+    .service-plan-tag {
+      display: inline-block;
+      background: #E0A23B;
+      color: #1f2937;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 3px;
+      margin-bottom: 24px;
+    }
+    .service-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-width: 580px;
+    }
+    .service-list li {
+      font-size: 15px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.25);
+      position: relative;
+      padding-left: 22px;
+    }
+    .service-list li:last-child { border-bottom: none; }
+    .service-list li::before {
+      content: '~';
+      position: absolute;
+      left: 0;
+      font-weight: 700;
+      color: #E0A23B;
+    }
+    .service-list li span.price-inline {
+      float: right;
+      font-weight: 600;
+      opacity: 0.9;
+      font-size: 14px;
+    }
+    .service-divider {
+      border: none;
+      border-top: 2px solid rgba(255,255,255,0.2);
+      margin: 20px 0 16px 0;
+    }
+    .service-section-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #E0A23B;
+      margin-bottom: 8px;
+      margin-top: 4px;
+    }
+
+    /* PRECIO - bloque único */
+    .price-block {
+      background: #EDE6D6;
+      padding: 36px 48px;
+      border-bottom: 3px solid #1f2937;
+    }
+    .price-section-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: #1f2937;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(0,0,0,0.12);
+    }
+    .price-row-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+    .price-detail {
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.7;
+    }
+    .price-detail b { color: #1f2937; }
+    .price-total-box {
+      background: #1f2937;
+      color: #fff;
+      padding: 18px 28px;
+      border-radius: 4px;
+      text-align: right;
+      min-width: 200px;
+    }
+    .price-total-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #E0A23B;
+      margin-bottom: 4px;
+    }
+    .price-total-value {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 28px;
+    }
+
+    /* ALTERNATIVA DE PUBLICIDAD */
+    .alt-block {
+      background: #2C5530;
+      color: #fff;
+      padding: 36px 48px;
+      border-bottom: 3px solid #1f2937;
+    }
+    .alt-eyebrow {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #E0A23B;
+      margin-bottom: 8px;
+    }
+    .alt-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .alt-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .alt-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 4px;
+      padding: 20px 24px;
+    }
+    .alt-card-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #E0A23B;
+      margin-bottom: 6px;
+    }
+    .alt-card-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 17px;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+    .alt-card-desc {
+      font-size: 13px;
+      opacity: 0.85;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .alt-card-price {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 22px;
+    }
+    .alt-card-price-sub {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 2px;
+    }
+
+    /* TÉRMINOS */
+    .terms-block {
+      background: #fff;
+      padding: 44px 48px;
+    }
+    .terms-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 22px;
+      color: #3D5BA9;
+      margin-bottom: 20px;
+    }
+    .terms-block p {
+      font-size: 13.5px;
+      line-height: 1.85;
+      color: #374151;
+      margin-bottom: 14px;
+    }
+
+    /* FOOTER */
+    .footer {
+      background: #3D5BA9;
+      color: #fff;
+      padding: 36px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 2px;
+    }
+    .footer-contact {
+      font-size: 13px;
+      text-align: right;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    /* PROYECCIÓN */
+    .projection-block {
+      background: #3D5BA9;
+      color: #fff;
+      padding: 44px 48px;
+    }
+    .projection-eyebrow {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #E0A23B;
+      margin-bottom: 8px;
+    }
+    .projection-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 26px;
+      margin-bottom: 28px;
+    }
+    .projection-scenarios {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .projection-scenario {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .projection-scenario-header {
+      background: #E0A23B;
+      color: #1f2937;
+      padding: 10px 20px;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .projection-scenario-body {
+      padding: 20px;
+    }
+    .projection-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      font-size: 13px;
+      gap: 12px;
+    }
+    .projection-row:last-child { border-bottom: none; }
+    .projection-row-label { opacity: 0.85; line-height: 1.4; }
+    .projection-row-label small {
+      display: block;
+      font-size: 11px;
+      opacity: 0.65;
+      margin-top: 2px;
+    }
+    .projection-row-value {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 15px;
+      white-space: nowrap;
+    }
+    .projection-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 2px solid rgba(255,255,255,0.35);
+    }
+    .projection-total-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #E0A23B;
+    }
+    .projection-total-value {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 26px;
+    }
+    .projection-note {
+      font-size: 12px;
+      opacity: 0.65;
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      .header, .meta-row, .service-block, .price-block, .alt-block, .terms-block, .footer, .detail-block, .projection-block {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+      .meta-row { grid-template-columns: 1fr; }
+      .meta-dates { text-align: left; }
+      .header-title { font-size: 28px; }
+      .price-row-group { flex-direction: column; align-items: flex-start; }
+      .price-total-box { text-align: left; width: 100%; }
+      .alt-cards { grid-template-columns: 1fr; }
+      .footer { flex-direction: column; align-items: flex-start; }
+      .footer-contact { text-align: left; }
+      .detail-card { grid-template-columns: 44px 1fr; }
+      .detail-card-price-col { grid-column: 1 / -1; text-align: left; }
+      .projection-scenarios { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="nav-row">
+        <div class="logo-block">
+          <span class="l1">LA OLA</span>
+          <span class="l2">STUDIO</span>
+          <svg class="logo-wave" viewBox="0 0 46 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 6C4 2 7 2 10 6C13 10 16 10 19 6C22 2 25 2 28 6C31 10 34 10 37 6C40 2 43 2 45 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="header-tag">Propuesta</span>
+      </div>
+      <h1 class="header-title">Propuesta comercial para Axisun</h1>
+      <div class="wave-bottom">
+        <svg viewBox="0 0 1000 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,30 Q250,5 500,30 T1000,30 L1000,60 L0,60 Z" fill="#fff"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- CLIENTE / FECHAS -->
+    <div class="meta-row">
+      <div>
+        <div class="meta-label">Cliente</div>
+        <div class="meta-value">Axisun</div>
+      </div>
+      <div class="meta-dates">
+        <div><b>Fecha:</b> 14/07/2026</div>
+        <div><b>Válida hasta:</b> 13/08/2026</div>
+      </div>
+    </div>
+
+    <!-- DETALLE DE SERVICIOS -->
+    <div class="detail-block">
+      <div class="detail-eyebrow">¿Qué incluye esta propuesta?</div>
+      <div class="detail-main-title">Detalle de servicios</div>
+      <div class="detail-cards">
+
+        <!-- VIDEO -->
+        <div class="detail-card">
+          <div class="detail-card-icon red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#B5432F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="15" height="16" rx="2"/><path d="M17 8l5-2v12l-5-2V8z"/>
+            </svg>
+          </div>
+          <div class="detail-card-body">
+            <div class="detail-card-tag">Proyecto único</div>
+            <div class="detail-card-title">3 Videos Publicitarios</div>
+            <div class="detail-card-desc">Producción completa de tres piezas audiovisuales orientadas a promocionar los productos o servicios de Axisun. Cada video incluye filmación en terreno, edición profesional y locución cuando el concepto lo requiera. El proceso parte desde la idea creativa hasta el archivo final listo para publicar.</div>
+            <div class="detail-card-includes">
+              <span class="detail-chip">Filmación</span>
+              <span class="detail-chip">Edición</span>
+              <span class="detail-chip">Locución (si aplica)</span>
+              <span class="detail-chip">Guión creativo</span>
+              <span class="detail-chip">2 rondas de revisión c/u</span>
+            </div>
+          </div>
+          <div class="detail-card-price-col">
+            <div class="detail-price-amount">$100.000</div>
+            <div class="detail-price-period">por video · c/IVA</div>
+          </div>
+        </div>
+
+        <!-- CHATBOT -->
+        <div class="detail-card">
+          <div class="detail-card-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#3D5BA9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div class="detail-card-body">
+            <div class="detail-card-tag">Servicio mensual</div>
+            <div class="detail-card-title">Chatbot para WhatsApp</div>
+            <div class="detail-card-desc">Asistente automatizado disponible 24/7 en WhatsApp que atiende a los prospectos y clientes de Axisun de forma inmediata. Está entrenado para responder preguntas frecuentes sobre los productos y servicios, calcular el ahorro personalizado para cada cliente según su caso, y agendar citas directamente desde la conversación. Incluye configuración, mantención mensual y ajustes según necesidad.</div>
+            <div class="detail-card-includes">
+              <span class="detail-chip">WhatsApp</span>
+              <span class="detail-chip">Respuesta a consultas</span>
+              <span class="detail-chip">Cálculo de ahorro</span>
+              <span class="detail-chip">Agendamiento de citas</span>
+              <span class="detail-chip">Disponible 24/7</span>
+            </div>
+          </div>
+          <div class="detail-card-price-col">
+            <div class="detail-price-amount">$83.300</div>
+            <div class="detail-price-period">mensual · c/IVA</div>
+          </div>
+        </div>
+
+        <!-- MENTORÍA -->
+        <div class="detail-card">
+          <div class="detail-card-icon gold">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#B8861A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+          </div>
+          <div class="detail-card-body">
+            <div class="detail-card-tag">Servicio mensual</div>
+            <div class="detail-card-title">Mentoría de Marketing Digital</div>
+            <div class="detail-card-desc">Sesiones semanales 1:1 en las que trabajamos juntos la estrategia de marketing de Axisun. En cada sesión definimos objetivos claros, diseñamos las estrategias para alcanzarlos y establecemos tareas concretas con responsables y fechas. Además, la mentoría incluye el desarrollo de guiones e ideas creativas para los videos publicitarios, asegurando que cada pieza tenga un propósito dentro de la estrategia general.</div>
+            <div class="detail-card-includes">
+              <span class="detail-chip">1 sesión semanal</span>
+              <span class="detail-chip">Objetivos y estrategia</span>
+              <span class="detail-chip">Tareas concretas</span>
+              <span class="detail-chip">Guiones e ideas creativas</span>
+              <span class="detail-chip">Sesiones 1:1</span>
+            </div>
+          </div>
+          <div class="detail-card-price-col">
+            <div class="detail-price-amount">$178.500</div>
+            <div class="detail-price-period">mensual · c/IVA</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SERVICIOS -->
+    <div class="service-block">
+      <div class="service-eyebrow">Descripción del servicio</div>
+      <div class="service-title">Plan Integral Axisun</div>
+      <span class="service-plan-tag">Proyecto + Servicios Mensuales</span>
+
+      <div class="service-section-label">Proyecto único</div>
+      <ul class="service-list">
+        <li>3 videos publicitarios<span class="price-inline">$100.000 c/u</span></li>
+      </ul>
+
+      <hr class="service-divider">
+
+      <div class="service-section-label">Servicios mensuales recurrentes</div>
+      <ul class="service-list">
+        <li>Chatbot<span class="price-inline">$70.000 / mes</span></li>
+        <li>Mentoría de marketing digital<span class="price-inline">$150.000 / mes</span></li>
+      </ul>
+    </div>
+
+    <!-- PRECIO: PROYECTO ÚNICO -->
+    <div class="price-block">
+      <div class="price-section-title">Videos publicitarios — Pago único</div>
+      <div class="price-row-group">
+        <div class="price-detail">
+          <div><b>3 videos × $100.000</b></div>
+          <div><b>Neto:</b> $300.000</div>
+          <div><b>IVA (19%):</b> $57.000</div>
+        </div>
+        <div class="price-total-box">
+          <div class="price-total-label">Total proyecto</div>
+          <div class="price-total-value">$357.000</div>
+        </div>
+      </div>
+
+      <div class="price-section-title">Servicios mensuales recurrentes</div>
+      <div class="price-row-group">
+        <div class="price-detail">
+          <div><b>Chatbot:</b> $70.000</div>
+          <div><b>Mentoría marketing digital:</b> $150.000</div>
+          <div><b>Neto:</b> $220.000</div>
+          <div><b>IVA (19%):</b> $41.800</div>
+        </div>
+        <div class="price-total-box">
+          <div class="price-total-label">Total mensual</div>
+          <div class="price-total-value">$261.800</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALTERNATIVAS DE GESTIÓN PUBLICIDAD -->
+    <div class="alt-block">
+      <div class="alt-eyebrow">Elige tu modalidad</div>
+      <div class="alt-title">Gestión de Publicidad Digital</div>
+      <div class="alt-cards">
+        <div class="alt-card">
+          <div class="alt-card-label">Opción A</div>
+          <div class="alt-card-title">Gestión a cargo de La Ola Studio</div>
+          <div class="alt-card-desc">Nos encargamos de la planificación, ejecución y optimización de tus campañas publicitarias digitales cada mes.</div>
+          <div class="alt-card-price">$238.000</div>
+          <div class="alt-card-price-sub">$200.000 neto + IVA · mensual</div>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-label">Opción B</div>
+          <div class="alt-card-title">Capacitación para gestión propia</div>
+          <div class="alt-card-desc">Clases de 1 hora para que tú o tu equipo aprendan a gestionar la publicidad de forma autónoma.</div>
+          <div class="alt-card-price">$53.550</div>
+          <div class="alt-card-price-sub">$45.000 neto + IVA · por clase</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROYECCIÓN DE COSTOS -->
+    <div class="projection-block">
+      <div class="projection-eyebrow">Proyección estimada</div>
+      <div class="projection-title">Costos primeros 3 meses</div>
+      <div class="projection-scenarios">
+
+        <!-- ESCENARIO A -->
+        <div class="projection-scenario">
+          <div class="projection-scenario-header">Opción A — Gestión La Ola Studio</div>
+          <div class="projection-scenario-body">
+            <div class="projection-row">
+              <div class="projection-row-label">Mes 1
+                <small>Videos + chatbot + mentoría + gestión</small>
+              </div>
+              <div class="projection-row-value">$856.800</div>
+            </div>
+            <div class="projection-row">
+              <div class="projection-row-label">Mes 2
+                <small>Chatbot + mentoría + gestión</small>
+              </div>
+              <div class="projection-row-value">$499.800</div>
+            </div>
+            <div class="projection-row">
+              <div class="projection-row-label">Mes 3
+                <small>Chatbot + mentoría + gestión</small>
+              </div>
+              <div class="projection-row-value">$499.800</div>
+            </div>
+            <div class="projection-total-row">
+              <div class="projection-total-label">Total 3 meses</div>
+              <div class="projection-total-value">$1.856.400</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESCENARIO B -->
+        <div class="projection-scenario">
+          <div class="projection-scenario-header">Opción B — Capacitación (3 clases/mes)</div>
+          <div class="projection-scenario-body">
+            <div class="projection-row">
+              <div class="projection-row-label">Mes 1
+                <small>Videos + chatbot + mentoría + 3 clases</small>
+              </div>
+              <div class="projection-row-value">$779.450</div>
+            </div>
+            <div class="projection-row">
+              <div class="projection-row-label">Mes 2
+                <small>Chatbot + mentoría + 3 clases</small>
+              </div>
+              <div class="projection-row-value">$422.450</div>
+            </div>
+            <div class="projection-row">
+              <div class="projection-row-label">Mes 3
+                <small>Chatbot + mentoría + 3 clases</small>
+              </div>
+              <div class="projection-row-value">$422.450</div>
+            </div>
+            <div class="projection-total-row">
+              <div class="projection-total-label">Total 3 meses</div>
+              <div class="projection-total-value">$1.624.350</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="projection-note">* Todos los valores incluyen IVA (19%). Los costos de pauta publicitaria (Opción A) y los costos asociados al chatbot (tokens OpenAI, API WhatsApp) no están incluidos en esta proyección, ya que son de responsabilidad del cliente y varían según uso.</div>
+    </div>
+
+    <!-- TÉRMINOS -->
+    <div class="terms-block">
+      <div class="terms-title">Términos y condiciones</div>
+      <p><b>Videos publicitarios (proyecto único):</b> El pago se realiza en dos cuotas: 50% para iniciar la producción y 50% restante contra entrega de los videos. Las revisiones de cada video están incluidas hasta un máximo de dos rondas de cambios.</p>
+      <p><b>Servicios mensuales (chatbot y mentoría):</b> Se facturan el último día hábil de cada mes. El pago debe realizarse a más tardar el día 5 del mes siguiente.</p>
+      <p><b>Costos asociados al chatbot:</b> Los costos de infraestructura necesarios para el funcionamiento del chatbot —incluyendo los tokens de OpenAI y el uso de la API de WhatsApp— son de exclusiva responsabilidad del cliente. Estos valores son referenciales: aproximadamente $10.000 cada dos meses en tokens OpenAI y $3.000 por cada 1.000 mensajes procesados vía API de WhatsApp. Dichos costos pueden variar según el volumen de uso.</p>
+      <p><b>Gestión de publicidad (Opción A):</b> El presupuesto de pauta publicitaria (inversión en plataformas) no está incluido en el valor de la gestión y es responsabilidad del cliente.</p>
+      <p><b>Capacitación (Opción B):</b> Las clases se agendan con al menos 48 horas de anticipación. La cancelación con menos de 24 horas de aviso no da derecho a reagendamiento sin cargo.</p>
+      <p>Los contenidos, materiales y estrategias desarrollados durante la mentoría son de uso exclusivo del cliente. La Ola Studio se reserva el derecho de mencionar la relación comercial para fines de portafolio, salvo acuerdo previo de confidencialidad.</p>
+      <p>Esta propuesta es válida hasta el <b>13 de agosto de 2026</b>. Pasada esa fecha, los valores pueden estar sujetos a actualización.</p>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="footer-logo">LA OLA STUDIO</div>
+      <div class="footer-contact">
+        contacto@laolastudio.cl<br>
+        +569 4844 6791
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
