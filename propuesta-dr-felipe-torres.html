@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propuesta - Dr. Felipe Torres · La Ola Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Oswald', sans-serif; background: #EDE6D6; padding: 40px 20px; color: #1f2937; }
+    .container { max-width: 880px; margin: 0 auto; background: #fff; overflow: hidden; border-radius: 4px; }
+
+    /* HEADER */
+    .header { background: #3D5BA9; padding: 40px 48px 70px 48px; position: relative; color: #fff; }
+    .nav-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; }
+    .logo-block { display: flex; flex-direction: column; line-height: 1; }
+    .logo-block .l1, .logo-block .l2 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: 3px; text-transform: uppercase; }
+    .logo-wave { margin-top: 6px; width: 46px; height: 12px; }
+    .header-tag { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; background: #E0A23B; color: #1f2937; padding: 6px 14px; border-radius: 3px; font-weight: 600; }
+    .header-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 38px; line-height: 1.15; max-width: 560px; }
+    .wave-bottom { position: absolute; bottom: -1px; left: 0; width: 100%; height: 50px; line-height: 0; }
+    .wave-bottom svg { display: block; width: 100%; height: 100%; }
+
+    /* CLIENTE / FECHAS */
+    .meta-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 36px 48px; background: #fff; border-bottom: 3px solid #1f2937; }
+    .meta-label { font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #6b7280; margin-bottom: 6px; }
+    .meta-value { font-family: 'Fraunces', serif; font-weight: 700; font-size: 26px; color: #3D5BA9; }
+    .meta-dates { text-align: right; font-size: 14px; color: #4b5563; line-height: 1.8; }
+    .meta-dates b { color: #1f2937; }
+
+    /* INTRO */
+    .intro-block { background: #fff; padding: 36px 48px; border-bottom: 3px solid #1f2937; }
+    .intro-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 24px; color: #3D5BA9; margin-bottom: 24px; }
+    .intro-service { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #e5e7eb; }
+    .intro-service:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .intro-service-name { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: #B5432F; margin-bottom: 6px; }
+    .intro-service-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 20px; color: #1f2937; margin-bottom: 8px; }
+    .intro-service p { font-size: 13.5px; color: #4b5563; line-height: 1.8; }
+    .intro-service-price { display: inline-block; margin-top: 8px; background: #EDE6D6; border-radius: 3px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: #1f2937; letter-spacing: 0.5px; }
+
+    /* OPCIONES */
+    /* B1 — verde (recomendada) */
+    .opcion-b1 { background: #2C5530; color: #fff; padding: 44px 48px; }
+    /* B2 — azul */
+    .opcion-b2 { background: #3D5BA9; color: #fff; padding: 44px 48px; }
+    /* A1 — rojo terracota */
+    .opcion-a1 { background: #B5432F; color: #fff; padding: 44px 48px; }
+    /* A2 — gris oscuro */
+    .opcion-a2 { background: #1f2937; color: #fff; padding: 44px 48px; }
+
+    .opcion-separador { height: 6px; background: #EDE6D6; }
+
+    .recomendada-badge {
+      display: inline-block;
+      background: #E0A23B;
+      color: #1f2937;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 3px;
+      margin-bottom: 12px;
+    }
+
+    .opcion-eyebrow {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 6px;
+    }
+
+    .opcion-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 28px;
+      margin-bottom: 4px;
+    }
+
+    .opcion-desc {
+      font-family: 'Oswald', sans-serif;
+      font-size: 13px;
+      opacity: 0.8;
+      margin-bottom: 32px;
+    }
+
+    /* TABLA RESUMEN dentro de cada opción */
+    .opcion-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    .opcion-table td {
+      font-size: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      vertical-align: top;
+    }
+    .opcion-table td:last-child { text-align: right; white-space: nowrap; padding-left: 16px; font-weight: 600; }
+    .opcion-table tr:last-child td { border-bottom: none; }
+
+    .opcion-cat {
+      font-family: 'Oswald', sans-serif;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #E0A23B;
+      padding-top: 20px !important;
+      padding-bottom: 4px !important;
+      border-bottom: none !important;
+      font-weight: 600;
+    }
+    .opcion-cat:first-child { padding-top: 0 !important; }
+
+    .opcion-total-row td {
+      padding-top: 16px !important;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 22px;
+      color: #E0A23B;
+      border-top: 2px solid rgba(255,255,255,0.3);
+      border-bottom: none !important;
+    }
+
+    .opcion-note {
+      font-size: 12px;
+      opacity: 0.6;
+      line-height: 1.6;
+    }
+
+    /* TÉRMINOS */
+    .terms-block { background: #fff; padding: 44px 48px; }
+    .terms-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; color: #3D5BA9; margin-bottom: 20px; }
+    .terms-block p { font-size: 13.5px; line-height: 1.85; color: #374151; margin-bottom: 14px; }
+
+    /* FOOTER */
+    .footer { background: #3D5BA9; color: #fff; padding: 36px 48px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 2px; }
+    .footer-contact { font-size: 13px; text-align: right; opacity: 0.9; line-height: 1.6; }
+
+    @media (max-width: 640px) {
+      .header, .meta-row, .intro-block, .opcion-b1, .opcion-b2, .opcion-a1, .opcion-a2, .terms-block, .footer { padding-left: 24px; padding-right: 24px; }
+      .meta-row { grid-template-columns: 1fr; }
+      .meta-dates { text-align: left; }
+      .header-title { font-size: 26px; }
+      .footer { flex-direction: column; align-items: flex-start; }
+      .footer-contact { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="nav-row">
+      <div class="logo-block">
+        <span class="l1">LA OLA</span>
+        <span class="l2">STUDIO</span>
+        <svg class="logo-wave" viewBox="0 0 46 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 6C4 2 7 2 10 6C13 10 16 10 19 6C22 2 25 2 28 6C31 10 34 10 37 6C40 2 43 2 45 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="header-tag">Propuesta</span>
+    </div>
+    <h1 class="header-title">Propuesta comercial para el Dr. Felipe Torres</h1>
+    <div class="wave-bottom">
+      <svg viewBox="0 0 1000 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,30 Q250,5 500,30 T1000,30 L1000,60 L0,60 Z" fill="#fff"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- CLIENTE / FECHAS -->
+  <div class="meta-row">
+    <div>
+      <div class="meta-label">Cliente</div>
+      <div class="meta-value">Dr. Felipe Torres</div>
+    </div>
+    <div class="meta-dates">
+      <div><b>Fecha:</b> 15/07/2026</div>
+      <div><b>Válida hasta:</b> 14/08/2026</div>
+    </div>
+  </div>
+
+  <!-- DESCRIPCIÓN DE SERVICIOS -->
+  <div class="intro-block">
+    <div class="intro-title">Nuestros servicios</div>
+
+    <div class="intro-service">
+      <div class="intro-service-name">Servicio 01</div>
+      <div class="intro-service-title">Mentoría Digital</div>
+      <p>Acompañamiento mensual integral para desarrollar y ejecutar tu estrategia digital. Incluye definición de objetivos, diseño de estrategia y planificación de acciones concretas para alcanzarlos. Cada mes elaboramos los guiones para los videos del canal. El proceso se sostiene con reuniones semanales de seguimiento para revisar avances, ajustar el rumbo y tomar decisiones en tiempo real.</p>
+      <span class="intro-service-price">$150.000 neto / mes</span>
+    </div>
+
+    <div class="intro-service">
+      <div class="intro-service-name">Servicio 02</div>
+      <div class="intro-service-title">Producción de Videos</div>
+      <p>Producción de videos profesionales adaptados para redes sociales (Reels, Stories, Feed). El primer mes se produce un paquete inicial de 3 videos para activar el canal. Desde el segundo mes en adelante, recomendamos mantener un mínimo de 1 video mensual para sostener la presencia y el alcance orgánico.</p>
+      <span class="intro-service-price">$100.000 neto / video</span>
+    </div>
+
+    <div class="intro-service">
+      <div class="intro-service-name">Servicio 03 · Dos alternativas</div>
+      <div class="intro-service-title">Publicidad en Meta Ads</div>
+      <p>Para la gestión de publicidad en Meta (Facebook e Instagram) ofrecemos dos caminos según el nivel de control que quieras tener:</p>
+      <p style="margin-top:10px;"><b>Alternativa A — Nosotros gestionamos:</b> Nuestro equipo crea, optimiza y monitorea tus campañas mes a mes.</p>
+      <p style="margin-top:8px;"><b>Alternativa B — Tú gestionas (con nuestras clases):</b> Te enseñamos a manejar Meta Ads de forma autónoma en 3 clases de 1 hora. Al terminar, gestionas tus campañas por tu cuenta.</p>
+      <span class="intro-service-price">Gestión mensual: $200.000 neto / mes</span>
+      &nbsp;
+      <span class="intro-service-price">Clases: $45.000 neto / clase (mín. 3)</span>
+    </div>
+
+    <div class="intro-service">
+      <div class="intro-service-name">Servicio 04</div>
+      <div class="intro-service-title">Chatbot</div>
+      <p>Integración y mantención mensual de un chatbot en tu sitio web para atender consultas frecuentes de pacientes de forma automática las 24 horas. El costo de las APIs se cobra aparte según consumo real.</p>
+      <span class="intro-service-price">$70.000 neto / mes + APIs según consumo</span>
+    </div>
+
+    <div class="intro-service">
+      <div class="intro-service-name">Servicio 05 · Proyecto único</div>
+      <div class="intro-service-title">Landing Page</div>
+      <p>Diseño y desarrollo de una página de aterrizaje orientada a convertir visitas en consultas. Optimizada para móvil, con formulario de contacto y agendamiento integrado. Disponible con o sin configuración de cuentas publicitarias de Google y Meta.</p>
+      <span class="intro-service-price">Con set up Google + Meta: $1.190.000 neto</span>
+      &nbsp;
+      <span class="intro-service-price">Sin set up: $990.000 neto</span>
+    </div>
+  </div>
+
+  <!-- ══════════ OPCIÓN B1 — AZUL ══════════ -->
+  <div class="opcion-b2">
+    <div class="opcion-eyebrow">Opción B1</div>
+    <div class="opcion-title">Sin Landing Page · Nosotros gestionamos Meta Ads</div>
+    <div class="opcion-desc">Partida ágil con la menor inversión inicial: mentoría, videos, publicidad gestionada y chatbot</div>
+    <table class="opcion-table">
+      <tr><td class="opcion-cat" colspan="2">Mes 1 — pago puntual</td></tr>
+      <tr><td>3 Videos iniciales</td><td>$357.000</td></tr>
+      <tr><td class="opcion-cat" colspan="2">Mensual recurrente</td></tr>
+      <tr><td>Mentoría Digital</td><td>$178.500</td></tr>
+      <tr><td>Gestión Meta Ads</td><td>$238.000</td></tr>
+      <tr><td>Chatbot</td><td>$83.300</td></tr>
+      <tr class="opcion-total-row"><td>Total mensual recurrente</td><td>$499.800</td></tr>
+    </table>
+    <p class="opcion-note">Inversión inicial mes 1: $357.000 · Desde mes 2: mín. 1 video adicional a $119.000 c/IVA · Presupuesto publicitario y APIs no incluidos</p>
+  </div>
+
+  <div class="opcion-separador"></div>
+
+  <!-- ══════════ OPCIÓN B2 — GRIS OSCURO ══════════ -->
+  <div class="opcion-a2">
+    <div class="opcion-eyebrow">Opción B2</div>
+    <div class="opcion-title">Sin Landing Page · Tú gestionas Meta Ads</div>
+    <div class="opcion-desc">Menor costo mensual recurrente: aprende a gestionar tu publicidad de forma autónoma</div>
+    <table class="opcion-table">
+      <tr><td class="opcion-cat" colspan="2">Mes 1 — pagos puntuales</td></tr>
+      <tr><td>3 Videos iniciales</td><td>$357.000</td></tr>
+      <tr><td>3 Clases Meta Ads</td><td>$160.650</td></tr>
+      <tr><td class="opcion-cat" colspan="2">Mensual recurrente</td></tr>
+      <tr><td>Mentoría Digital</td><td>$178.500</td></tr>
+      <tr><td>Chatbot</td><td>$83.300</td></tr>
+      <tr class="opcion-total-row"><td>Total mensual recurrente</td><td>$261.800</td></tr>
+    </table>
+    <p class="opcion-note">Inversión inicial mes 1: $517.650 · Tú gestionas tus propias campañas · Desde mes 2: mín. 1 video adicional a $119.000 c/IVA · Presupuesto publicitario y APIs no incluidos</p>
+  </div>
+
+  <div class="opcion-separador"></div>
+
+  <!-- ══════════ OPCIÓN A1 — VERDE (RECOMENDADA) ══════════ -->
+  <div class="opcion-b1">
+    <div class="recomendada-badge">★ Nuestra recomendación</div>
+    <div class="opcion-eyebrow">Opción A1</div>
+    <div class="opcion-title">Con Landing Page · Nosotros gestionamos Meta Ads</div>
+    <div class="opcion-desc">Embudo completo con landing page, chatbot y publicidad gestionada por nuestro equipo</div>
+    <table class="opcion-table">
+      <tr><td class="opcion-cat" colspan="2">Mes 1 — pagos puntuales</td></tr>
+      <tr><td>3 Videos iniciales</td><td>$357.000</td></tr>
+      <tr><td>Landing Page + Set Up Google & Meta</td><td>$1.416.100</td></tr>
+      <tr><td class="opcion-cat" colspan="2">Mensual recurrente</td></tr>
+      <tr><td>Mentoría Digital</td><td>$178.500</td></tr>
+      <tr><td>Gestión Meta Ads</td><td>$238.000</td></tr>
+      <tr><td>Chatbot</td><td>$83.300</td></tr>
+      <tr class="opcion-total-row"><td>Total mensual recurrente</td><td>$499.800</td></tr>
+    </table>
+    <p class="opcion-note">Inversión inicial mes 1: $1.773.100 · Desde mes 2: mín. 1 video adicional a $119.000 c/IVA · Presupuesto publicitario y APIs no incluidos</p>
+  </div>
+
+  <div class="opcion-separador"></div>
+
+  <!-- ══════════ OPCIÓN A2 — ROJO ══════════ -->
+  <div class="opcion-a1">
+    <div class="opcion-eyebrow">Opción A2</div>
+    <div class="opcion-title">Con Landing Page · Tú gestionas Meta Ads</div>
+    <div class="opcion-desc">Embudo completo con landing page, chatbot y autonomía en la gestión publicitaria</div>
+    <table class="opcion-table">
+      <tr><td class="opcion-cat" colspan="2">Mes 1 — pagos puntuales</td></tr>
+      <tr><td>3 Videos iniciales</td><td>$357.000</td></tr>
+      <tr><td>3 Clases Meta Ads</td><td>$160.650</td></tr>
+      <tr><td>Landing Page + Set Up Google & Meta</td><td>$1.416.100</td></tr>
+      <tr><td class="opcion-cat" colspan="2">Mensual recurrente</td></tr>
+      <tr><td>Mentoría Digital</td><td>$178.500</td></tr>
+      <tr><td>Chatbot</td><td>$83.300</td></tr>
+      <tr class="opcion-total-row"><td>Total mensual recurrente</td><td>$261.800</td></tr>
+    </table>
+    <p class="opcion-note">Inversión inicial mes 1: $1.933.750 · Tú gestionas tus propias campañas · Desde mes 2: mín. 1 video adicional a $119.000 c/IVA · Presupuesto publicitario y APIs no incluidos</p>
+  </div>
+
+  <!-- TÉRMINOS -->
+  <div class="terms-block">
+    <div class="terms-title">Términos y condiciones</div>
+    <p><b>Servicios mensuales (mentoría, gestión Meta Ads, chatbot):</b> Se facturan mensualmente. La factura se emite el último día hábil de cada mes y el pago debe realizarse a más tardar el día 5 del mes siguiente.</p>
+    <p><b>Producción de videos:</b> Se facturan al inicio de cada producción. Desde el mes 2 en adelante, cada video se cotiza y factura de forma independiente.</p>
+    <p><b>Clases de Meta Ads:</b> Se facturan al inicio del paquete de 3 sesiones. La programación de cada clase se coordina según disponibilidad de ambas partes.</p>
+    <p><b>Landing Page (proyecto único):</b> El pago se divide en tres cuotas: 50% para iniciar el proyecto, 30% a mitad del desarrollo y 20% al momento de la entrega.</p>
+    <p>Cada servicio incluye únicamente los entregables especificados en esta propuesta. Cualquier trabajo adicional será cotizado por separado antes de ejecutarse.</p>
+    <p>El presupuesto publicitario destinado a campañas de Meta Ads y Google Ads es independiente de esta propuesta y es responsabilidad del cliente.</p>
+    <p>Los costos de APIs del chatbot se cobran según consumo real y serán informados mensualmente junto a la factura.</p>
+    <p>El material producido podrá ser utilizado por el cliente para fines comerciales, digitales e impresos. La Ola Studio se reserva el derecho de utilizar el material para portafolio y difusión profesional, salvo acuerdo previo de confidencialidad.</p>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-logo">LA OLA STUDIO</div>
+    <div class="footer-contact">
+      contacto@laolastudio.cl<br>
+      +569 4844 6791
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
