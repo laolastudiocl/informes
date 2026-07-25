@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propuesta - La Ola Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Oswald', sans-serif;
+      background: #EDE6D6;
+      padding: 40px 20px;
+      color: #1f2937;
+    }
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      background: #fff;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      background: #3D5BA9;
+      padding: 40px 48px 70px 48px;
+      position: relative;
+      color: #fff;
+    }
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 50px;
+    }
+    .logo-block {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+    .logo-block .l1, .logo-block .l2 {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    .logo-wave {
+      margin-top: 6px;
+      width: 46px;
+      height: 12px;
+    }
+    .header-tag {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: #E0A23B;
+      color: #1f2937;
+      padding: 6px 14px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+    .header-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 38px;
+      line-height: 1.15;
+      max-width: 560px;
+    }
+    .wave-bottom {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 50px;
+      line-height: 0;
+    }
+    .wave-bottom svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ===== CLIENTE / FECHAS ===== */
+    .meta-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      padding: 36px 48px;
+      background: #fff;
+      border-bottom: 3px solid #1f2937;
+    }
+    .meta-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+    .meta-value {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 26px;
+      color: #3D5BA9;
+    }
+    .meta-dates {
+      text-align: right;
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.8;
+    }
+    .meta-dates b { color: #1f2937; }
+
+    /* ===== SERVICIO (bloque rojo) ===== */
+    .service-block {
+      background: #B5432F;
+      color: #fff;
+      padding: 44px 48px;
+    }
+    .service-eyebrow {
+      font-family: 'Oswald', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 10px;
+    }
+    .service-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 32px;
+      margin-bottom: 6px;
+    }
+    .service-plan-tag {
+      display: inline-block;
+      background: #E0A23B;
+      color: #1f2937;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 3px;
+      margin-bottom: 24px;
+    }
+    .service-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-width: 560px;
+    }
+    .service-list li {
+      font-size: 15px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.25);
+      position: relative;
+      padding-left: 22px;
+    }
+    .service-list li:last-child { border-bottom: none; }
+    .service-list li::before {
+      content: '~';
+      position: absolute;
+      left: 0;
+      font-weight: 700;
+      color: #E0A23B;
+    }
+
+    /* ===== PRECIO (bloque beige) ===== */
+    .price-block {
+      background: #EDE6D6;
+      padding: 36px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      border-bottom: 3px solid #1f2937;
+    }
+    .price-detail {
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.7;
+    }
+    .price-detail b { color: #1f2937; }
+    .price-total-box {
+      background: #1f2937;
+      color: #fff;
+      padding: 18px 28px;
+      border-radius: 4px;
+      text-align: right;
+    }
+    .price-total-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #E0A23B;
+      margin-bottom: 4px;
+    }
+    .price-total-value {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 30px;
+    }
+
+    /* ===== ADICIONALES (bloque verde oscuro) ===== */
+    .extra-block {
+      background: #2C5530;
+      color: #fff;
+      padding: 32px 48px;
+    }
+    .extra-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+    .extra-subtitle {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-bottom: 16px;
+      max-width: 560px;
+      line-height: 1.6;
+    }
+    .extra-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .extra-list li {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 3px;
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    /* ===== TÉRMINOS ===== */
+    .terms-block {
+      background: #fff;
+      padding: 44px 48px;
+    }
+    .terms-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 22px;
+      color: #3D5BA9;
+      margin-bottom: 20px;
+    }
+    .terms-block p {
+      font-size: 13.5px;
+      line-height: 1.85;
+      color: #374151;
+      margin-bottom: 14px;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: #3D5BA9;
+      color: #fff;
+      padding: 36px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 2px;
+    }
+    .footer-contact {
+      font-size: 13px;
+      text-align: right;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      .header, .meta-row, .service-block, .price-block, .extra-block, .terms-block, .footer {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+      .meta-row { grid-template-columns: 1fr; }
+      .meta-dates { text-align: left; }
+      .header-title { font-size: 28px; }
+      .price-block { flex-direction: column; align-items: flex-start; }
+      .price-total-box { text-align: left; width: 100%; }
+      .footer { flex-direction: column; align-items: flex-start; }
+      .footer-contact { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="nav-row">
+        <div class="logo-block">
+          <span class="l1">LA OLA</span>
+          <span class="l2">STUDIO</span>
+          <svg class="logo-wave" viewBox="0 0 46 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 6C4 2 7 2 10 6C13 10 16 10 19 6C22 2 25 2 28 6C31 10 34 10 37 6C40 2 43 2 45 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="header-tag">Propuesta</span>
+      </div>
+      <h1 class="header-title">Sitio web para Monteci</h1>
+
+      <div class="wave-bottom">
+        <svg viewBox="0 0 1000 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,30 Q250,5 500,30 T1000,30 L1000,60 L0,60 Z" fill="#fff"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- CLIENTE / FECHAS -->
+    <div class="meta-row">
+      <div>
+        <div class="meta-label">Cliente</div>
+        <div class="meta-value">Monteci</div>
+      </div>
+      <div class="meta-dates">
+        <div><b>Fecha:</b> 24/07/2026</div>
+        <div><b>Válida hasta:</b> 23/08/2026</div>
+      </div>
+    </div>
+
+    <!-- SERVICIO -->
+    <div class="service-block">
+      <div class="service-eyebrow">Descripción del servicio</div>
+      <div class="service-title">Diseño de Sitio Web en Shopify</div>
+      <span class="service-plan-tag">Plan Estándar · Proyecto único</span>
+      <ul class="service-list">
+        <li>Diseño completo del sitio: home, menú, colecciones y pie de página</li>
+        <li>Instalación de hasta 5 apps</li>
+        <li>Asesoría para la compra del dominio</li>
+        <li>Vinculación del dominio vía Cloudflare</li>
+        <li>Integración de pasarelas de pago y métodos de despacho</li>
+        <li>Capacitación para que el equipo de Monteci pueda autoadministrar el sitio</li>
+      </ul>
+    </div>
+
+    <!-- PRECIO -->
+    <div class="price-block">
+      <div class="price-detail">
+        <div><b>Neto:</b> $1.190.000</div>
+        <div><b>IVA (19%):</b> $226.100</div>
+      </div>
+      <div class="price-total-box">
+        <div class="price-total-label">Total proyecto</div>
+        <div class="price-total-value">$1.416.100</div>
+      </div>
+    </div>
+
+    <!-- BONOS INCLUIDOS SIN COSTO -->
+    <div class="extra-block">
+      <div class="extra-title">Bonos incluidos sin costo adicional</div>
+      <div class="extra-subtitle">Como parte de este proyecto, sumamos los siguientes servicios de forma gratuita. El valor indicado es referencial, para que veas lo que representan si se cotizaran por separado.</div>
+      <ul class="extra-list">
+        <li>Conexión de cuentas con Meta y Google — valor referencial $240.000, gratis</li>
+        <li>Asesoría en comunicación de marca estratégica — valor referencial $90.000, gratis</li>
+        <li>Email marketing (1 campaña) — valor referencial $120.000, gratis</li>
+        <li>Marcha blanca (45 días de ajustes) — valor referencial $70.000, gratis</li>
+      </ul>
+    </div>
+
+    <!-- SERVICIOS APARTE -->
+    <div class="terms-block" style="padding-bottom: 0;">
+      <div class="terms-title" style="font-size: 18px; margin-bottom: 10px;">Servicios no incluidos en este plan</div>
+      <p>La integración del inventario con Mercado Libre se realiza a través de un tercero especializado, con un valor aparte al de esta propuesta. Te compartiremos opciones de empresas que ofrecen este servicio para que elijas la que más te acomode.</p>
+      <p>Plantilla de pago de Shopify: tiene un valor tentativo entre $200.000 y $400.000, según el diseño elegido. La recomendamos absolutamente, ya que impacta directamente en que el sitio tenga una mejor tasa de conversión.</p>
+    </div>
+
+    <!-- TÉRMINOS -->
+    <div class="terms-block">
+      <div class="terms-title">Términos y condiciones de pago</div>
+      <p>El pago del proyecto deberá realizarse en tres partes: 50% inicial para iniciar el proyecto, 30% al segundo mes (a mitad del desarrollo) y 20% final una vez entregado el sitio web, antes de iniciar la marcha blanca.</p>
+      <p>Se incluyen 45 días de marcha blanca, período en el que Monteci puede solicitar ajustes al sitio entregado sin costo adicional.</p>
+      <p>Incluye capacitación para que el equipo de Monteci pueda autoadministrar el sitio web (carga de productos, gestión de colecciones y contenidos básicos) una vez finalizado el desarrollo.</p>
+      <p>Los gastos de Shopify, instalación de plantillas de diseño y aplicaciones pagadas no están incluidos en esta cotización.</p>
+      <p>Los bonos incluidos (conexión Meta/Google, asesoría de comunicación de marca, email marketing y marcha blanca) se entregan sin costo como parte de este proyecto. Los valores indicados son referenciales y no se facturan por separado mientras formen parte de esta propuesta.</p>
+      <p>La integración de inventario con Mercado Libre se coordina con un proveedor externo, cuyo costo no está incluido en este valor y se cotiza de forma independiente.</p>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="footer-logo">LA OLA STUDIO</div>
+      <div class="footer-contact">
+        contacto@laolastudio.cl<br>
+        +569 4844 6791
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
