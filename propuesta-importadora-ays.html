@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propuesta - La Ola Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Oswald', sans-serif;
+      background: #EDE6D6;
+      padding: 40px 20px;
+      color: #1f2937;
+    }
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      background: #fff;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      background: #3D5BA9;
+      padding: 40px 48px 70px 48px;
+      position: relative;
+      color: #fff;
+    }
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 50px;
+    }
+    .logo-block {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+    .logo-block .l1, .logo-block .l2 {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    .logo-wave {
+      margin-top: 6px;
+      width: 46px;
+      height: 12px;
+    }
+    .header-tag {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: #E0A23B;
+      color: #1f2937;
+      padding: 6px 14px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+    .header-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 38px;
+      line-height: 1.15;
+      max-width: 560px;
+    }
+    .wave-bottom {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 50px;
+      line-height: 0;
+    }
+    .wave-bottom svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ===== CLIENTE / FECHAS ===== */
+    .meta-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      padding: 36px 48px;
+      background: #fff;
+      border-bottom: 3px solid #1f2937;
+    }
+    .meta-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+    .meta-value {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 26px;
+      color: #3D5BA9;
+    }
+    .meta-dates {
+      text-align: right;
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.8;
+    }
+    .meta-dates b { color: #1f2937; }
+
+    /* ===== SERVICIO ===== */
+    .service-block {
+      background: #B5432F;
+      color: #fff;
+      padding: 44px 48px;
+    }
+    .service-eyebrow {
+      font-family: 'Oswald', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 10px;
+    }
+    .service-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 32px;
+      margin-bottom: 6px;
+    }
+    .service-plan-tag {
+      display: inline-block;
+      background: #E0A23B;
+      color: #1f2937;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 3px;
+      margin-bottom: 24px;
+    }
+    .service-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-width: 560px;
+    }
+    .service-list li {
+      font-size: 15px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.25);
+      position: relative;
+      padding-left: 22px;
+    }
+    .service-list li:last-child { border-bottom: none; }
+    .service-list li::before {
+      content: '~';
+      position: absolute;
+      left: 0;
+      font-weight: 700;
+      color: #E0A23B;
+    }
+
+    /* ===== PRECIO ===== */
+    .price-block {
+      background: #EDE6D6;
+      padding: 36px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      border-bottom: 3px solid #1f2937;
+    }
+    .price-detail {
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.7;
+    }
+    .price-detail b { color: #1f2937; }
+    .price-total-box {
+      background: #1f2937;
+      color: #fff;
+      padding: 18px 28px;
+      border-radius: 4px;
+      text-align: right;
+    }
+    .price-total-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #E0A23B;
+      margin-bottom: 4px;
+    }
+    .price-total-value {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 30px;
+    }
+
+    /* ===== BONOS (verde) ===== */
+    .extra-block {
+      background: #2C5530;
+      color: #fff;
+      padding: 32px 48px;
+    }
+    .extra-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+    .extra-subtitle {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-bottom: 16px;
+    }
+    .extra-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 14px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .extra-list li {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 3px;
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+    .extra-note {
+      font-size: 12px;
+      opacity: 0.8;
+      line-height: 1.6;
+      max-width: 640px;
+    }
+
+    /* ===== TÉRMINOS ===== */
+    .terms-block {
+      background: #fff;
+      padding: 44px 48px;
+    }
+    .terms-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 22px;
+      color: #3D5BA9;
+      margin-bottom: 20px;
+    }
+    .terms-block p {
+      font-size: 13.5px;
+      line-height: 1.85;
+      color: #374151;
+      margin-bottom: 14px;
+    }
+    .terms-block ul {
+      margin: 0 0 14px 20px;
+      padding: 0;
+    }
+    .terms-block li {
+      font-size: 13.5px;
+      line-height: 1.85;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    /* ===== COSTOS MENSUALES (beige claro, separado de T&C) ===== */
+    .monthly-block {
+      background: #EDE6D6;
+      padding: 40px 48px;
+      border-top: 3px solid #1f2937;
+    }
+    .monthly-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+    .monthly-subtitle {
+      font-size: 12.5px;
+      color: #6b7280;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .monthly-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .monthly-table th {
+      text-align: left;
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #6b7280;
+      padding: 8px 10px;
+      border-bottom: 2px solid #1f2937;
+    }
+    .monthly-table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(31,41,55,0.15);
+      color: #374151;
+      vertical-align: top;
+    }
+    .monthly-table td.val {
+      white-space: nowrap;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    .monthly-foot {
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.7;
+      margin-top: 16px;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: #3D5BA9;
+      color: #fff;
+      padding: 36px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 2px;
+    }
+    .footer-contact {
+      font-size: 13px;
+      text-align: right;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      .header, .meta-row, .service-block, .price-block, .extra-block, .terms-block, .monthly-block, .footer {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+      .meta-row { grid-template-columns: 1fr; }
+      .meta-dates { text-align: left; }
+      .header-title { font-size: 28px; }
+      .price-block { flex-direction: column; align-items: flex-start; }
+      .price-total-box { text-align: left; width: 100%; }
+      .footer { flex-direction: column; align-items: flex-start; }
+      .footer-contact { text-align: left; }
+      .monthly-table { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="nav-row">
+        <div class="logo-block">
+          <span class="l1">LA OLA</span>
+          <span class="l2">STUDIO</span>
+          <svg class="logo-wave" viewBox="0 0 46 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 6C4 2 7 2 10 6C13 10 16 10 19 6C22 2 25 2 28 6C31 10 34 10 37 6C40 2 43 2 45 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="header-tag">Propuesta</span>
+      </div>
+      <h1 class="header-title">Tu tienda Shopify, diseñada para convertir</h1>
+
+      <div class="wave-bottom">
+        <svg viewBox="0 0 1000 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,30 Q250,5 500,30 T1000,30 L1000,60 L0,60 Z" fill="#fff"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- CLIENTE / FECHAS -->
+    <div class="meta-row">
+      <div>
+        <div class="meta-label">Cliente</div>
+        <div class="meta-value">Importadora A y S</div>
+      </div>
+      <div class="meta-dates">
+        <div><b>Fecha:</b> 04/08/2026</div>
+        <div><b>Válida hasta:</b> 03/09/2026</div>
+      </div>
+    </div>
+
+    <!-- SERVICIO -->
+    <div class="service-block">
+      <div class="service-eyebrow">Descripción del servicio</div>
+      <div class="service-title">Diseño Web Shopify</div>
+      <span class="service-plan-tag">Plan Estándar · Proyecto único</span>
+      <ul class="service-list">
+        <li>Asesoría para vincular tu dominio con Shopify</li>
+        <li>Diseño web completo y a medida</li>
+        <li>Carga completa de productos e imágenes</li>
+        <li>Sitio 100% responsivo (adaptado a celular, tablet y desktop)</li>
+        <li>Foco en alta tasa de conversión: herramientas de persuasión aplicadas al diseño</li>
+        <li>Diseño de página de producto predeterminada para todo el catálogo, más 3 landing pages 100% optimizadas para tus productos "estrella", con preguntas frecuentes y respuestas, derribo de objeciones, herramientas de urgencia y escasez, y desarrollo de oferta</li>
+        <li>Acompañamiento semana a semana durante todo el proyecto</li>
+      </ul>
+    </div>
+
+    <!-- PRECIO -->
+    <div class="price-block">
+      <div class="price-detail">
+        <div><b>Neto:</b> $1.190.000</div>
+        <div><b>IVA (19%):</b> $226.100</div>
+      </div>
+      <div class="price-total-box">
+        <div class="price-total-label">Total proyecto</div>
+        <div class="price-total-value">$1.416.100</div>
+      </div>
+    </div>
+
+    <!-- BONOS -->
+    <div class="extra-block">
+      <div class="extra-title">Bonos incluidos sin costo adicional</div>
+      <div class="extra-subtitle">Valor referencial de mercado de estos servicios: $600.000 aprox.</div>
+      <ul class="extra-list">
+        <li>Asesoría en desarrollo de ofertas — valor $70.000</li>
+        <li>Set Up Meta — valor $120.000</li>
+        <li>Set Up Google — valor $120.000</li>
+        <li>Capacitación carga masiva de productos (Shopify) — valor $90.000</li>
+        <li>2 clases de Shopify, 1 hora c/u — valor $200.000</li>
+      </ul>
+    </div>
+
+    <!-- TÉRMINOS -->
+    <div class="terms-block">
+      <div class="terms-title">Términos y condiciones de pago</div>
+      <p>El pago del proyecto se realiza en tres partes:</p>
+      <ul>
+        <li>50% inicial, para dar inicio al proyecto.</li>
+        <li>30% al segundo mes, a mitad del desarrollo.</li>
+        <li>20% final, una vez entregado el sitio web y antes de iniciar la marcha blanca.</li>
+      </ul>
+      <p>El plan Estándar incluye 45 días de marcha blanca: un período posterior a la entrega en el que puedes solicitar ajustes sin costo adicional.</p>
+      <p>Los bonos incluidos (asesoría de ofertas, set up de Meta y Google, capacitaciones) se agendan dentro de los 60 días posteriores a la entrega del sitio, sujeto a disponibilidad de agenda.</p>
+      <p>Los gastos de Shopify, dominio, plantillas de pago, aplicaciones pagadas y comisiones de pasarelas de pago no están incluidos en esta cotización. Ver detalle referencial más abajo.</p>
+    </div>
+
+    <!-- COSTOS MENSUALES DEL CLIENTE -->
+    <div class="monthly-block">
+      <div class="monthly-title">Costos mensuales que debes considerar (no incluidos en esta propuesta)</div>
+      <div class="monthly-subtitle">Estos son costos que pagas directamente a terceros (Shopify, Google, la pasarela de pago, apps), no a La Ola Studio. Son valores referenciales a agosto de 2026 y pueden variar según tipo de cambio, promociones y plan elegido.</div>
+      <table class="monthly-table">
+        <tr>
+          <th>Costo</th>
+          <th>Referencia</th>
+          <th>Estimado CLP</th>
+        </tr>
+        <tr>
+          <td>Shopify, plan Basic (Chile)</td>
+          <td>USD 19/mes</td>
+          <td class="val">~$17.600/mes</td>
+        </tr>
+        <tr>
+          <td>Google Workspace, plan Business Starter (correos @tudominio)</td>
+          <td>USD 7/usuario/mes</td>
+          <td class="val">~$6.500/mes por casilla</td>
+        </tr>
+        <tr>
+          <td>Webpay Plus (Transbank)</td>
+          <td>Tarifa oficial vigente desde mayo 2026 para comercios nuevos</td>
+          <td class="val">2,35% crédito / 1,75% débito + IVA</td>
+        </tr>
+        <tr>
+          <td>Mercado Pago</td>
+          <td>Tarifa referencial según plazo de abono (instantáneo vs. días)</td>
+          <td class="val">2,89% – 3,19% + IVA</td>
+        </tr>
+        <tr>
+          <td>Flow</td>
+          <td>Tarifa plana, abono en 24-72 h</td>
+          <td class="val">2,89% + IVA</td>
+        </tr>
+        <tr>
+          <td>VentiPay</td>
+          <td>Débito 1 cuota / Crédito estándar / Débito en 3 cuotas (tarifa referencial de agregador, no oficial)</td>
+          <td class="val">1,80% – 3,49% + IVA</td>
+        </tr>
+      </table>
+      <div class="monthly-foot">
+        Los USD de Shopify y Google Workspace están convertidos a CLP con el dólar de hoy (~$925 CLP/USD); ese peso cambia día a día. Las comisiones de pasarela de pago no son un monto fijo mensual: es un porcentaje que se descuenta de cada venta, y depende del medio de pago (débito/crédito) y del plazo en que quieras recibir el dinero. La cifra de Webpay Plus viene directo de Transbank; las de Mercado Pago, Flow y VentiPay son referenciales de sitios comparadores, así que te recomendamos confirmar la tarifa exacta con cada proveedor antes de decidir.
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="footer-logo">LA OLA STUDIO</div>
+      <div class="footer-contact">
+        contacto@laolastudio.cl<br>
+        +569 4844 6791
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
