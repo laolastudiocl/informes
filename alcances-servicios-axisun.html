@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alcances de Servicios — Axisun</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700&family=Oswald:wght@400;500;600;700&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --azul:   #3D5BA9;
+      --rojo:   #B5432F;
+      --verde:  #2C5530;
+      --naranja:#E0A23B;
+      --beige:  #EDE6D6;
+      --oscuro: #1A1A2E;
+      --gris:   #4b5563;
+    }
+
+    body {
+      font-family: 'Source Serif 4', Georgia, serif;
+      background: var(--beige);
+      color: var(--oscuro);
+      padding: 40px 20px 80px;
+      line-height: 1.75;
+    }
+
+    .doc {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    /* ENCABEZADO */
+    .encabezado {
+      background: var(--oscuro);
+      color: #fff;
+      padding: 52px 56px 48px;
+      border-radius: 6px 6px 0 0;
+    }
+    .enc-logo {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--naranja);
+      margin-bottom: 32px;
+    }
+    .enc-tipo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 10px;
+    }
+    .enc-titulo {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 38px;
+      line-height: 1.1;
+      margin-bottom: 28px;
+    }
+    .enc-meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding-top: 28px;
+      margin-top: 8px;
+    }
+    .enc-meta-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 4px;
+    }
+    .enc-meta-val {
+      font-family: 'Oswald', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+    }
+
+    /* INTRO */
+    .intro {
+      background: var(--azul);
+      color: #fff;
+      padding: 36px 56px;
+      font-size: 15px;
+      line-height: 1.8;
+      opacity: 1;
+    }
+    .intro p { opacity: 0.9; }
+
+    /* BLOQUES DE SERVICIO */
+    .servicio {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .servicio-header {
+      padding: 32px 56px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .servicio-num {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 48px;
+      line-height: 1;
+      color: #e5e7eb;
+      flex-shrink: 0;
+      margin-top: -4px;
+    }
+    .servicio-header-body {}
+    .servicio-tag {
+      font-family: 'Oswald', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--naranja);
+      margin-bottom: 4px;
+    }
+    .servicio-titulo {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--oscuro);
+      line-height: 1.2;
+    }
+    .servicio-body {
+      padding: 24px 56px 36px;
+    }
+    .servicio-body p {
+      font-size: 15px;
+      color: #374151;
+      margin-bottom: 14px;
+      line-height: 1.8;
+    }
+    .servicio-body p:last-child { margin-bottom: 0; }
+    .servicio-body strong { color: var(--oscuro); }
+
+    /* LISTA DE ALCANCES */
+    .alcances-titulo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--azul);
+      margin: 20px 0 12px;
+    }
+    .alcances-lista {
+      list-style: none;
+      padding: 0;
+    }
+    .alcances-lista li {
+      font-size: 14.5px;
+      color: #374151;
+      padding: 9px 0 9px 22px;
+      border-bottom: 1px solid #f3f4f6;
+      position: relative;
+      line-height: 1.6;
+    }
+    .alcances-lista li:last-child { border-bottom: none; }
+    .alcances-lista li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--azul);
+      font-weight: 700;
+      font-family: 'Oswald', sans-serif;
+    }
+
+    /* LISTA DE EXCLUSIONES */
+    .excl-lista {
+      list-style: none;
+      padding: 0;
+    }
+    .excl-lista li {
+      font-size: 14.5px;
+      color: #6b7280;
+      padding: 9px 0 9px 22px;
+      border-bottom: 1px solid #f3f4f6;
+      position: relative;
+      line-height: 1.6;
+    }
+    .excl-lista li:last-child { border-bottom: none; }
+    .excl-lista li::before {
+      content: '✕';
+      position: absolute;
+      left: 0;
+      color: var(--rojo);
+      font-weight: 700;
+      font-size: 12px;
+      top: 11px;
+    }
+
+    /* PRECIO INLINE */
+    .precio-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--beige);
+      border: 1.5px solid var(--naranja);
+      border-radius: 4px;
+      padding: 10px 18px;
+      margin: 20px 0 0;
+    }
+    .precio-tag-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #92640a;
+    }
+    .precio-tag-valor {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--oscuro);
+    }
+    .precio-tag-sub {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      color: #92640a;
+    }
+
+    /* BLOQUE NO INCLUIDO */
+    .no-incluido {
+      background: #fafafa;
+      border-top: 3px solid var(--rojo);
+      padding: 36px 56px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .no-incluido-titulo {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--rojo);
+      margin-bottom: 8px;
+    }
+    .no-incluido p {
+      font-size: 14.5px;
+      color: #6b7280;
+      margin-bottom: 16px;
+      line-height: 1.75;
+    }
+
+    /* COMISIONES */
+    .comisiones {
+      background: var(--verde);
+      color: #fff;
+      padding: 40px 56px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .com-tag {
+      font-family: 'Oswald', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--naranja);
+      margin-bottom: 8px;
+    }
+    .com-titulo {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .com-body p {
+      font-size: 15px;
+      opacity: 0.9;
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+    .com-body p:last-child { margin-bottom: 0; }
+    .com-body strong { color: var(--naranja); }
+    .com-ejemplo {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 20px 24px;
+      margin-top: 20px;
+    }
+    .com-ejemplo-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--naranja);
+      margin-bottom: 10px;
+    }
+    .com-ejemplo-fila {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      opacity: 0.85;
+    }
+    .com-ejemplo-fila:last-child {
+      border-bottom: none;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 16px;
+      opacity: 1;
+      color: var(--naranja);
+      padding-top: 12px;
+      margin-top: 4px;
+    }
+    .com-ejemplo-fila span:last-child { font-weight: 600; }
+
+    /* DISPOSICIONES GENERALES */
+    .generales {
+      background: #fff;
+      padding: 40px 56px;
+    }
+    .gen-titulo {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--oscuro);
+      margin-bottom: 20px;
+    }
+    .gen-item {
+      padding: 16px 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .gen-item:last-child { border-bottom: none; }
+    .gen-item-titulo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--oscuro);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .gen-item p {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.75;
+    }
+
+    /* FIRMAS */
+    .firmas {
+      background: var(--beige);
+      padding: 40px 56px;
+      border-top: 3px solid var(--oscuro);
+    }
+    .firmas-titulo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gris);
+      margin-bottom: 28px;
+    }
+    .firmas-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    .firma-bloque {}
+    .firma-linea {
+      border-bottom: 1.5px solid var(--oscuro);
+      height: 48px;
+      margin-bottom: 10px;
+    }
+    .firma-nombre {
+      font-family: 'Oswald', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--oscuro);
+    }
+    .firma-rol {
+      font-size: 12px;
+      color: var(--gris);
+      margin-top: 2px;
+    }
+
+    /* FOOTER */
+    .footer {
+      background: var(--oscuro);
+      color: rgba(255,255,255,0.5);
+      padding: 24px 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 0 0 6px 6px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .footer span { color: var(--naranja); }
+
+    @media (max-width: 640px) {
+      .encabezado, .intro, .servicio-header, .servicio-body,
+      .no-incluido, .comisiones, .generales, .firmas, .footer {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+      .enc-titulo { font-size: 28px; }
+      .enc-meta { grid-template-columns: 1fr 1fr; }
+      .firmas-grid { grid-template-columns: 1fr; gap: 28px; }
+      .footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+<div class="doc">
+
+  <!-- ENCABEZADO -->
+  <div class="encabezado">
+    <div class="enc-logo">La Ola Studio</div>
+    <div class="enc-tipo">Documento de alcances de servicios</div>
+    <div class="enc-titulo">Descripción y alcances de los servicios contratados</div>
+    <div class="enc-meta">
+      <div>
+        <div class="enc-meta-label">Cliente</div>
+        <div class="enc-meta-val">Axisun</div>
+      </div>
+      <div>
+        <div class="enc-meta-label">Prestador</div>
+        <div class="enc-meta-val">La Ola Studio</div>
+      </div>
+      <div>
+        <div class="enc-meta-label">Fecha</div>
+        <div class="enc-meta-val">Agosto 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro">
+    <p>El presente documento describe con precisión los servicios que La Ola Studio prestará a Axisun, detallando qué está incluido en cada uno, qué no está incluido y cuáles son las condiciones de la compensación acordada. Su objetivo es que ambas partes tengan total claridad sobre los alcances del trabajo antes de comenzar.</p>
+  </div>
+
+  <!-- SERVICIO 1: MENTORÍA -->
+  <div class="servicio">
+    <div class="servicio-header">
+      <div class="servicio-num">01</div>
+      <div class="servicio-header-body">
+        <div class="servicio-tag">Servicio mensual recurrente</div>
+        <div class="servicio-titulo">Mentoría de Marketing Digital</div>
+      </div>
+    </div>
+    <div class="servicio-body">
+      <p>La mentoría es el servicio central que articula toda la estrategia de marketing de Axisun. No se trata de una consultoría teórica: cada sesión produce decisiones concretas, contenidos listos para usar y un plan de acción para la semana siguiente.</p>
+
+      <div class="alcances-titulo">Qué incluye</div>
+      <ul class="alcances-lista">
+        <li><strong>Sesiones semanales 1:1:</strong> una reunión por semana entre el prestador y el equipo de Axisun, con una duración aproximada de una hora cada una (4 sesiones al mes).</li>
+        <li><strong>Definición de objetivos:</strong> en cada ciclo mensual se establecen los objetivos de marketing medibles y alcanzables para el período (por ejemplo: número de cotizaciones, alcance de publicaciones, leads generados).</li>
+        <li><strong>Diseño de estrategia:</strong> se define la estrategia de comunicación del mes: qué mensajes se van a transmitir, a qué público, por qué canal y con qué frecuencia.</li>
+        <li><strong>Plan de acciones concretas:</strong> cada sesión concluye con una lista de tareas específicas, con responsables y fechas, para que el equipo de Axisun sepa exactamente qué hacer hasta la próxima sesión.</li>
+        <li><strong>Guión de videos:</strong> el prestador desarrolla el guión completo de cada video publicitario o de contenido, definiendo el mensaje, la estructura narrativa, los textos en pantalla y las indicaciones de grabación.</li>
+        <li><strong>Copywriting:</strong> redacción de los textos publicitarios para avisos pagados en Meta (títulos, descripciones, llamadas a la acción), así como los textos para publicaciones orgánicas cuando se acuerde dentro de la estrategia mensual.</li>
+      </ul>
+
+      <div class="precio-tag">
+        <div>
+          <div class="precio-tag-label">Valor mensual</div>
+          <div class="precio-tag-valor">$178.500</div>
+          <div class="precio-tag-sub">$150.000 neto + IVA (19%)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICIO 2: FILMMAKER -->
+  <div class="servicio">
+    <div class="servicio-header">
+      <div class="servicio-num">02</div>
+      <div class="servicio-header-body">
+        <div class="servicio-tag">Servicio de producción audiovisual</div>
+        <div class="servicio-titulo">Filmmaker</div>
+      </div>
+    </div>
+    <div class="servicio-body">
+      <p>El servicio de filmmaker cubre la producción audiovisual completa de las piezas de video definidas dentro de la estrategia mensual. Esto incluye desde la filmación hasta la entrega del archivo final, listo para publicar.</p>
+
+      <div class="alcances-titulo">Qué incluye</div>
+      <ul class="alcances-lista">
+        <li><strong>Filmación en terreno:</strong> grabación en las instalaciones de Axisun, en obras o en los puntos que se definan según el concepto del video. Los costos de movilización del prestador hacia y desde el lugar de filmación (combustible, peajes, estacionamiento o transporte) serán de cargo de Axisun y se cobrarán según gasto real, previa coordinación.</li>
+        <li><strong>Dirección:</strong> el prestador dirige la grabación siguiendo el guión previamente desarrollado en la mentoría, coordinando los tiempos, encuadres y participaciones necesarias.</li>
+        <li><strong>Edición de video:</strong> montaje completo del material grabado, incluyendo cortes, transiciones, ajuste de color, subtítulos o textos en pantalla, y música de fondo libre de derechos.</li>
+        <li><strong>Locución:</strong> inclusión de voz en off cuando el concepto del video lo requiera, ya sea por parte del prestador o mediante locutores acordados entre ambas partes.</li>
+        <li><strong>Formatos de entrega:</strong> el archivo final se entrega en el formato y resolución adecuados para la plataforma de publicación (vertical para Reels/Stories, horizontal para YouTube o sitio web, cuadrado para feed).</li>
+        <li><strong>Revisiones:</strong> cada video incluye hasta dos rondas de ajustes antes de la entrega final. Los cambios solicitados fuera de este límite se cotizan por separado.</li>
+      </ul>
+
+      <div class="precio-tag">
+        <div>
+          <div class="precio-tag-label">Valor por video</div>
+          <div class="precio-tag-valor">$119.000</div>
+          <div class="precio-tag-sub">$100.000 neto + IVA (19%)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICIO 3: PAID MEDIA -->
+  <div class="servicio">
+    <div class="servicio-header">
+      <div class="servicio-num">03</div>
+      <div class="servicio-header-body">
+        <div class="servicio-tag">Servicio mensual recurrente</div>
+        <div class="servicio-titulo">Gestión de Publicidad Pagada en Meta (Paid Media)</div>
+      </div>
+    </div>
+    <div class="servicio-body">
+      <p>El servicio de paid media consiste en la configuración, administración y optimización de las campañas publicitarias de Axisun dentro de la plataforma Meta Ads (Facebook e Instagram). El objetivo es que el presupuesto de pauta que Axisun destina a publicidad genere el mayor número posible de contactos calificados al menor costo.</p>
+
+      <div class="alcances-titulo">Qué incluye</div>
+      <ul class="alcances-lista">
+        <li><strong>Configuración de campañas:</strong> creación de la estructura de campañas en Meta Ads, incluyendo la definición del objetivo de campaña (tráfico, conversiones, mensajes, etc.), la segmentación del público y la configuración del presupuesto diario o mensual.</li>
+        <li><strong>Carga de avisos:</strong> publicación de los avisos en la plataforma, usando los textos desarrollados en la mentoría (copywriting) y los videos o imágenes producidos en el servicio de filmmaker o aprobados por Axisun.</li>
+        <li><strong>Monitoreo de resultados:</strong> revisión periódica del rendimiento de las campañas activas: costo por clic, alcance, impresiones, tasa de conversión y costo por lead.</li>
+        <li><strong>Optimización continua:</strong> ajustes a las campañas en base a los datos observados: pausa de avisos con bajo rendimiento, modificación de públicos, prueba de nuevas variantes de texto o imagen cuando sea necesario.</li>
+        <li><strong>Reporte mensual:</strong> entrega de un informe con los resultados del mes en lenguaje claro: cuántas personas vieron los avisos, cuántas hicieron clic, cuántos contactos generó la publicidad y cuánto costó cada contacto.</li>
+      </ul>
+
+      <div class="alcances-titulo" style="color: var(--rojo); margin-top: 24px;">Qué no incluye este servicio</div>
+      <ul class="excl-lista">
+        <li><strong>Presupuesto de pauta:</strong> el dinero destinado a mostrar los avisos en Facebook e Instagram lo paga Axisun directamente a Meta. Este costo no está incluido en el valor del servicio y lo administra Axisun con total transparencia desde su propia cuenta publicitaria.</li>
+        <li><strong>Creación de imágenes o diseño gráfico:</strong> el servicio no incluye la producción de piezas gráficas estáticas (banners, flyers digitales, imágenes con texto). Si se requieren, deben ser proporcionadas por Axisun o cotizarse por separado.</li>
+        <li><strong>Gestión de mensajes o comentarios:</strong> el prestador no responde mensajes privados, comentarios en publicaciones ni interacciones en redes sociales. Eso corresponde al servicio de community management, que no está incluido en esta contratación.</li>
+      </ul>
+
+      <div class="precio-tag">
+        <div>
+          <div class="precio-tag-label">Valor mensual</div>
+          <div class="precio-tag-valor">$238.000</div>
+          <div class="precio-tag-sub">$200.000 neto + IVA (19%)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NO INCLUIDO GLOBAL -->
+  <div class="no-incluido">
+    <div class="no-incluido-titulo">Servicios no incluidos en esta contratación</div>
+    <p>Los siguientes servicios están expresamente excluidos del alcance de este acuerdo. Si en algún momento Axisun los requiere, deberán cotizarse por separado.</p>
+    <ul class="excl-lista">
+      <li><strong>Community management:</strong> gestión de redes sociales, respuesta a comentarios y mensajes privados, publicación de contenido orgánico en nombre de Axisun, moderación de comunidades.</li>
+      <li><strong>Diseño gráfico:</strong> creación de piezas gráficas estáticas, edición de fotografías, diseño de banners, flyers, presentaciones u otros materiales visuales que no sean video.</li>
+      <li><strong>Fotografía profesional:</strong> sesiones fotográficas de producto, instalaciones o equipo humano.</li>
+      <li><strong>Gestión de otras plataformas publicitarias:</strong> el servicio de paid media cubre exclusivamente Meta Ads (Facebook e Instagram). La gestión de Google Ads, TikTok Ads u otras plataformas no está incluida.</li>
+      <li><strong>Desarrollo o mantención del sitio web:</strong> cualquier modificación, actualización o gestión del sitio web de Axisun.</li>
+    </ul>
+  </div>
+
+  <!-- COMISIONES -->
+  <div class="comisiones">
+    <div class="com-tag">Compensación</div>
+    <div class="com-titulo">Comisión por ventas generadas</div>
+    <div class="com-body">
+      <p>La totalidad de los servicios de La Ola Studio descritos en este documento se compensan exclusivamente mediante comisión por ventas. <strong>No se facturarán valores fijos mensuales por ninguno de los servicios contratados.</strong> La única contraprestación económica será la comisión acordada a continuación.</p>
+      <p>El prestador recibirá una <strong>comisión del 3% + IVA sobre el monto bruto de cada venta</strong> (valor con IVA incluido) que Axisun concrete y que sea atribuible directamente a las acciones de marketing gestionadas por La Ola Studio.</p>
+      <p>Se entiende como venta atribuible aquella en la que el cliente llegó a Axisun a través de los videos, la publicidad digital o los contenidos producidos en el marco de esta contratación. La atribución se acordará entre ambas partes de forma transparente al cierre de cada mes.</p>
+      <p>La comisión se facturará mensualmente, una vez confirmadas y pagadas las ventas del período.</p>
+
+      <div class="com-ejemplo">
+        <div class="com-ejemplo-label">Ejemplo de cálculo</div>
+        <div class="com-ejemplo-fila">
+          <span>Venta de instalación de paneles (bruto c/IVA)</span>
+          <span>$8.000.000</span>
+        </div>
+        <div class="com-ejemplo-fila">
+          <span>Comisión (3% sobre $8.000.000)</span>
+          <span>$240.000</span>
+        </div>
+        <div class="com-ejemplo-fila">
+          <span>IVA sobre la comisión (19%)</span>
+          <span>$45.600</span>
+        </div>
+        <div class="com-ejemplo-fila">
+          <span>Total a pagar por comisión</span>
+          <span>$285.600</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISPOSICIONES GENERALES -->
+  <div class="generales">
+    <div class="gen-titulo">Disposiciones generales</div>
+
+    <div class="gen-item">
+      <div class="gen-item-titulo">Forma de pago</div>
+      <p>La totalidad de los servicios se compensan mediante comisión por ventas, sin cobro de tarifas fijas mensuales. La comisión se factura mensualmente al cierre de cada período, una vez que Axisun confirme las ventas atribuibles del mes. El pago debe realizarse a más tardar el día 5 del mes siguiente a la emisión de la factura. Los costos de movilización asociados a filmaciones se cobran por separado, según gasto real efectuado.</p>
+    </div>
+
+    <div class="gen-item">
+      <div class="gen-item-titulo">Propiedad de los materiales</div>
+      <p>Los videos, guiones, textos y estrategias desarrollados en el marco de esta contratación son de uso exclusivo de Axisun una vez realizado el pago correspondiente. La Ola Studio se reserva el derecho de mencionar a Axisun como cliente y mostrar los materiales producidos en su portafolio, salvo que Axisun solicite expresamente confidencialidad.</p>
+    </div>
+
+    <div class="gen-item">
+      <div class="gen-item-titulo">Accesos y colaboración</div>
+      <p>Para la correcta ejecución del servicio de paid media, Axisun deberá otorgar acceso de administrador a su cuenta de Meta Business Suite al prestador. El prestador se compromete a operar únicamente dentro del alcance de esta contratación y a no realizar cambios fuera de lo acordado sin autorización previa.</p>
+    </div>
+
+    <div class="gen-item">
+      <div class="gen-item-titulo">Modificaciones al alcance</div>
+      <p>Cualquier servicio o tarea que no esté expresamente descrito en este documento se considerará fuera del alcance y deberá cotizarse por separado. Ambas partes pueden acordar modificaciones al alcance por escrito (correo electrónico o WhatsApp) antes de ejecutar el trabajo adicional.</p>
+    </div>
+
+    <div class="gen-item">
+      <div class="gen-item-titulo">Vigencia</div>
+      <p>Este documento entra en vigor en la fecha de firma y rige mientras dure la relación comercial entre Axisun y La Ola Studio. Cualquiera de las partes puede dar término a los servicios con un aviso mínimo de 30 días corridos.</p>
+    </div>
+  </div>
+
+  <!-- FIRMAS -->
+  <div class="firmas">
+    <div class="firmas-titulo">Conformidad y aceptación</div>
+    <div class="firmas-grid">
+      <div class="firma-bloque">
+        <div class="firma-linea"></div>
+        <div class="firma-nombre">La Ola Studio</div>
+        <div class="firma-rol">Prestador de servicios</div>
+      </div>
+      <div class="firma-bloque">
+        <div class="firma-linea"></div>
+        <div class="firma-nombre">Axisun</div>
+        <div class="firma-rol">Cliente</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>La Ola Studio</span>
+    <span>contacto@laolastudio.cl · +569 4844 6791</span>
+  </div>
+
+</div>
+</body>
+</html>
