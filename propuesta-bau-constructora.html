@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propuesta BAU Constructora - La Ola Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Oswald', sans-serif;
+      background: #EDE6D6;
+      padding: 40px 20px;
+      color: #1f2937;
+    }
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      background: #fff;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      background: #3D5BA9;
+      padding: 40px 48px 70px 48px;
+      position: relative;
+      color: #fff;
+    }
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 50px;
+    }
+    .logo-block { display: flex; flex-direction: column; line-height: 1; }
+    .logo-block .l1, .logo-block .l2 {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    .logo-wave { margin-top: 6px; width: 46px; height: 12px; }
+    .header-tag {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: #E0A23B;
+      color: #1f2937;
+      padding: 6px 14px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+    .header-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 38px;
+      line-height: 1.15;
+      max-width: 560px;
+    }
+    .wave-bottom {
+      position: absolute;
+      bottom: -1px; left: 0;
+      width: 100%; height: 50px;
+      line-height: 0;
+    }
+    .wave-bottom svg { display: block; width: 100%; height: 100%; }
+
+    /* ===== CLIENTE / FECHAS ===== */
+    .meta-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      padding: 36px 48px;
+      background: #fff;
+      border-bottom: 3px solid #1f2937;
+    }
+    .meta-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+    .meta-value {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 26px;
+      color: #3D5BA9;
+    }
+    .meta-dates {
+      text-align: right;
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.8;
+    }
+    .meta-dates b { color: #1f2937; }
+
+    /* ===== INTRO ===== */
+    .intro-block { background: #fff; padding: 40px 48px; border-bottom: 3px solid #1f2937; }
+    .intro-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 24px;
+      color: #3D5BA9;
+      margin-bottom: 16px;
+    }
+    .intro-block p {
+      font-size: 14px;
+      line-height: 1.85;
+      color: #374151;
+      margin-bottom: 12px;
+    }
+
+    /* ===== BARRA DE OPCIÓN ===== */
+    .option-bar {
+      background: #1f2937;
+      color: #fff;
+      padding: 30px 48px;
+    }
+    .option-eyebrow {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #E0A23B;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .option-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    .option-sub { font-size: 14px; opacity: 0.85; line-height: 1.7; max-width: 640px; }
+
+    /* ===== SERVICIO ===== */
+    .service-block { background: #B5432F; color: #fff; padding: 44px 48px; }
+    .service-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 10px;
+    }
+    .service-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 30px;
+      margin-bottom: 6px;
+    }
+    .service-plan-tag {
+      display: inline-block;
+      background: #E0A23B;
+      color: #1f2937;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 3px;
+      margin-bottom: 20px;
+    }
+    .service-intro {
+      font-size: 14px;
+      line-height: 1.8;
+      max-width: 640px;
+      margin-bottom: 22px;
+      opacity: 0.95;
+    }
+    .service-subtitle {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #E0A23B;
+      margin: 26px 0 10px 0;
+    }
+    .service-list { list-style: none; padding: 0; margin: 0; max-width: 640px; }
+    .service-list li {
+      font-size: 14.5px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.25);
+      position: relative;
+      padding-left: 22px;
+      line-height: 1.6;
+    }
+    .service-list li:last-child { border-bottom: none; }
+    .service-list li::before {
+      content: '~';
+      position: absolute;
+      left: 0;
+      font-weight: 700;
+      color: #E0A23B;
+    }
+
+    /* ===== PRECIO ===== */
+    .price-block {
+      background: #EDE6D6;
+      padding: 32px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      border-bottom: 3px solid #1f2937;
+    }
+    .price-detail { font-size: 13px; color: #4b5563; line-height: 1.7; }
+    .price-detail b { color: #1f2937; }
+    .price-via-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #B5432F;
+      margin-bottom: 8px;
+    }
+    .price-note { font-size: 12px; color: #6b7280; margin-top: 6px; max-width: 380px; line-height: 1.6; }
+    .price-total-box {
+      background: #1f2937;
+      color: #fff;
+      padding: 18px 28px;
+      border-radius: 4px;
+      text-align: right;
+    }
+    .price-total-label {
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #E0A23B;
+      margin-bottom: 4px;
+    }
+    .price-total-value {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 28px;
+    }
+
+    /* ===== RESUMEN OPCIÓN ===== */
+    .summary-block { background: #3D5BA9; color: #fff; padding: 34px 48px; }
+    .summary-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 22px;
+      margin-bottom: 18px;
+    }
+    .summary-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .summary-table td {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.25);
+    }
+    .summary-table tr:last-child td { border-bottom: none; font-weight: 600; }
+    .summary-table td:last-child { text-align: right; white-space: nowrap; }
+    .summary-note { font-size: 12.5px; opacity: 0.85; margin-top: 14px; line-height: 1.7; }
+
+    /* ===== ADICIONALES ===== */
+    .extra-block { background: #2C5530; color: #fff; padding: 34px 48px; }
+    .extra-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+    .extra-list {
+      list-style: none;
+      padding: 0; margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .extra-list li {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 3px;
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    /* ===== TÉRMINOS ===== */
+    .terms-block { background: #fff; padding: 44px 48px; }
+    .terms-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 22px;
+      color: #3D5BA9;
+      margin-bottom: 20px;
+    }
+    .terms-subtitle {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #B5432F;
+      margin: 24px 0 10px 0;
+    }
+    .terms-block p {
+      font-size: 13.5px;
+      line-height: 1.85;
+      color: #374151;
+      margin-bottom: 12px;
+    }
+    .terms-block ul { margin: 0 0 12px 20px; }
+    .terms-block li { font-size: 13.5px; line-height: 1.85; color: #374151; }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: #3D5BA9;
+      color: #fff;
+      padding: 36px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo { font-weight: 700; font-size: 16px; letter-spacing: 2px; }
+    .footer-contact { font-size: 13px; text-align: right; opacity: 0.9; line-height: 1.6; }
+
+    @media (max-width: 640px) {
+      .header, .meta-row, .intro-block, .option-bar, .service-block,
+      .price-block, .summary-block, .extra-block, .terms-block, .footer {
+        padding-left: 24px; padding-right: 24px;
+      }
+      .meta-row { grid-template-columns: 1fr; }
+      .meta-dates { text-align: left; }
+      .header-title { font-size: 28px; }
+      .price-block { flex-direction: column; align-items: flex-start; }
+      .price-total-box { text-align: left; width: 100%; }
+      .footer { flex-direction: column; align-items: flex-start; }
+      .footer-contact { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="nav-row">
+        <div class="logo-block">
+          <span class="l1">LA OLA</span>
+          <span class="l2">STUDIO</span>
+          <svg class="logo-wave" viewBox="0 0 46 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 6C4 2 7 2 10 6C13 10 16 10 19 6C22 2 25 2 28 6C31 10 34 10 37 6C40 2 43 2 45 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="header-tag">Propuesta</span>
+      </div>
+      <h1 class="header-title">Marca, sitio web y captación de clientes para BAU Constructora</h1>
+
+      <div class="wave-bottom">
+        <svg viewBox="0 0 1000 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,30 Q250,5 500,30 T1000,30 L1000,60 L0,60 Z" fill="#fff"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- CLIENTE / FECHAS -->
+    <div class="meta-row">
+      <div>
+        <div class="meta-label">Cliente</div>
+        <div class="meta-value">BAU Constructora</div>
+      </div>
+      <div class="meta-dates">
+        <div><b>Fecha:</b> 24/08/2026</div>
+        <div><b>Válida hasta:</b> 23/09/2026</div>
+      </div>
+    </div>
+
+    <!-- INTRO -->
+    <div class="intro-block">
+      <div class="intro-title">El objetivo</div>
+      <p>Aumentar las ventas de BAU Constructora ordenando primero la base —marca y propuesta de valor— y activando después un sistema consistente de captación de clientes.</p>
+      <p>Presentamos dos alternativas. Ambas comparten el mismo punto de partida (refresh de marca) y el mismo acompañamiento estratégico. Se diferencian en dónde ocurre la conversión: en un sitio web propio o directamente en un formulario dentro de Meta.</p>
+    </div>
+
+    <!-- =============== OPCIÓN A =============== -->
+    <div class="option-bar">
+      <div class="option-eyebrow">Alternativa 1</div>
+      <div class="option-title">Marca + Sitio Web + Acompañamiento</div>
+      <div class="option-sub">Tres etapas. La estrategia lleva tráfico calificado hacia el sitio web, donde el visitante conoce los proyectos, evalúa a BAU y solicita una cotización.</div>
+    </div>
+
+    <!-- ETAPA 1 -->
+    <div class="service-block">
+      <div class="service-eyebrow">Etapa 1 de 3</div>
+      <div class="service-title">Refresh de Marca</div>
+      <span class="service-plan-tag">Identidad + Brandboard + Propuesta de valor</span>
+
+      <p class="service-intro">Se desarrollarán 2 líneas gráficas. La primera parte de la identidad existente de BAU Constructora, refinando y ordenando sus elementos: manteniendo aquellos que aportan valor y evolucionando los que necesiten mayor claridad, coherencia y actualidad. La segunda explora una nueva dirección visual, construida a partir de los atributos que BAU busca transmitir en esta nueva etapa: una marca sólida, profesional y contemporánea, capaz de comunicar experiencia, confianza y calidad en el desarrollo de sus proyectos.</p>
+      <p class="service-intro">Cada propuesta contará con un concepto que definirá el nuevo tono, estilo y lenguaje visual de la marca, explorando distintas posibilidades de tipografías, colores, recursos gráficos y composición. Las propuestas se presentan con la identidad desarrollada y posibles aplicaciones a modo de maqueta, permitiendo visualizar cómo funcionaría cada dirección en los distintos puntos de contacto de BAU. Una vez aprobada una de ellas, se continúa con su desarrollo, ajustes y consolidación final.</p>
+
+      <div class="service-subtitle">Proceso</div>
+      <ul class="service-list">
+        <li>Investigación, análisis, conceptualización y diseño de 2 propuestas</li>
+        <li>Presentación de propuestas y aplicaciones a modo de maqueta</li>
+        <li>Correcciones, ajustes, evolución y desarrollo final de la identidad</li>
+      </ul>
+
+      <div class="service-subtitle">Entregables de imagen corporativa</div>
+      <ul class="service-list">
+        <li>Logotipo: todas sus versiones en PNG sin fondo y PDF</li>
+        <li>Isotipo: todas sus versiones en PNG sin fondo y PDF</li>
+        <li>Recursos gráficos: íconos, texturas, patrones e ilustraciones si aplica</li>
+        <li>Sistema tipográfico: tipografía corporativa y secundarias</li>
+        <li>Paleta de colores: códigos Pantone®, RGB, CMYK y HEX</li>
+      </ul>
+
+      <div class="service-subtitle">Brandboard (formato digital)</div>
+      <ul class="service-list">
+        <li>Logotipo: versiones, área de seguridad, tamaños mínimos, versiones para fondos, usos correctos e incorrectos</li>
+        <li>Tipografías: corporativa y complementarias</li>
+        <li>Colores: corporativos y complementarios, versión impresos y digital</li>
+        <li>Recursos gráficos: ilustraciones, símbolos, formas, bordes, marcos y detalles decorativos asociados a la marca</li>
+        <li>Aplicaciones ejemplificadas mediante maquetas digitales, para consolidar una marca fuerte, consistente, reconocible y recordable</li>
+      </ul>
+
+      <div class="service-subtitle">Estrategia comercial incluida</div>
+      <ul class="service-list">
+        <li>Desarrollo de la propuesta de valor del negocio</li>
+        <li>Creación de ofertas irresistibles a partir de los dolores, motivaciones y psicología de los clientes de BAU, para mejorar la comunicación</li>
+      </ul>
+    </div>
+
+    <div class="price-block">
+      <div class="price-detail">
+        <div><b>Neto:</b> $817.291</div>
+        <div><b>IVA (19%):</b> $155.285</div>
+        <div class="price-note">Equivalente a UF 20 + IVA, calculado con el valor de la UF del 24 de agosto de 2026 ($40.864,55). El valor en pesos se mantiene fijo durante la vigencia de esta propuesta.</div>
+      </div>
+      <div class="price-total-box">
+        <div class="price-total-label">Total Etapa 1</div>
+        <div class="price-total-value">$972.576</div>
+      </div>
+    </div>
+
+    <!-- ETAPA 2 -->
+    <div class="service-block">
+      <div class="service-eyebrow">Etapa 2 de 3</div>
+      <div class="service-title">Sitio Web Orientado a Conversión</div>
+      <span class="service-plan-tag">Plan Estándar adaptado a empresa de servicios</span>
+
+      <p class="service-intro">Un sitio que además de estético es estratégico y comercial. Cada sección se diseña con un objetivo: que el visitante entienda qué hace BAU, confíe en su capacidad de ejecución y solicite una cotización. La estructura, los textos y los llamados a la acción se construyen sobre la propuesta de valor definida en la Etapa 1.</p>
+
+      <div class="service-subtitle">Diseño y desarrollo</div>
+      <ul class="service-list">
+        <li>Arquitectura de contenidos orientada a conversión: home, servicios, portafolio de proyectos, quiénes somos, contacto</li>
+        <li>Diseño completo del sitio: menú, secciones internas, pie de página y páginas de destino</li>
+        <li>Formularios de solicitud de cotización y captura de datos de contacto</li>
+        <li>Redacción de llamados a la acción y jerarquía de mensajes según la propuesta de valor</li>
+        <li>Asesoría de dominio, vinculación y configuración de Cloudflare</li>
+        <li>Hasta 5 integraciones o aplicaciones</li>
+      </ul>
+
+      <div class="service-subtitle">Medición y vinculación publicitaria</div>
+      <ul class="service-list">
+        <li>Google Analytics configurado con eventos de conversión</li>
+        <li>Vinculación con Meta: píxel y eventos de contacto y cotización</li>
+        <li>Vinculación con Google: Google Ads y Search Console</li>
+        <li>Vinculación con Pinterest: etiqueta de seguimiento</li>
+        <li>1 campaña de email</li>
+      </ul>
+
+      <div class="service-subtitle">Puesta en marcha</div>
+      <ul class="service-list">
+        <li>45 días de marcha blanca, con solicitudes de cambio sin costo adicional</li>
+        <li>Capacitación al equipo de BAU para la autogestión del sitio</li>
+      </ul>
+    </div>
+
+    <div class="price-block">
+      <div class="price-detail">
+        <div><b>Neto:</b> $1.190.000</div>
+        <div><b>IVA (19%):</b> $226.100</div>
+      </div>
+      <div class="price-total-box">
+        <div class="price-total-label">Total Etapa 2</div>
+        <div class="price-total-value">$1.416.100</div>
+      </div>
+    </div>
+
+    <!-- ETAPA 3 -->
+    <div class="service-block">
+      <div class="service-eyebrow">Etapa 3 de 3</div>
+      <div class="service-title">Mentoría y Activación Publicitaria</div>
+      <span class="service-plan-tag">1 mes · Estrategia orientada a tráfico web</span>
+
+      <p class="service-intro">Un mes de acompañamiento para que BAU deje de comunicar de forma reactiva y pase a operar con objetivos, estrategia y acciones concretas con seguimiento. En esta alternativa la publicidad lleva tráfico calificado al sitio web y la conversión ocurre allí, en el formulario de cotización.</p>
+
+      <div class="service-subtitle">Mentoría</div>
+      <ul class="service-list">
+        <li>Desarrollo de guiones para videos de redes sociales</li>
+        <li>Definición de objetivos comerciales y de comunicación</li>
+        <li>Definición de estrategia y acciones concretas, con responsables y plazos</li>
+        <li>Seguimiento y ajuste de las acciones definidas</li>
+      </ul>
+
+      <div class="service-subtitle">Publicidad — elegir una vía</div>
+      <ul class="service-list">
+        <li><b>Vía A · Gestión:</b> configuración, lanzamiento y optimización de campañas en Google Ads y Meta Ads, orientadas a tráfico y conversión en el sitio web</li>
+        <li><b>Vía B · Autogestión:</b> clases prácticas para que el equipo de BAU configure, lance y optimice sus propias campañas. 3 clases de Meta Ads y 3 clases de Google Ads, de 1 hora cada una</li>
+      </ul>
+    </div>
+
+    <div class="price-block">
+      <div class="price-detail">
+        <div class="price-via-label">Vía A · Gestión mensual</div>
+        <div><b>Mentoría mensual:</b> $150.000</div>
+        <div><b>Gestión de publicidad Meta:</b> $200.000</div>
+        <div><b>Gestión de publicidad Google:</b> $200.000</div>
+        <div><b>Neto:</b> $550.000 &nbsp;·&nbsp; <b>IVA (19%):</b> $104.500</div>
+        <div class="price-note">Valor mensual. El presupuesto de medios (inversión publicitaria en Google y Meta) no está incluido y se paga directamente por BAU a cada plataforma.</div>
+      </div>
+      <div class="price-total-box">
+        <div class="price-total-label">Total mensual · Vía A</div>
+        <div class="price-total-value">$654.500</div>
+      </div>
+    </div>
+
+    <div class="price-block">
+      <div class="price-detail">
+        <div class="price-via-label">Vía B · Autogestión</div>
+        <div><b>Mentoría mensual:</b> $150.000</div>
+        <div><b>6 clases de 1 hora</b> (3 Meta + 3 Google) a $45.000 c/u: $270.000</div>
+        <div><b>Neto:</b> $420.000 &nbsp;·&nbsp; <b>IVA (19%):</b> $79.800</div>
+        <div class="price-note">La mentoría es de valor mensual; las clases son un pago único. El presupuesto de medios no está incluido.</div>
+      </div>
+      <div class="price-total-box">
+        <div class="price-total-label">Total primer mes · Vía B</div>
+        <div class="price-total-value">$499.800</div>
+      </div>
+    </div>
+
+    <!-- RESUMEN OPCIÓN A -->
+    <div class="summary-block">
+      <div class="summary-title">Resumen Alternativa 1</div>
+      <table class="summary-table">
+        <tr><td>Etapa 1 · Refresh de marca</td><td>$817.291 + IVA</td></tr>
+        <tr><td>Etapa 2 · Sitio web orientado a conversión</td><td>$1.190.000 + IVA</td></tr>
+        <tr><td>Etapa 3 · Mentoría y publicidad — Vía A, gestión mensual</td><td>$550.000 + IVA</td></tr>
+        <tr><td>Etapa 3 · Mentoría y publicidad — Vía B, autogestión</td><td>$420.000 + IVA</td></tr>
+      </table>
+      <div class="summary-note">Las etapas 1 y 2 son proyectos de pago único. La Etapa 3 es un servicio mensual: en la Vía A el valor se repite cada mes; en la Vía B las clases son un pago único y solo la mentoría de $150.000 + IVA es mensual. Las vías A y B son excluyentes: se contrata una de las dos.</div>
+    </div>
+
+    <!-- =============== OPCIÓN B =============== -->
+    <div class="option-bar">
+      <div class="option-eyebrow">Alternativa 2</div>
+      <div class="option-title">Marca + Acompañamiento</div>
+      <div class="option-sub">Dos etapas, sin desarrollo de sitio web. La captación se resuelve con una campaña de clientes potenciales y formulario nativo dentro de Meta.</div>
+    </div>
+
+    <!-- ETAPA 1 (B) -->
+    <div class="service-block">
+      <div class="service-eyebrow">Etapa 1 de 2</div>
+      <div class="service-title">Refresh de Marca</div>
+      <span class="service-plan-tag">Idéntica a la Alternativa 1</span>
+      <p class="service-intro">Incluye exactamente los mismos alcances y entregables descritos en la Etapa 1 de la Alternativa 1: dos líneas gráficas, desarrollo final de la identidad, entregables de imagen corporativa, Brandboard digital y desarrollo de la propuesta de valor con creación de ofertas irresistibles.</p>
+    </div>
+
+    <div class="price-block">
+      <div class="price-detail">
+        <div><b>Neto:</b> $817.291</div>
+        <div><b>IVA (19%):</b> $155.285</div>
+        <div class="price-note">Equivalente a UF 20 + IVA, calculado con el valor de la UF del 24 de agosto de 2026 ($40.864,55). El valor en pesos se mantiene fijo durante la vigencia de esta propuesta.</div>
+      </div>
+      <div class="price-total-box">
+        <div class="price-total-label">Total Etapa 1</div>
+        <div class="price-total-value">$972.576</div>
+      </div>
+    </div>
+
+    <!-- ETAPA 2 (B) -->
+    <div class="service-block">
+      <div class="service-eyebrow">Etapa 2 de 2</div>
+      <div class="service-title">Mentoría y Captación Directa en Meta</div>
+      <span class="service-plan-tag">1 mes · Campaña de clientes potenciales</span>
+
+      <p class="service-intro">Mismo acompañamiento que en la Alternativa 1. La diferencia está en la estrategia publicitaria: en lugar de llevar tráfico a un sitio web, se ejecuta una campaña de clientes potenciales con formulario nativo dentro de Meta. El interesado deja sus datos sin salir de Instagram o Facebook y BAU recibe el contacto para gestionarlo comercialmente.</p>
+
+      <div class="service-subtitle">Mentoría</div>
+      <ul class="service-list">
+        <li>Desarrollo de guiones para videos de redes sociales</li>
+        <li>Definición de objetivos comerciales y de comunicación</li>
+        <li>Definición de estrategia y acciones concretas, con responsables y plazos</li>
+        <li>Seguimiento y ajuste de las acciones definidas</li>
+      </ul>
+
+      <div class="service-subtitle">Publicidad — elegir una vía</div>
+      <ul class="service-list">
+        <li><b>Vía A · Gestión:</b> configuración, lanzamiento y optimización de la campaña de clientes potenciales en Meta, incluyendo diseño del formulario y preguntas de calificación</li>
+        <li><b>Vía B · Autogestión:</b> clases prácticas para que el equipo de BAU configure, lance y optimice su propia campaña de clientes potenciales en Meta. 3 clases de 1 hora cada una</li>
+      </ul>
+    </div>
+
+    <div class="price-block">
+      <div class="price-detail">
+        <div class="price-via-label">Vía A · Gestión mensual</div>
+        <div><b>Mentoría mensual:</b> $150.000</div>
+        <div><b>Gestión de publicidad Meta:</b> $200.000</div>
+        <div><b>Neto:</b> $350.000 &nbsp;·&nbsp; <b>IVA (19%):</b> $66.500</div>
+        <div class="price-note">Valor mensual. El presupuesto de medios (inversión publicitaria en Meta) no está incluido y se paga directamente por BAU a la plataforma.</div>
+      </div>
+      <div class="price-total-box">
+        <div class="price-total-label">Total mensual · Vía A</div>
+        <div class="price-total-value">$416.500</div>
+      </div>
+    </div>
+
+    <div class="price-block">
+      <div class="price-detail">
+        <div class="price-via-label">Vía B · Autogestión</div>
+        <div><b>Mentoría mensual:</b> $150.000</div>
+        <div><b>3 clases de Meta Ads de 1 hora</b> a $45.000 c/u: $135.000</div>
+        <div><b>Neto:</b> $285.000 &nbsp;·&nbsp; <b>IVA (19%):</b> $54.150</div>
+        <div class="price-note">La mentoría es de valor mensual; las clases son un pago único. El presupuesto de medios no está incluido.</div>
+      </div>
+      <div class="price-total-box">
+        <div class="price-total-label">Total primer mes · Vía B</div>
+        <div class="price-total-value">$339.150</div>
+      </div>
+    </div>
+
+    <!-- RESUMEN OPCIÓN B -->
+    <div class="summary-block">
+      <div class="summary-title">Resumen Alternativa 2</div>
+      <table class="summary-table">
+        <tr><td>Etapa 1 · Refresh de marca</td><td>$817.291 + IVA</td></tr>
+        <tr><td>Etapa 2 · Mentoría y captación en Meta — Vía A, gestión mensual</td><td>$350.000 + IVA</td></tr>
+        <tr><td>Etapa 2 · Mentoría y captación en Meta — Vía B, autogestión</td><td>$285.000 + IVA</td></tr>
+      </table>
+      <div class="summary-note">La Etapa 1 es un proyecto de pago único. La Etapa 2 es un servicio mensual: en la Vía A el valor se repite cada mes; en la Vía B las clases son un pago único y solo la mentoría de $150.000 + IVA es mensual. Las vías A y B son excluyentes: se contrata una de las dos.</div>
+    </div>
+
+    <!-- ADICIONALES -->
+    <div class="extra-block">
+      <div class="extra-title">Adicionales disponibles</div>
+      <ul class="extra-list">
+        <li>Presupuesto de medios — no incluido, se paga directo a la plataforma</li>
+        <li>Contenido RRSS mensual — desde $300.000 + IVA</li>
+        <li>Video extra — $50.000 + IVA</li>
+        <li>Lámina extra — $16.000 + IVA</li>
+        <li>Sesión de fotos y video en obra — a cotizar</li>
+        <li>Diseño de banners para sitio web — $40.000 + IVA</li>
+        <li>Dominio, hosting, plantillas y aplicaciones pagadas — no incluidos</li>
+      </ul>
+    </div>
+
+    <!-- TÉRMINOS -->
+    <div class="terms-block">
+      <div class="terms-title">Términos y condiciones</div>
+
+      <div class="terms-subtitle">Refresh de marca y sitio web (proyectos)</div>
+      <p>El pago de cada proyecto se realiza en tres partes:</p>
+      <ul>
+        <li>50% inicial: para dar inicio al proyecto</li>
+        <li>30% a mitad del desarrollo</li>
+        <li>20% final: una vez entregado, antes de iniciar la marcha blanca</li>
+      </ul>
+      <p>El proyecto de sitio web incluye 45 días de marcha blanca, período en que BAU puede solicitar cambios sin costo adicional. Los gastos de dominio, hosting, instalación de plantillas de diseño y aplicaciones pagadas no están incluidos en esta cotización.</p>
+      <p>El refresh de marca contempla las rondas de corrección y ajuste descritas en el proceso. Rediseños posteriores a la aprobación de la identidad final serán cotizados aparte.</p>
+
+      <div class="terms-subtitle">Mentoría y gestión publicitaria (servicio mensual)</div>
+      <p>El servicio se factura mensualmente. La factura correspondiente al mes se emite el último día hábil, y el pago debe realizarse a más tardar el día 5 del mes siguiente.</p>
+      <p>El plan contratado incluye únicamente los entregables especificados en esta propuesta. Cualquier trabajo adicional (videos extra, sesiones adicionales, piezas fuera de pauta, etc.) será cotizado aparte.</p>
+      <p>Las clases de autogestión (Vía B) se cobran por hora realizada y corresponden a un pago único, independiente de la mentoría mensual. Horas adicionales a las contempladas en esta propuesta se cobran al mismo valor por hora.</p>
+      <p>El presupuesto de inversión publicitaria en Google, Meta y Pinterest no está incluido y es pagado directamente por BAU a cada plataforma. La Ola Studio gestiona y optimiza las campañas, sin garantizar resultados comerciales específicos, que dependen también de la capacidad de respuesta y gestión comercial del equipo de BAU.</p>
+
+      <div class="terms-subtitle">Generales</div>
+      <p>Las imágenes y videos podrán ser utilizados por la marca para fines comerciales, digitales e impresos. El estudio se reserva el derecho de utilizar el material para portafolio y difusión profesional, salvo acuerdo previo de confidencialidad.</p>
+      <p>El valor de la Etapa 1 fue calculado en base a UF 20, convertidas al valor de la UF del 24 de agosto de 2026 ($40.864,55). El monto en pesos se mantiene fijo durante los 30 días de vigencia de esta propuesta; pasado ese plazo se recalcula con la UF vigente. Todos los valores están expresados como neto más IVA (19%).</p>
+      <p>Esta propuesta tiene una validez de 30 días desde su fecha de emisión.</p>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="footer-logo">LA OLA STUDIO</div>
+      <div class="footer-contact">
+        contacto@laolastudio.cl<br>
+        +569 4844 6791
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
