@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propuesta - La Ola Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Oswald', sans-serif;
+      background: #EDE6D6;
+      padding: 40px 20px;
+      color: #1f2937;
+    }
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      background: #fff;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      background: #3D5BA9;
+      padding: 40px 48px 70px 48px;
+      position: relative;
+      color: #fff;
+    }
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 50px;
+    }
+    .logo-block {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+    .logo-block .l1, .logo-block .l2 {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    .logo-wave {
+      margin-top: 6px;
+      width: 46px;
+      height: 12px;
+    }
+    .header-tag {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: #E0A23B;
+      color: #1f2937;
+      padding: 6px 14px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+    .header-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 38px;
+      line-height: 1.15;
+      max-width: 560px;
+    }
+    .wave-bottom {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 50px;
+      line-height: 0;
+    }
+    .wave-bottom svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ===== CLIENTE / FECHAS ===== */
+    .meta-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      padding: 36px 48px;
+      background: #fff;
+      border-bottom: 3px solid #1f2937;
+    }
+    .meta-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+    .meta-value {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 26px;
+      color: #3D5BA9;
+    }
+    .meta-dates {
+      text-align: right;
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.8;
+    }
+    .meta-dates b { color: #1f2937; }
+
+    /* ===== SERVICIO ===== */
+    .service-block {
+      background: #B5432F;
+      color: #fff;
+      padding: 44px 48px;
+    }
+    .service-eyebrow {
+      font-family: 'Oswald', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 10px;
+    }
+    .service-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 32px;
+      margin-bottom: 6px;
+    }
+    .service-plan-tag {
+      display: inline-block;
+      background: #E0A23B;
+      color: #1f2937;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 3px;
+      margin-bottom: 24px;
+    }
+    .service-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-width: 620px;
+    }
+    .service-list li {
+      font-size: 15px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.25);
+      position: relative;
+      padding-left: 22px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .service-list li:last-child { border-bottom: none; }
+    .service-list li::before {
+      content: '~';
+      position: absolute;
+      left: 0;
+      font-weight: 700;
+      color: #E0A23B;
+    }
+    .service-list li .item-price {
+      font-weight: 600;
+      white-space: nowrap;
+      opacity: 0.95;
+    }
+
+    /* ===== PRECIO ===== */
+    .price-block {
+      background: #EDE6D6;
+      padding: 36px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      border-bottom: 3px solid #1f2937;
+    }
+    .price-detail {
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.7;
+    }
+    .price-detail b { color: #1f2937; }
+    .price-total-box {
+      background: #1f2937;
+      color: #fff;
+      padding: 18px 28px;
+      border-radius: 4px;
+      text-align: right;
+    }
+    .price-total-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #E0A23B;
+      margin-bottom: 4px;
+    }
+    .price-total-value {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 30px;
+    }
+
+    /* ===== TÉRMINOS ===== */
+    .terms-block {
+      background: #fff;
+      padding: 44px 48px;
+    }
+    .terms-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 22px;
+      color: #3D5BA9;
+      margin-bottom: 20px;
+    }
+    .terms-block p {
+      font-size: 13.5px;
+      line-height: 1.85;
+      color: #374151;
+      margin-bottom: 14px;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: #3D5BA9;
+      color: #fff;
+      padding: 36px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 2px;
+    }
+    .footer-contact {
+      font-size: 13px;
+      text-align: right;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      .header, .meta-row, .service-block, .price-block, .terms-block, .footer {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+      .meta-row { grid-template-columns: 1fr; }
+      .meta-dates { text-align: left; }
+      .header-title { font-size: 28px; }
+      .price-block { flex-direction: column; align-items: flex-start; }
+      .price-total-box { text-align: left; width: 100%; }
+      .footer { flex-direction: column; align-items: flex-start; }
+      .footer-contact { text-align: left; }
+      .service-list li { flex-direction: column; gap: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="nav-row">
+        <div class="logo-block">
+          <span class="l1">LA OLA</span>
+          <span class="l2">STUDIO</span>
+          <svg class="logo-wave" viewBox="0 0 46 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 6C4 2 7 2 10 6C13 10 16 10 19 6C22 2 25 2 28 6C31 10 34 10 37 6C40 2 43 2 45 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="header-tag">Propuesta</span>
+      </div>
+      <h1 class="header-title">Propuesta de modificaciones a tu sitio web</h1>
+
+      <div class="wave-bottom">
+        <svg viewBox="0 0 1000 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,30 Q250,5 500,30 T1000,30 L1000,60 L0,60 Z" fill="#fff"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- CLIENTE / FECHAS -->
+    <div class="meta-row">
+      <div>
+        <div class="meta-label">Cliente</div>
+        <div class="meta-value">Corporación ELA Chile</div>
+      </div>
+      <div class="meta-dates">
+        <div><b>Fecha:</b> 01/09/2026</div>
+        <div><b>Válida hasta:</b> 01/10/2026</div>
+      </div>
+    </div>
+
+    <!-- SERVICIO -->
+    <div class="service-block">
+      <div class="service-eyebrow">Descripción del servicio</div>
+      <div class="service-title">Modificaciones al sitio web</div>
+      <span class="service-plan-tag">Proyecto puntual · Pago único</span>
+      <ul class="service-list">
+        <li><span>Actualizar profesionales</span><span class="item-price">$25.000</span></li>
+        <li><span>Agregar banner para el evento de golf</span><span class="item-price">$20.000</span></li>
+        <li><span>Actualizar resumen de datos</span><span class="item-price">$15.000</span></li>
+        <li><span>Agregar banner nuevo con cosas por destacar</span><span class="item-price">$20.000</span></li>
+        <li><span>Agregar colaboradores nuevos</span><span class="item-price">$20.000</span></li>
+        <li><span>Linkear colaboradores a URLs</span><span class="item-price">$20.000</span></li>
+        <li><span>Crear sección para viñas / empresas</span><span class="item-price">$60.000</span></li>
+        <li><span>Limpiar sitio web</span><span class="item-price">$80.000</span></li>
+      </ul>
+    </div>
+
+    <!-- PRECIO -->
+    <div class="price-block">
+      <div class="price-detail">
+        <div><b>Neto:</b> $260.000</div>
+        <div><b>IVA (19%):</b> $49.400</div>
+      </div>
+      <div class="price-total-box">
+        <div class="price-total-label">Total del proyecto</div>
+        <div class="price-total-value">$309.400</div>
+      </div>
+    </div>
+
+    <!-- TÉRMINOS -->
+    <div class="terms-block">
+      <div class="terms-title">Términos y condiciones de pago</div>
+      <p>El pago del proyecto se realiza en un único abono correspondiente al 100% del valor total, al momento de confirmar el inicio de los trabajos.</p>
+      <p>Esta cotización incluye únicamente las modificaciones especificadas arriba. Cualquier ajuste adicional no listado en esta propuesta será cotizado aparte.</p>
+      <p>Los gastos de Shopify, instalación de plantillas de diseño y aplicaciones pagadas no están incluidos en esta cotización.</p>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="footer-logo">LA OLA STUDIO</div>
+      <div class="footer-contact">
+        contacto@laolastudio.cl<br>
+        +569 4844 6791
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
